@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/models/child.dart';
-import 'package:khuta/screens/child/assessment_screen.dart';
+import 'package:khuta/models/question.dart';
 
 class ResultsScreen extends StatelessWidget {
   final Child child;
@@ -19,7 +19,6 @@ class ResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(

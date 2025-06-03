@@ -3,37 +3,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/models/child.dart';
+import 'package:khuta/models/question.dart';
 import 'package:khuta/models/test_result.dart';
 
 import 'results_screen.dart';
-
-class Question {
-  final String id;
-  final String imageUrl;
-  final String questionText;
-  final List<String> options;
-  final Map<String, String> questionTextLocalized;
-
-  Question({
-    required this.id,
-    required this.imageUrl,
-    required this.questionText,
-    required this.options,
-    required this.questionTextLocalized,
-  });
-
-  factory Question.fromMap(Map<String, dynamic> map) {
-    return Question(
-      id: map['id'] ?? '',
-      imageUrl: map['imageUrl'] ?? '',
-      questionText: map['questionText'] ?? '',
-      options: List<String>.from(map['options'] ?? []),
-      questionTextLocalized: Map<String, String>.from(
-        map['questionTextLocalized'] ?? {},
-      ),
-    );
-  }
-}
 
 class AssessmentScreen extends StatefulWidget {
   final Child child;
@@ -110,12 +83,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           'en': 'How does your child respond to changes in routine?',
           'ar': 'كيف يتجاوب طفلك مع التغييرات في الروتين؟',
         },
-        options: [
-          'very_poorly'.tr(),
-          'poorly'.tr(),
-          'adequately'.tr(),
-          'very_well'.tr(),
-        ],
+        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
       ),
     ];
   }

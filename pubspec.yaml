@@ -31,8 +31,8 @@ dependencies:
   # Utils
   uuid:
   intl: 
-  speech_to_text: ^7.0.0
-  flutter_tts: ^4.2.3
+
+  flutter_tts:
   permission_handler: 
 
 dev_dependencies:
@@ -50,4 +50,6 @@ flutter:
     - assets/translations/
     - assets/images/
     - assets/fonts/
+    - assets/images/parent_assessment/
+    - assets/images/teacher_assessment/
 
