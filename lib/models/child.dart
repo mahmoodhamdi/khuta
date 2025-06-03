@@ -1,78 +1,46 @@
-import 'package:equatable/equatable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:khuta/models/test_result.dart';
 
-class Child extends Equatable {
+class Child {
   final String id;
   final String name;
+  final String gender; // 'male' or 'female'
   final int age;
-  final String gender;
-  final int? score;
-  final String? lastEvaluationType;
-  final DateTime? lastEvaluationDate;
+  final List<TestResult> testResults;
+  final DateTime createdAt;
 
-  const Child({
+  Child({
     required this.id,
     required this.name,
-    required this.age,
     required this.gender,
-    this.score,
-    this.lastEvaluationType,
-    this.lastEvaluationDate,
+    required this.age,
+    required this.testResults,
+    required this.createdAt,
   });
 
-  @override
-  List<Object?> get props => [
-    id,
-    name,
-    age,
-    gender,
-    score,
-    lastEvaluationType,
-    lastEvaluationDate,
-  ];
-
-  Child copyWith({
-    String? id,
-    String? name,
-    int? age,
-    String? gender,
-    int? score,
-    String? lastEvaluationType,
-    DateTime? lastEvaluationDate,
-  }) {
+  factory Child.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Child(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      age: age ?? this.age,
-      gender: gender ?? this.gender,
-      score: score ?? this.score,
-      lastEvaluationType: lastEvaluationType ?? this.lastEvaluationType,
-      lastEvaluationDate: lastEvaluationDate ?? this.lastEvaluationDate,
+      id: doc.id,
+      name: data['name'] ?? '',
+      gender: data['gender'] ?? 'male',
+      age: data['age'] ?? 0,
+      testResults:
+          (data['testResults'] as List<dynamic>?)
+              ?.map((e) => TestResult.fromMap(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toFirestore() {
     return {
-      'id': id,
       'name': name,
-      'age': age,
       'gender': gender,
-      'score': score,
-      'lastEvaluationType': lastEvaluationType,
-      'lastEvaluationDate': lastEvaluationDate?.toIso8601String(),
+      'age': age,
+      'testResults': testResults.map((e) => e.toMap()).toList(),
+      'createdAt': Timestamp.fromDate(createdAt),
     };
-  }
-
-  factory Child.fromJson(Map<String, dynamic> json) {
-    return Child(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      age: json['age'] as int,
-      gender: json['gender'] as String,
-      score: json['score'] as int?,
-      lastEvaluationType: json['lastEvaluationType'] as String?,
-      lastEvaluationDate: json['lastEvaluationDate'] != null
-          ? DateTime.parse(json['lastEvaluationDate'] as String)
-          : null,
-    );
   }
 }
