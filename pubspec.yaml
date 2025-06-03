@@ -31,6 +31,9 @@ dependencies:
   # Utils
   uuid:
   intl: 
+  speech_to_text: ^7.0.0
+  flutter_tts: ^4.2.3
+  permission_handler: 
 
 dev_dependencies:
   flutter_test:
