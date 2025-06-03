@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/constants/questions.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/models/test_result.dart';
@@ -37,7 +38,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     try {
       // Load sample questions - في التطبيق الحقيقي ستحمل من Firebase
       setState(() {
-        questions = _getSampleQuestions();
+        questions = getSampleQuestions();
         answers = List.filled(questions.length, -1);
         isLoading = false;
       });
@@ -47,45 +48,6 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
         isLoading = false;
       });
     }
-  }
-
-  List<Question> _getSampleQuestions() {
-    return [
-      Question(
-        id: '1',
-        imageUrl:
-            'https://via.placeholder.com/300x200/4299E1/FFFFFF?text=Question+1',
-        questionText: 'How often does your child engage in social activities?',
-        questionTextLocalized: {
-          'en': 'How often does your child engage in social activities?',
-          'ar': 'كم مرة ينخرط طفلك في الأنشطة الاجتماعية؟',
-        },
-        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
-      ),
-      Question(
-        id: '2',
-        imageUrl:
-            'https://via.placeholder.com/300x200/48BB78/FFFFFF?text=Question+2',
-        questionText:
-            'Does your child maintain eye contact during conversations?',
-        questionTextLocalized: {
-          'en': 'Does your child maintain eye contact during conversations?',
-          'ar': 'هل يحافظ طفلك على التواصل البصري أثناء المحادثات؟',
-        },
-        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
-      ),
-      Question(
-        id: '3',
-        imageUrl:
-            'https://via.placeholder.com/300x200/ED64A6/FFFFFF?text=Question+3',
-        questionText: 'How does your child respond to changes in routine?',
-        questionTextLocalized: {
-          'en': 'How does your child respond to changes in routine?',
-          'ar': 'كيف يتجاوب طفلك مع التغييرات في الروتين؟',
-        },
-        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
-      ),
-    ];
   }
 
   void _previousQuestion() {
@@ -337,10 +299,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         ],
                       ),
                       child: Text(
-                        currentQuestion.questionTextLocalized[context
-                                .locale
-                                .languageCode] ??
-                            currentQuestion.questionText,
+                        tr(currentQuestion.questionText),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -543,4 +502,6 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       ),
     );
   }
+  
+ 
 }

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/constants/questions.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/controllers/assessment_controller.dart';
@@ -35,7 +36,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   void _loadQuestions() {
     try {
       setState(() {
-        questions = _getSampleQuestions();
+        questions = getSampleQuestions();
         answers = List.filled(questions.length, -1);
         isLoading = false;
       });
@@ -55,45 +56,6 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
         isLoading = false;
       });
     }
-  }
-
-  List<Question> _getSampleQuestions() {
-    return [
-      Question(
-        id: '1',
-        imageUrl:
-            'https://via.placeholder.com/300x200/4299E1/FFFFFF?text=Question+1',
-        questionText: 'How often does your child engage in social activities?',
-        questionTextLocalized: {
-          'en': 'How often does your child engage in social activities?',
-          'ar': 'كم مرة ينخرط طفلك في الأنشطة الاجتماعية؟',
-        },
-        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
-      ),
-      Question(
-        id: '2',
-        imageUrl:
-            'https://via.placeholder.com/300x200/48BB78/FFFFFF?text=Question+2',
-        questionText:
-            'Does your child maintain eye contact during conversations?',
-        questionTextLocalized: {
-          'en': 'Does your child maintain eye contact during conversations?',
-          'ar': 'هل يحافظ طفلك على التواصل البصري أثناء المحادثات؟',
-        },
-        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
-      ),
-      Question(
-        id: '3',
-        imageUrl:
-            'https://via.placeholder.com/300x200/ED64A6/FFFFFF?text=Question+3',
-        questionText: 'How does your child respond to changes in routine?',
-        questionTextLocalized: {
-          'en': 'How does your child respond to changes in routine?',
-          'ar': 'كيف يتجاوب طفلك مع التغييرات في الروتين؟',
-        },
-        options: ['never'.tr(), 'rarely'.tr(), 'sometimes'.tr(), 'often'.tr()],
-      ),
-    ];
   }
 
   @override
@@ -190,11 +152,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           QuestionImage(imageUrl: currentQuestion.imageUrl),
           const SizedBox(height: 24),
           QuestionText(
-            text:
-                currentQuestion.questionTextLocalized[context
-                    .locale
-                    .languageCode] ??
-                currentQuestion.questionText,
+            text: questions[currentQuestionIndex].questionText,
             isRTL: isRTL,
           ),
           const SizedBox(height: 24),

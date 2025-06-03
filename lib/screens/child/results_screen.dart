@@ -325,10 +325,7 @@ class ResultsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              question.questionTextLocalized[context
-                                      .locale
-                                      .languageCode] ??
-                                  question.questionText,
+                              tr(question.questionText),
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
