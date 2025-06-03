@@ -1,0 +1,50 @@
+name: khuta
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.0
+dependencies:
+  flutter:
+    sdk: flutter  # Core
+  cupertino_icons: 
+  easy_localization:
+  equatable: 
+  google_fonts:
+  flutter_bloc: 
+  bloc: 
+  shared_preferences: 
+  sqflite: 
+  path:
+
+  # Firebase
+  firebase_core: 
+  firebase_auth: 
+  cloud_firestore: 
+
+  # UI & Theming
+  flutter_svg: 
+  shimmer: 
+  flutter_native_splash:
+
+  # Utils
+  uuid:
+  intl: 
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  bloc_test: ^9.1.6
+  mocktail: ^1.0.3
+
+flutter:
+  uses-material-design: true
+
+  # Add assets here
+  assets:
+    - assets/translations/
+    - assets/images/
+    - assets/fonts/
+

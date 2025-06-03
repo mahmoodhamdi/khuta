@@ -1,0 +1,89 @@
+{
+  "app_name": "خطى - تطبيق تشخيص اضطراب فرط الحركة",
+
+  "assessment": {
+    "finish": "إنهاء",
+    "question_number": "سؤال {{current}}/{{total}}",
+    "completed": "اكتمل التقييم",
+    "score": "النتيجة",
+    "select_type": "اختر نوع التقييم",
+    "age_inappropriate": "هذا التقييم غير مناسب لعمر {{name}}",
+    "vanderbilt": "مقياس فاندربيلت",
+    "snap": "مقياس سناب-4",
+    "conners": "مقياس كونرز"
+  },
+  
+  "login": "تسجيل الدخول",
+  "logout": "تسجيل الخروج",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  
+  "start_assessment": "بدء التقييم",
+  "enter_child_info": "معلومات الطفل",
+  "generate_report": "توليد التقرير",
+  
+  "child_name": "اسم الطفل",
+  "child_age": "العمر",
+  "child_gender": "النوع",
+  "add_child": "اضافة طفل",
+  
+  "profile": "الصفحة الشخصية",
+  "last_score": "احدث النتيجة",
+  "last_score_date": "تاريخ احدث النتيجة",
+  
+  "assessment_history": "تاريخ التقييمات",
+  "assessment_type": "نوع التقييم",
+  "assessment_date": "تاريخ التقييم",
+  "assessment_score": "نتيجة التقييم",
+  "evaluation_type": "نوع التقييم",
+  "start_evaluation": "بدء التقييم",
+  "no_data": "لا يوجد بيانات",
+  "no_children_yet": "لا يوجد بيانات",
+  "home": "الرئيسية",
+  "reports": "التقارير",
+  "settings": "الإعدادات",
+  "required_field": "هذا الحقل مطلوب", 
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "next": "التالي",
+  "back": "رجوع",
+  
+  "register": "تسجيل حساب جديد",
+  "no_account": "ليس لديك حساب؟ سجل الآن",
+  "have_account": "لديك حساب بالفعل؟ سجل دخول",
+  "welcome_back": "مرحباً بعودتك",
+  
+  "error": {
+    "invalid_email": "يرجى إدخال بريد إلكتروني صحيح",
+    "required_field": "هذا الحقل مطلوب",
+    "short_password": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "login_failed": "فشل تسجيل الدخول. حاول مرة أخرى",
+    "register_failed": "فشل إنشاء الحساب. حاول مرة أخرى"
+  },
+  "auth": {
+    "confirm_password": "تاكيد كلمة المرور",
+    "password_mismatch": "كلمة المرور غير متطابقة",
+    "user_created": "تم انشاء الحساب بنجاح",
+    "user_not_found": "لا يوجد حساب بهذا البريد الإلكتروني",
+    "wrong_password": "كلمة المرور غير صحيحة",
+    "email_already_in_use": "هذا البريد الإلكتروني مستخدم بالفعل",
+    "weak_password": "كلمة المرور ضعيفة. يرجى استخدام 6 أحرف على الأقل",
+    "invalid_email": "يرجى إدخال بريد إلكتروني صحيح",
+    "network_error": "خطأ في الشبكة. يرجى التحقق من اتصالك بالإنترنت",
+    "too_many_requests": "محاولات كثيرة جداً. يرجى المحاولة لاحقاً",
+    "operation_not_allowed": "تسجيل الدخول بالبريد الإلكتروني غير مفعل",
+    "unknown_error": "حدث خطأ غير معروف. يرجى المحاولة مرة أخرى"
+    ,"please_wait": "يرجى الانتظار"
+    ,"no_internet": "لا يوجد اتصال بالانترنت"
+    ,"no_connection": "لا يوجد اتصال بالانترنت"
+    ,"please_enter_email": "يرجى ادخال البريد الالكتروني"
+    ,"please_enter_password": "يرجى ادخال كلمة المرور"
+    ,"please_enter_name": "يرجى ادخال الاسم"
+    ,"please_enter_age": "يرجى ادخال العمر"
+    ,"please_enter_gender": "يرجى ادخال النوع"
+  }
+   , "gender": {
+    "male": "ذكر",
+    "female": "انثى"
+  }
+}

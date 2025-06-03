@@ -1,0 +1,78 @@
+{
+  "app_name": "Khuta – ADHD Diagnosis App",
+
+  "assessment": {
+    "finish": "Finish",
+    "question_number": "Question {{current}}/{{total}}",
+    "completed": "Assessment completed",
+    "score": "Score",
+    "select_type": "Select Assessment Type",
+    "age_inappropriate": "This assessment is not appropriate for {{name}}'s age",
+    "vanderbilt": "Vanderbilt Assessment Scale",
+    "snap": "SNAP-IV Rating Scale",
+    "conners": "Conners Rating Scale"
+  },
+  
+  "login": "Login",
+  "logout": "Logout",
+  "email": "Email",
+  "password": "Password",
+  
+  "start_assessment": "Start Assessment",
+  "enter_child_info": "Enter Child's Information",
+  "generate_report": "Generate Report",
+  
+  "child_name": "Child's Name",
+  "child_age": "Age",
+  "child_gender": "Gender",
+  "add_child": "Add Child",
+  
+  "profile": "Profile",
+  "children": "Children",
+  
+  "about": "About",
+  "evaluation_types": "Evaluation Types",
+  "language": "Language",
+  "last_score": "Last Score",
+  "last_score_date": "Last Score Date",
+  "start_evaluation": "Start Evaluation",
+  "dashboard": "Dashboard",
+  "home": "Home",
+  "required_field": "Required",
+  "reports": "Reports",
+  "settings": "Settings",
+  
+  "save": "Save",
+  "cancel": "Cancel",
+  "next": "Next",
+  "back": "Back",
+  
+  "register": "Register",
+  "no_account": "Don't have an account? Register",
+  "have_account": "Already have an account? Login",
+  "welcome_back": "Welcome back",
+  
+  "error": {
+    "invalid_email": "Please enter a valid email",
+    "required_field": "This field is required",
+    "short_password": "Password must be at least 6 characters",
+    "login_failed": "Login failed. Please try again",
+    "register_failed": "Registration failed. Please try again"
+  },
+  "auth": {
+    "user_not_found": "No account found with this email",
+    "wrong_password": "Incorrect password",
+    "email_already_in_use": "An account already exists with this email",
+    "weak_password": "Password is too weak. Please use at least 6 characters",
+    "invalid_email": "Please enter a valid email address",
+    "network_error": "Network error. Please check your connection",
+    "too_many_requests": "Too many attempts. Please try again later",
+    "operation_not_allowed": "Email/password sign-in is not enabled",
+    "unknown_error": "An unknown error occurred. Please try again"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female"
+  }
+  
+}
