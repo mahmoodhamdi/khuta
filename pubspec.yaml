@@ -34,8 +34,6 @@ dependencies:
 
   flutter_tts:
   permission_handler: 
-  flutter_gen_runner:
-  build_runner:
 
 dev_dependencies:
   flutter_test:
@@ -54,8 +52,3 @@ flutter:
     - assets/fonts/
     - assets/images/teacher_questions/
     - assets/images/parents_questions/
-
-flutter_gen:
-  assets:
-    enabled: true
-    output: lib/gen/assets.gen.dart
