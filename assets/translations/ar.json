@@ -1,4 +1,7 @@
-{"autism_assessment": "تقييم التوحد",
+{
+  "total_score": "الدرجة الكلية",
+  "total_questions": "الاسئلة الكلية",
+  "autism_assessment": "تقييم التوحد",
   "parent_assessment": "تقييم الوالدين",
   "rude_with_adults": "بذى مع الكبار",
   "distracted_and_inattentive": "تشتت وقله انتباه",

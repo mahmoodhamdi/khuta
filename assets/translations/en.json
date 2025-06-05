@@ -1,4 +1,8 @@
 {
+  "total_score": "Total Score",
+  "total_questions": "Total Questions",
+  "parent_assessment": "Parent Assessment",
+
   "rude_with_adults": "Rude with adults",
   "distracted_and_inattentive": "Distracted and inattentive",
   "shy": "Shy",
