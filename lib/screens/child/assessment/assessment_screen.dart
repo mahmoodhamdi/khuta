@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:khuta/core/constants/questions.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/controllers/assessment_controller.dart';
@@ -12,8 +11,12 @@ import 'package:khuta/screens/child/assessment/widgets/question_text.dart';
 
 class AssessmentScreen extends StatefulWidget {
   final Child child;
-
-  const AssessmentScreen({super.key, required this.child});
+  final List<Question> questions;
+  const AssessmentScreen({
+    super.key,
+    required this.questions,
+    required this.child,
+  });
 
   @override
   State<AssessmentScreen> createState() => _AssessmentScreenState();
@@ -30,13 +33,13 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   @override
   void initState() {
     super.initState();
+    questions = widget.questions;
     _loadQuestions();
   }
 
-  void _loadQuestions() {
+  Future<void> _loadQuestions() async {
     try {
       setState(() {
-        questions = getSampleQuestions();
         answers = List.filled(questions.length, -1);
         isLoading = false;
       });
@@ -133,7 +136,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
             Text('error_loading_questions'.tr()),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _loadQuestions,
+              onPressed: () => _loadQuestions(),
               child: Text('retry'.tr()),
             ),
           ],

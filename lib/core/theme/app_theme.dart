@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,10 +10,10 @@ class AppTheme {
     colorSchemeSeed: AppColors.softBlue,
   );
 
-  static ThemeData get lightTheme => _baseTheme.copyWith(
+  static ThemeData lightTheme(BuildContext context) => _baseTheme.copyWith(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.lightBackground,
-    textTheme: _getTextTheme(AppColors.lightText),
+    textTheme: _getTextTheme(AppColors.lightText, context),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.softWhite,
       foregroundColor: AppColors.darkGray,
@@ -44,10 +45,10 @@ class AppTheme {
     ),
   );
 
-  static ThemeData get darkTheme => _baseTheme.copyWith(
+  static ThemeData darkTheme(BuildContext context) => _baseTheme.copyWith(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.darkBackground,
-    textTheme: _getTextTheme(AppColors.darkText),
+    textTheme: _getTextTheme(AppColors.darkText, context),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.darkBackground,
       foregroundColor: AppColors.softWhite,
@@ -79,36 +80,42 @@ class AppTheme {
     ),
   );
 
-  static TextTheme _getTextTheme(Color textColor) {
+  static TextTheme _getTextTheme(Color textColor, BuildContext context) {
+    final locale = context.locale.languageCode;
+    final isArabic = locale == 'ar';
+
+    final headlineFont = isArabic ? GoogleFonts.cairo : GoogleFonts.poppins;
+    final bodyFont = isArabic ? GoogleFonts.cairo : GoogleFonts.roboto;
+
     return TextTheme(
-      displayLarge: GoogleFonts.poppins(
+      displayLarge: headlineFont(
         fontSize: 32,
         fontWeight: FontWeight.bold,
         color: textColor,
       ),
-      displayMedium: GoogleFonts.poppins(
+      displayMedium: headlineFont(
         fontSize: 28,
         fontWeight: FontWeight.bold,
         color: textColor,
       ),
-      displaySmall: GoogleFonts.poppins(
+      displaySmall: headlineFont(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: textColor,
       ),
-      headlineMedium: GoogleFonts.poppins(
+      headlineMedium: headlineFont(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: textColor,
       ),
-      titleLarge: GoogleFonts.poppins(
+      titleLarge: headlineFont(
         fontSize: 18,
         fontWeight: FontWeight.w500,
         color: textColor,
       ),
-      bodyLarge: GoogleFonts.roboto(fontSize: 16, color: textColor),
-      bodyMedium: GoogleFonts.roboto(fontSize: 14, color: textColor),
-      labelLarge: GoogleFonts.poppins(
+      bodyLarge: bodyFont(fontSize: 16, color: textColor),
+      bodyMedium: bodyFont(fontSize: 14, color: textColor),
+      labelLarge: headlineFont(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: textColor,

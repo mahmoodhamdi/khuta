@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/constants/questions.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/test_result.dart';
-
-import 'assessment_screen.dart';
+import 'package:khuta/screens/child/assessment/assessment_screen.dart';
 
 class ChildDetailsScreen extends StatefulWidget {
   final Child child;
@@ -123,6 +123,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
               const SizedBox(height: 24),
 
               // Assessment Section
+              // Assessment Section
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -183,6 +184,8 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
+
+                    // Parent Assessment Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -190,8 +193,51 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AssessmentScreen(child: widget.child),
+                              builder: (context) => AssessmentScreen(
+                                child: widget.child,
+                                questions: parentQuestions,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4299E1),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.family_restroom, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              'parent_assessment'.tr(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AssessmentScreen(
+                                questions: teacherQuestions,
+                                child: widget.child,
+                              ),
                             ),
                           );
                         },

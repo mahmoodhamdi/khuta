@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:khuta/core/constants/questions.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/models/test_result.dart';
@@ -11,8 +10,12 @@ import 'results_screen.dart';
 
 class AssessmentScreen extends StatefulWidget {
   final Child child;
-
-  const AssessmentScreen({super.key, required this.child});
+  final List<Question> questions;
+  const AssessmentScreen({
+    super.key,
+    required this.child,
+    required this.questions,
+  });
 
   @override
   State<AssessmentScreen> createState() => _AssessmentScreenState();
@@ -22,7 +25,6 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  List<Question> questions = [];
   List<int> answers = [];
   int currentQuestionIndex = 0;
   bool isLoading = true;
@@ -38,8 +40,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     try {
       // Load sample questions - في التطبيق الحقيقي ستحمل من Firebase
       setState(() {
-        questions = getSampleQuestions();
-        answers = List.filled(questions.length, -1);
+        answers = List.filled(widget.questions.length, -1);
         isLoading = false;
       });
     } catch (e) {
@@ -59,7 +60,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   void _nextQuestion() {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (currentQuestionIndex < widget.questions.length - 1) {
       setState(() {
         currentQuestionIndex++;
       });
@@ -102,7 +103,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
             child: widget.child,
             score: finalScore,
             answers: answers,
-            questions: questions,
+            questions: widget.questions,
           ),
         ),
       );
@@ -176,7 +177,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
               Text('error_loading_questions'.tr()),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _loadQuestions,
+                onPressed: () => _loadQuestions(),
                 child: Text('retry'.tr()),
               ),
             ],
@@ -185,8 +186,8 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       );
     }
 
-    final currentQuestion = questions[currentQuestionIndex];
-    final progress = (currentQuestionIndex + 1) / questions.length;
+    final currentQuestion = widget.questions[currentQuestionIndex];
+    final progress = (currentQuestionIndex + 1) / widget.questions.length;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
@@ -221,7 +222,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         ),
                       ),
                       Text(
-                        '${currentQuestionIndex + 1} / ${questions.length}',
+                        '${currentQuestionIndex + 1} / ${widget.questions.length}',
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],
@@ -454,13 +455,13 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            currentQuestionIndex == questions.length - 1
+                            currentQuestionIndex == widget.questions.length - 1
                                 ? 'show_results'.tr()
                                 : 'next'.tr(),
                           ),
                           const SizedBox(width: 8),
                           Icon(
-                            currentQuestionIndex == questions.length - 1
+                            currentQuestionIndex == widget.questions.length - 1
                                 ? Icons.check
                                 : isRTL
                                 ? Icons.arrow_back
@@ -502,6 +503,4 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       ),
     );
   }
-  
- 
 }

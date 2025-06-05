@@ -46,8 +46,8 @@ class KhutaApp extends StatelessWidget {
       locale: context.locale,
 
       // Theme
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme(context),
+      darkTheme: AppTheme.darkTheme(context),
       themeMode: ThemeMode.system,
       home: const SplashScreen(),
     );
