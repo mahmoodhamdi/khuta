@@ -1,4 +1,14 @@
 { 
+   "extremely_above_average": "Extremely Above Average (≥70)",
+  "significantly_above_average": "Significantly Above Average (66-70)",
+  "above_average": "Above Average (61-65)",
+  "slightly_above_average": "Slightly Above Average (56-60)",
+  "average": "Average (45-55)",
+  "slightly_below_average": "Slightly Below Average (40-44)",
+  "below_average": "Below Average (35-39)",
+  "significantly_below_average": "Significantly Below Average (30-34)",
+  "extremely_below_average": "Extremely Below Average (<30)",
+
   "sdq_assessment": "SDQ Assessment",
   "very_high_risk": "Very High Risk",
   "high_risk": "High Risk",

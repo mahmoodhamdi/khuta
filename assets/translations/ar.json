@@ -1,4 +1,13 @@
 {
+    "extremely_above_average": "فوق المتوسط بدرجة كبيرة جدا (≥70)",
+  "significantly_above_average": "فوق المتوسط بدرجة كبيرة (66-70)",
+  "above_average": "فوق المتوسط (61-65)",
+  "slightly_above_average": "فوق المتوسط بدرجة طفيفة (56-60)",
+  "average": "متوسط (45-55)",
+  "slightly_below_average": "أقل من المتوسط بدرجة طفيفة (40-44)",
+  "below_average": "أقل من المتوسط (35-39)",
+  "significantly_below_average": "أقل من المتوسط بدرجة كبيرة (30-34)",
+  "extremely_below_average": "أقل من المتوسط بدرجة كبيرة جدا (<30)",
   "very_high_risk": "مرتفع جداً",
   "high_risk": "مرتفع",
   "moderately_high_risk": "مرتفع جداً",

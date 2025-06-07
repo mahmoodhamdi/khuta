@@ -151,9 +151,7 @@ class SdqScoringService {
     // Get T-score using the scoring map
     int tScore = getTScore(assessmentType, gender, ageGroup, proratedScore);
     if (tScore == -1) {
-
       throw Exception('error_prorated_score'.tr());
-      
     }
 
     return tScore;
@@ -162,15 +160,23 @@ class SdqScoringService {
   /// Get interpretation of T-score
   static String getScoreInterpretation(int tScore) {
     if (tScore >= 70) {
-      return 'very_high_risk';
-    } else if (tScore >= 65) {
-      return 'high_risk';
-    } else if (tScore >= 60) {
-      return 'moderately_high_risk';
+      return 'extremely_above_average';
+    } else if (tScore >= 66) {
+      return 'significantly_above_average';
+    } else if (tScore >= 61) {
+      return 'above_average';
+    } else if (tScore >= 56) {
+      return 'slightly_above_average';
     } else if (tScore >= 45) {
-      return 'normal_range';
+      return 'average';
+    } else if (tScore >= 40) {
+      return 'slightly_below_average';
+    } else if (tScore >= 35) {
+      return 'below_average';
+    } else if (tScore >= 30) {
+      return 'significantly_below_average';
     } else {
-      return 'low_range';
+      return 'extremely_below_average';
     }
   }
 
