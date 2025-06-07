@@ -7,7 +7,6 @@ import '../../core/constants/app_strings.dart';
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
-import '../home/home_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
