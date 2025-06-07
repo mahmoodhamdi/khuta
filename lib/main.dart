@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/theme/app_theme.dart';
 import 'cubit/auth/auth_cubit.dart';
+import 'cubit/connectivity/connectivity_cubit.dart';
 import 'firebase_options.dart';
 import 'screens/splash/splash_screen.dart';
 
@@ -24,7 +25,10 @@ void main() async {
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => AuthCubit())],
+        providers: [
+          BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(create: (context) => ConnectivityCubit()),
+        ],
         child: const KhutaApp(),
       ),
     ),
@@ -33,7 +37,6 @@ void main() async {
 
 class KhutaApp extends StatelessWidget {
   const KhutaApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

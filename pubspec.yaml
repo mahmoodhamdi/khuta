@@ -33,6 +33,7 @@ dependencies:
 
   flutter_tts:
   permission_handler: 
+  connectivity_plus: ^6.1.4
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,7 @@
-{
-  "test_summary": "ملخص الاختبار",
+{  "test_deleted": "تم حذف الاختبار بنجاح",
+  "error_deleting_test": "حدث خطأ اثناء حذف الاختبار",
+  "error_deleting_child": "حدث خطأ اثناء حذف الطفل",
+  "offline_mode": "أنت غير متصل بالإنترنت حاليًا","test_summary": "ملخص الاختبار",
   "test_deleted": "تم حذف الاختبار بنجاح",
   "error_deleting_test": "حدث خطأ اثناء حذف الاختبار",
   "error_deleting_child": "حدث خطأ اثناء حذف الطفل",
