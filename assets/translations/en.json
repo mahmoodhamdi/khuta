@@ -1,4 +1,11 @@
-{ 
+{"Don\\'t have an account? Register": "Don't have an account? Register",
+  "Already have an account? Login": "Already have an account? Login",
+  "email_invalid": "Invalid email address",
+  "password_confirm_required": "Password confirmation is required",
+  "password_invalid": "Invalid password",
+  "password_mismatch": "Passwords do not match",
+  "invalid_password_length": "Password must be at least 6 characters long",
+  "Create Account": "Create Account",
    "extremely_above_average": "Extremely Above Average (≥70)",
   "significantly_above_average": "Significantly Above Average (66-70)",
   "above_average": "Above Average (61-65)",

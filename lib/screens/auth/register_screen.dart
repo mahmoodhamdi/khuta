@@ -76,10 +76,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your email';
+                          return 'email_required'.tr();
                         }
                         if (!value!.contains('@')) {
-                          return 'Please enter a valid email';
+                          return 'email_invalid'.tr();
                         }
                         return null;
                       },
@@ -90,10 +90,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       isPassword: true,
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your password';
+                          return 'password_required'.tr();
                         }
                         if (value!.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return 'invalid_password_length'.tr();
                         }
                         return null;
                       },
@@ -106,10 +106,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSubmitted: (_) => _handleRegister(),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please confirm your password';
+                          return 'password_confirm_required'.tr();
                         }
                         if (value != _passwordController.text) {
-                          return 'Passwords do not match';
+                          return 'password_mismatch'.tr();
                         }
                         return null;
                       },

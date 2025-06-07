@@ -1,4 +1,10 @@
-{
+{"Don\\'t have an account? Register": "لا يوجد لديك حساب؟ إنشاء حساب",
+  "Already have an account? Login": "هل لديك حساب بالفعل؟ تسجيل الدخول",
+  "email_invalid": "عنوان بريد إلكتروني غير صالح",
+  "password_invalid": "كلمة المرور غير صالحة",
+  "password_confirm_required": "يجب تأكيد كلمة المرور",
+   "password_invalid_length": "يجب أن تكون كلمة المرور على الأقل 6 حروف",
+  "Create Account": "إنشاء حساب",
     "extremely_above_average": "فوق المتوسط بدرجة كبيرة جدا (≥70)",
   "significantly_above_average": "فوق المتوسط بدرجة كبيرة (66-70)",
   "above_average": "فوق المتوسط (61-65)",

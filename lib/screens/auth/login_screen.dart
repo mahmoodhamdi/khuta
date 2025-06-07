@@ -80,10 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your email';
+                          return 'email_required'.tr();
                         }
                         if (!value!.contains('@')) {
-                          return 'Please enter a valid email';
+                          return 'email_invalid'.tr();
                         }
                         return null;
                       },
@@ -96,10 +96,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       onSubmitted: (_) => _handleLogin(),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your password';
+                          return 'password_required'.tr();
                         }
                         if (value!.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return 'ivalid_password'.tr();
                         }
                         return null;
                       },
