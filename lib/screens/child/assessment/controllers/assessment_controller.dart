@@ -51,7 +51,6 @@ class AssessmentController {
     if (questions.isEmpty) return;
 
     try {
-      final questionType = questions[0].questionType;
       final score = answers.asMap().entries.fold<int>(
         0,
         (sum, entry) => sum + entry.value,

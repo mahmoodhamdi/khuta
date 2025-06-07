@@ -68,9 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
   Future<void> _addChild(Child child) async {
     if (!mounted) return;
-    
+
     try {
       final user = _auth.currentUser;
       if (user == null) return;
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('error_adding_child'.tr()),
@@ -95,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
   }
+
   void _showAddChildScreen() {
     if (!mounted) return;
     Navigator.push(
@@ -246,7 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildChildrenList() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: children.length,
@@ -258,7 +259,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildChildCard(Child child) {
-    final isRTL = context.locale.languageCode == 'ar';
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final lastTest = child.testResults.isNotEmpty
         ? child.testResults.last
@@ -270,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
         color: HomeScreenTheme.cardBackground(isDark),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [HomeScreenTheme.cardShadow(isDark)],
-      ),      child: InkWell(
+      ),
+      child: InkWell(
         onTap: () {
           if (!mounted) return;
           Navigator.push(
@@ -496,7 +497,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-      ));
+      ),
+    );
   }
 
   Widget _buildScoreIndicator(double score, bool isDark) {

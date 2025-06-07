@@ -16,7 +16,6 @@ class AnimatedBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isRTL = context.locale.languageCode == 'ar';
 
     return Container(
       decoration: BoxDecoration(
