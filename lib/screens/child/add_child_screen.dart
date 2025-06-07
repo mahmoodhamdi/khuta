@@ -15,7 +15,7 @@ class AddChildScreen extends StatefulWidget {
 class _AddChildScreenState extends State<AddChildScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  int _selectedAge = 3;
+  int _selectedAge = 6;
   String _selectedGender = 'male';
   bool _isLoading = false;
 
@@ -212,7 +212,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                                   : const Color(0xFF2D3748),
                               fontSize: 16,
                             ),
-                            items: List.generate(15, (index) => index + 3)
+                            items: List.generate(18, (index) => index + 6)
                                 .map(
                                   (age) => DropdownMenuItem(
                                     value: age,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/core/services/sdq_scoring_service.dart';
@@ -58,25 +59,24 @@ class AssessmentService {
 
   /// Calculate the SDQ T-score based on raw answers
   int calculateScore(List<int> answers, QuestionType questionType) {
+    if (child.age < 6 || child.age > 17) {
+      throw Exception('Age must be between 6 and 17');
+    }
+
     // Filter out unanswered questions (-1) and map to SDQ scores
     final validAnswers = answers.where((a) => a != -1).toList();
 
     if (validAnswers.isEmpty) {
-      return 0;
+      throw Exception('No valid answers provided');
     }
 
-    try {
-      return SdqScoringService.calculateTScore(
-        answers: validAnswers,
-        gender: child.gender.toLowerCase(),
-        age: child.age,
-        assessmentType: questionType == QuestionType.parent
-            ? 'parent'
-            : 'teacher',
-      );
-    } catch (e) {
-      debugPrint('Error calculating SDQ score: $e');
-      return 0;
-    }
+    return SdqScoringService.calculateTScore(
+      answers: validAnswers,
+      gender: child.gender.toLowerCase(),
+      age: child.age,
+      assessmentType: questionType == QuestionType.parent
+          ? 'parent'
+          : 'teacher',
+    );
   }
 }

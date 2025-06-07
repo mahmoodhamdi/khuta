@@ -196,7 +196,7 @@ class ResultsScreen extends StatelessWidget {
   }
 
   String _getScoreInterpretation(int tScore) {
-    return 'sdq_score_${_getScoreTitle(tScore).toLowerCase()}'.tr();
+    return '${"sdq_score_".tr()} ${_getScoreTitle(tScore).toLowerCase()}'.tr();
   }
 
   List<String> _getRecommendations(int tScore) {

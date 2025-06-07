@@ -333,12 +333,6 @@ final List<Question> parentQuestions = List.generate(48, (index) {
     id: 'p$index',
     questionText: tr(indexedParentQuestions[index]!['text']!),
     imageUrl: indexedParentQuestions[index]!['image']!,
-    options: [
-      tr('never'),
-      tr('rarely'),
-      tr('sometimes'),
-      tr('often'),
-    ], // مفاتيح ترجمة فقط
     questionType: QuestionType.parent,
   );
 });
@@ -350,7 +344,6 @@ final List<Question> teacherQuestions = List.generate(
       id: 't$index',
       questionText: tr(indexedTeacherQuestions[index]!['text']!),
       imageUrl: indexedTeacherQuestions[index]!['image']!,
-      options: [tr('never'), tr('rarely'), tr('sometimes'), tr('often')],
       questionType: QuestionType.teacher,
     );
   },

@@ -11,15 +11,15 @@ class AssessmentController {
   final BuildContext context;
   final Child child;
   final List<Question> questions;
-  final List<int> answers;
+  List<int> answers;
   final Function(int) onQuestionChanged;
   final Function(List<int>) onAnswersChanged;
 
   AssessmentController({
+    required this.answers,
     required this.context,
     required this.child,
     required this.questions,
-    required this.answers,
     required this.onQuestionChanged,
     required this.onAnswersChanged,
   }) : _service = AssessmentService(child: child);
@@ -33,25 +33,31 @@ class AssessmentController {
   void nextQuestion(int currentIndex) {
     if (currentIndex < questions.length - 1) {
       onQuestionChanged(currentIndex + 1);
+      debugPrint('currentIndex: $currentIndex');
+      debugPrint('answers: $answers');
     } else {
       _showResults();
     }
   }
 
   void selectAnswer(int questionIndex, int optionIndex) {
-    final newAnswers = List<int>.from(answers);
-    newAnswers[questionIndex] = optionIndex;
-    onAnswersChanged(newAnswers);
+    answers[questionIndex] = optionIndex;
+    onAnswersChanged(answers);
+    debugPrint('Answer selected for question $questionIndex: $optionIndex');
+    debugPrint('Current answers: $answers');
   }
 
   Future<void> _showResults() async {
     if (questions.isEmpty) return;
 
-    final questionType = questions[0].questionType;
-    final score = _service.calculateScore(answers, questionType);
-    final interpretation = _service.getScoreInterpretation(score);
-
     try {
+      final questionType = questions[0].questionType;
+      final score = answers.asMap().entries.fold<int>(
+        0,
+        (sum, entry) => sum + entry.value,
+      );
+      final interpretation = _service.getScoreInterpretation(score);
+
       await _service.saveTestResult(score, interpretation);
 
       if (context.mounted) {
@@ -68,10 +74,15 @@ class AssessmentController {
         );
       }
     } catch (e) {
+      debugPrint('Error saving test result: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('error_saving_results'.tr()),
+            content: Text(
+              e.toString().contains('Age must be between')
+                  ? 'error_invalid_age'.tr()
+                  : 'error_saving_results'.tr(),
+            ),
             backgroundColor: Colors.red,
           ),
         );

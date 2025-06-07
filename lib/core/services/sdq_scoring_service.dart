@@ -1,7 +1,130 @@
-import '../constants/scorring_map.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+Map<String, Map<String, Map<String, Map<int, int>>>> sdqParentTScoreTable = {
+  'parent': {
+    'male': {
+      '6-8': {
+        0: 37,
+        1: 41,
+        2: 45,
+        3: 49,
+        4: 50,
+        5: 52,
+        6: 55,
+        7: 58,
+        8: 60,
+        9: 63,
+        10: 67,
+      },
+      '9-11': {
+        0: 37,
+        1: 42,
+        2: 46,
+        3: 50,
+        4: 51,
+        5: 53,
+        6: 56,
+        7: 59,
+        8: 61,
+        9: 64,
+        10: 68,
+      },
+      '12-14': {
+        0: 36,
+        1: 42,
+        2: 46,
+        3: 48,
+        4: 50,
+        5: 53,
+        6: 56,
+        7: 60,
+        8: 62,
+        9: 65,
+        10: 69,
+      },
+      '15-17': {
+        0: 39,
+        1: 44,
+        2: 48,
+        3: 50,
+        4: 52,
+        5: 56,
+        6: 57,
+        7: 59,
+        8: 62,
+        9: 66,
+        10: 70,
+      },
+    },
+    'female': {
+      '6-8': {
+        0: 39,
+        1: 45,
+        2: 49,
+        3: 51,
+        4: 53,
+        5: 56,
+        6: 59,
+        7: 62,
+        8: 65,
+        9: 68,
+        10: 71,
+      },
+      '9-11': {
+        0: 41,
+        1: 46,
+        2: 50,
+        3: 52,
+        4: 54,
+        5: 57,
+        6: 61,
+        7: 63,
+        8: 67,
+        9: 69,
+        10: 74,
+      },
+      '12-14': {
+        0: 42,
+        1: 47,
+        2: 49,
+        3: 51,
+        4: 55,
+        5: 58,
+        6: 61,
+        7: 64,
+        8: 67,
+        9: 71,
+        10: 77,
+      },
+      '15-17': {
+        0: 42,
+        1: 48,
+        2: 50,
+        3: 52,
+        4: 56,
+        5: 60,
+        6: 63,
+        7: 65,
+        8: 68,
+        9: 74,
+        10: 75,
+      },
+    },
+  },
+};
+
+// دالة لجلب درجة T بناءً على البيانات المدخلة
+int getTScore(
+  String assessmentType,
+  String gender,
+  String ageGroup,
+  int proratedScore,
+) {
+  return sdqParentTScoreTable[assessmentType]?[gender]?[ageGroup]?[proratedScore] ??
+      -1;
+}
 
 class SdqScoringService {
-  /// Converts raw answers (0-3) to SDQ T-scores based on age and gender
   static int calculateTScore({
     required List<int> answers,
     required String gender, // 'male' or 'female'
@@ -9,7 +132,7 @@ class SdqScoringService {
     required String assessmentType, // 'parent' or 'teacher'
   }) {
     // Calculate prorated score (sum of all answers)
-    int proratedScore = answers.fold(0, (sum, answer) => sum + answer);
+    int proratedScore = answers.fold<int>(0, (sum, value) => sum + value);
 
     // Determine age group based on age
     String ageGroup = '';
@@ -28,7 +151,9 @@ class SdqScoringService {
     // Get T-score using the scoring map
     int tScore = getTScore(assessmentType, gender, ageGroup, proratedScore);
     if (tScore == -1) {
-      throw Exception('Invalid prorated score or parameters');
+
+      throw Exception('error_prorated_score'.tr());
+      
     }
 
     return tScore;

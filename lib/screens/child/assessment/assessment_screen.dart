@@ -4,7 +4,7 @@ import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/controllers/assessment_controller.dart';
-import 'package:khuta/screens/child/assessment/widgets/answer_option.dart';
+import 'package:khuta/screens/child/assessment/widgets/answer_options_list.dart';
 import 'package:khuta/screens/child/assessment/widgets/navigation_buttons.dart';
 import 'package:khuta/screens/child/assessment/widgets/progress_bar.dart';
 import 'package:khuta/screens/child/assessment/widgets/question_image.dart';
@@ -25,7 +25,7 @@ class AssessmentScreen extends StatefulWidget {
 
 class _AssessmentScreenState extends State<AssessmentScreen> {
   List<Question> questions = [];
-  List<int> answers = [];
+  late List<int> answers;
   int currentQuestionIndex = 0;
   bool isLoading = true;
   String? error;
@@ -34,32 +34,43 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   @override
   void initState() {
     super.initState();
-    questions = widget.questions;
-    _loadQuestions();
+
+    // Validate child's age first
+    if (widget.child.age < 6 || widget.child.age > 17) {
+      setState(() {
+        error = 'error_invalid_age'.tr();
+        isLoading = false;
+      });
+      return;
+    }
+
+    questions = List.from(widget.questions);
+    if (questions.isEmpty) {
+      setState(() {
+        error = 'No questions available';
+        isLoading = false;
+      });
+      return;
+    }
+    answers = List.filled(questions.length, -1);
+    _initController();
   }
 
-  Future<void> _loadQuestions() async {
-    try {
-      setState(() {
-        answers = List.filled(questions.length, -1);
-        isLoading = false;
-      });
-
-      _controller = AssessmentController(
-        context: context,
-        child: widget.child,
-        questions: questions,
-        answers: answers,
-        onQuestionChanged: (index) =>
-            setState(() => currentQuestionIndex = index),
-        onAnswersChanged: (newAnswers) => setState(() => answers = newAnswers),
-      );
-    } catch (e) {
-      setState(() {
-        error = e.toString();
-        isLoading = false;
-      });
-    }
+  void _initController() {
+    _controller = AssessmentController(
+      answers: answers,
+      context: context,
+      child: widget.child,
+      questions: questions,
+      onQuestionChanged: (index) =>
+          setState(() => currentQuestionIndex = index),
+      onAnswersChanged: (newAnswers) {
+        answers = newAnswers;
+        setState(() {});
+        debugPrint('Answers updated: $answers');
+      },
+    );
+    setState(() => isLoading = false);
   }
 
   @override
@@ -77,9 +88,13 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
         ),
       );
     }
-
-    if (error != null) {
+    if (error != null || questions.isEmpty) {
       return _buildErrorScreen();
+    }
+
+    // Ensure answers list is properly initialized
+    if (answers.length != questions.length) {
+      answers = List.filled(questions.length, -1);
     }
 
     return WillPopScope(
@@ -156,7 +171,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => _loadQuestions(),
+              onPressed: () => _initController(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HomeScreenTheme.accentBlue(isDark),
                 foregroundColor: Colors.white,
@@ -184,13 +199,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           const SizedBox(height: 24),
           QuestionText(text: currentQuestion.questionText, isRTL: isRTL),
           const SizedBox(height: 24),
-          ...currentQuestion.options.asMap().entries.map(
-            (entry) => AnswerOption(
-              option: entry.value,
-              isSelected: answers[currentQuestionIndex] == entry.key,
-              onTap: () =>
-                  _controller.selectAnswer(currentQuestionIndex, entry.key),
-            ),
+          AnswerOptionsList(
+            selectedAnswer: answers[currentQuestionIndex],
+            onSelect: (optionIndex) =>
+                _controller.selectAnswer(currentQuestionIndex, optionIndex),
           ),
         ],
       ),

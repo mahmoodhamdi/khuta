@@ -404,7 +404,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  test.testType,
+                  test.testType.tr(),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
