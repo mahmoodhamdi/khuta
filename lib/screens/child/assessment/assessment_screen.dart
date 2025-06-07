@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/controllers/assessment_controller.dart';
@@ -64,11 +65,16 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   @override
   Widget build(BuildContext context) {
     final isRTL = context.locale.languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (isLoading) {
-      return const Scaffold(
-        backgroundColor: Color(0xFFF8F9FA),
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        backgroundColor: HomeScreenTheme.backgroundColor(isDark),
+        body: Center(
+          child: CircularProgressIndicator(
+            color: HomeScreenTheme.accentBlue(isDark),
+          ),
+        ),
       );
     }
 
@@ -79,7 +85,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     return WillPopScope(
       onWillPop: _controller.showExitConfirmation,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FA),
+        backgroundColor: HomeScreenTheme.backgroundColor(isDark),
         appBar: _buildAppBar(isRTL),
         body: SafeArea(
           child: Column(
@@ -106,10 +112,12 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   PreferredSizeWidget _buildAppBar(bool isRTL) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AppBar(
       title: Text('assessment'.tr()),
-      backgroundColor: Colors.white,
-      foregroundColor: const Color(0xFF2D3748),
+      backgroundColor: HomeScreenTheme.cardBackground(isDark),
+      foregroundColor: HomeScreenTheme.primaryText(isDark),
       elevation: 0,
       leading: IconButton(
         icon: Icon(isRTL ? Icons.arrow_forward : Icons.arrow_back),
@@ -119,24 +127,44 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   Widget _buildErrorScreen() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: HomeScreenTheme.backgroundColor(isDark),
       appBar: AppBar(
         title: Text('assessment'.tr()),
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF2D3748),
+        backgroundColor: HomeScreenTheme.cardBackground(isDark),
+        foregroundColor: HomeScreenTheme.primaryText(isDark),
         elevation: 0,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+            Icon(
+              Icons.error_outline,
+              size: 64,
+              color: HomeScreenTheme.accentRed(isDark),
+            ),
             const SizedBox(height: 16),
-            Text('error_loading_questions'.tr()),
+            Text(
+              'error_loading_questions'.tr(),
+              style: TextStyle(
+                fontSize: 18,
+                color: HomeScreenTheme.primaryText(isDark),
+              ),
+            ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => _loadQuestions(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HomeScreenTheme.accentBlue(isDark),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
               child: Text('retry'.tr()),
             ),
           ],
@@ -154,10 +182,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
         children: [
           QuestionImage(imageUrl: currentQuestion.imageUrl),
           const SizedBox(height: 24),
-          QuestionText(
-            text: questions[currentQuestionIndex].questionText,
-            isRTL: isRTL,
-          ),
+          QuestionText(text: currentQuestion.questionText, isRTL: isRTL),
           const SizedBox(height: 24),
           ...currentQuestion.options.asMap().entries.map(
             (entry) => AnswerOption(

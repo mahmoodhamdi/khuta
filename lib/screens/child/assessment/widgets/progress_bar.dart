@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 
 class AssessmentProgressBar extends StatelessWidget {
   final int currentQuestionIndex;
@@ -14,10 +15,11 @@ class AssessmentProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final progress = (currentQuestionIndex + 1) / totalQuestions;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(20),
-      color: Colors.white,
+      color: HomeScreenTheme.cardBackground(isDark),
       child: Column(
         children: [
           Row(
@@ -25,23 +27,28 @@ class AssessmentProgressBar extends StatelessWidget {
             children: [
               Text(
                 '${'question'.tr()} ${currentQuestionIndex + 1}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF2D3748),
+                  color: HomeScreenTheme.primaryText(isDark),
                 ),
               ),
               Text(
                 '${currentQuestionIndex + 1} / $totalQuestions',
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: HomeScreenTheme.secondaryText(isDark),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: Colors.grey[200],
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4299E1)),
+            backgroundColor: isDark ? Colors.grey[800] : Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation<Color>(
+              HomeScreenTheme.accentBlue(isDark),
+            ),
             minHeight: 6,
           ),
         ],

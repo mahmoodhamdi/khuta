@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 
 class QuestionImage extends StatelessWidget {
   final String imageUrl;
@@ -7,19 +8,15 @@ class QuestionImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       height: 200,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: HomeScreenTheme.cardBackground(isDark),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [HomeScreenTheme.cardShadow(isDark)],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -28,11 +25,11 @@ class QuestionImage extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
-              color: const Color(0xFF4299E1).withValues(alpha: 0.1),
-              child: const Icon(
+              color: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+              child: Icon(
                 Icons.image,
                 size: 50,
-                color: Color(0xFF4299E1),
+                color: HomeScreenTheme.accentBlue(isDark),
               ),
             );
           },

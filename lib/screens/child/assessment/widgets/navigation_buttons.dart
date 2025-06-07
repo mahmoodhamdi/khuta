@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 
 class NavigationButtons extends StatelessWidget {
   final VoidCallback onPrevious;
@@ -21,9 +22,11 @@ class NavigationButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(20),
-      color: Colors.white,
+      color: HomeScreenTheme.cardBackground(isDark),
       child: Row(
         children: [
           if (!isFirstQuestion)
@@ -31,8 +34,8 @@ class NavigationButtons extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onPrevious,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[100],
-                  foregroundColor: const Color(0xFF2D3748),
+                  backgroundColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                  foregroundColor: HomeScreenTheme.primaryText(isDark),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -59,13 +62,16 @@ class NavigationButtons extends StatelessWidget {
             child: ElevatedButton(
               onPressed: canProceed ? onNext : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4299E1),
+                backgroundColor: HomeScreenTheme.accentBlue(isDark),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 0,
+                disabledBackgroundColor: isDark
+                    ? Colors.grey[700]
+                    : Colors.grey[300],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

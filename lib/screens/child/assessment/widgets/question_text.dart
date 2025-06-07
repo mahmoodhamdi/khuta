@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 
 class QuestionText extends StatelessWidget {
   final String text;
@@ -9,26 +10,22 @@ class QuestionText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: HomeScreenTheme.cardBackground(isDark),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha:  0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [HomeScreenTheme.cardShadow(isDark)],
       ),
       child: Text(
-       tr(text),
-        style: const TextStyle(
+        tr(text),
+        style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF2D3748),
+          color: HomeScreenTheme.primaryText(isDark),
           height: 1.5,
         ),
         textAlign: isRTL ? TextAlign.right : TextAlign.left,

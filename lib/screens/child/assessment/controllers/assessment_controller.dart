@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/services/assessment_service.dart';
@@ -64,29 +66,48 @@ class AssessmentController {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error saving results: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('error_saving_results'.tr()),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
       }
     }
   }
 
   Future<bool> showExitConfirmation() async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Exit Assessment'),
-        content: const Text(
-          'Are you sure you want to exit? Your progress will be lost.',
+        backgroundColor: HomeScreenTheme.cardBackground(isDark),
+        title: Text(
+          'exit_assessment'.tr(),
+          style: TextStyle(
+            color: HomeScreenTheme.primaryText(isDark),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'exit_assessment_confirmation'.tr(),
+          style: TextStyle(color: HomeScreenTheme.primaryText(isDark)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Continue'),
+            child: Text(
+              'continue'.tr(),
+              style: TextStyle(color: HomeScreenTheme.accentBlue(isDark)),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Exit'),
+            child: Text(
+              'exit'.tr(),
+              style: TextStyle(color: HomeScreenTheme.accentRed(isDark)),
+            ),
           ),
         ],
       ),
