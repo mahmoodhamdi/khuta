@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/services/sdq_scoring_service.dart';
 import 'package:khuta/models/child.dart';
+import 'package:khuta/models/question.dart';
 import 'package:khuta/models/test_result.dart';
 
 class AssessmentService {
@@ -16,16 +18,19 @@ class AssessmentService {
   }) : _firestore = firestore ?? FirebaseFirestore.instance,
        _auth = auth ?? FirebaseAuth.instance;
 
-  Future<void> saveTestResult(double score, String interpretation) async {
+  Future<void> saveTestResult(int score, String interpretation) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return;
 
+      final recommendations = SdqScoringService.getRecommendations(score);
+
       final testResult = TestResult(
-        testType: 'autism_assessment',
-        score: score,
+        testType: 'sdq_assessment',
+        score: score.toDouble(),
         date: DateTime.now(),
         notes: interpretation,
+        recommendations: recommendations,
       );
 
       // Add result to child's list
@@ -46,24 +51,32 @@ class AssessmentService {
     }
   }
 
-  String getScoreInterpretation(double score) {
-    if (score >= 80) return 'high_functionality';
-    if (score >= 60) return 'moderate_functionality';
-    if (score >= 40) return 'low_functionality';
-    return 'very_low_functionality';
+  /// Get the interpretation text based on the T-score
+  String getScoreInterpretation(int tScore) {
+    return SdqScoringService.getScoreInterpretation(tScore);
   }
 
-  double calculateScore(List<int> answers) {
-    double totalScore = 0;
-    int answeredQuestions = 0;
+  /// Calculate the SDQ T-score based on raw answers
+  int calculateScore(List<int> answers, QuestionType questionType) {
+    // Filter out unanswered questions (-1) and map to SDQ scores
+    final validAnswers = answers.where((a) => a != -1).toList();
 
-    for (int answer in answers) {
-      if (answer != -1) {
-        totalScore += (answer + 1) * 25; // Each answer from 25 to 100
-        answeredQuestions++;
-      }
+    if (validAnswers.isEmpty) {
+      return 0;
     }
 
-    return answeredQuestions > 0 ? totalScore / answeredQuestions : 0;
+    try {
+      return SdqScoringService.calculateTScore(
+        answers: validAnswers,
+        gender: child.gender.toLowerCase(),
+        age: child.age,
+        assessmentType: questionType == QuestionType.parent
+            ? 'parent'
+            : 'teacher',
+      );
+    } catch (e) {
+      debugPrint('Error calculating SDQ score: $e');
+      return 0;
+    }
   }
 }

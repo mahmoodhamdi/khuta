@@ -45,7 +45,10 @@ class AssessmentController {
   }
 
   Future<void> _showResults() async {
-    final score = _service.calculateScore(answers);
+    if (questions.isEmpty) return;
+
+    final questionType = questions[0].questionType;
+    final score = _service.calculateScore(answers, questionType);
     final interpretation = _service.getScoreInterpretation(score);
 
     try {
@@ -57,7 +60,7 @@ class AssessmentController {
           MaterialPageRoute(
             builder: (context) => ResultsScreen(
               child: child,
-              score: score,
+              score: score.toDouble(),
               answers: answers,
               questions: questions,
             ),
@@ -69,7 +72,7 @@ class AssessmentController {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('error_saving_results'.tr()),
-            backgroundColor: Theme.of(context).colorScheme.error,
+            backgroundColor: Colors.red,
           ),
         );
       }

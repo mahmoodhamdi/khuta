@@ -43,73 +43,46 @@ class ResultsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              // Results Header
+              // Results Header with T-Score
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
+                    colors: _getScoreGradient(score.toInt(), isDark),
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      HomeScreenTheme.getScoreColor(score, isDark),
-                      HomeScreenTheme.getScoreColor(
-                        score,
-                        isDark,
-                      ).withValues(alpha: 0.8),
-                    ],
                   ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: HomeScreenTheme.getScoreColor(
-                        score,
-                        isDark,
-                      ).withValues(alpha: 0.3),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        _getScoreIcon(score),
-                        size: 40,
-                        color: Colors.white,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _getScoreIcon(score.toInt()),
+                          size: 32,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          _getScoreTitle(score.toInt()),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      '${score.toStringAsFixed(1)}%',
+                      'T-Score: ${score.toInt()}',
                       style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                         color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _getScoreTitle(score),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      child.name,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -118,52 +91,31 @@ class ResultsScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Score Interpretation
+              // Interpretation
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: HomeScreenTheme.cardBackground(isDark),
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [HomeScreenTheme.cardShadow(isDark)],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: HomeScreenTheme.accentBlue(
-                              isDark,
-                            ).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.info_outline,
-                            color: HomeScreenTheme.accentBlue(isDark),
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          'interpretation'.tr(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: HomeScreenTheme.primaryText(isDark),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
                     Text(
-                      _getScoreInterpretation(score),
+                      'interpretation'.tr(),
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: HomeScreenTheme.primaryText(isDark),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _getScoreInterpretation(score.toInt()).tr(),
+                      style: TextStyle(
+                        fontSize: 16,
                         color: HomeScreenTheme.secondaryText(isDark),
-                        height: 1.6,
                       ),
                     ),
                   ],
@@ -179,62 +131,37 @@ class ResultsScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: HomeScreenTheme.cardBackground(isDark),
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [HomeScreenTheme.cardShadow(isDark)],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: HomeScreenTheme.accentGreen(
-                              isDark,
-                            ).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.lightbulb_outline,
-                            color: HomeScreenTheme.accentGreen(isDark),
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          'recommendations'.tr(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: HomeScreenTheme.primaryText(isDark),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'recommendations'.tr(),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: HomeScreenTheme.primaryText(isDark),
+                      ),
                     ),
-                    const SizedBox(height: 16),
-                    ..._getRecommendations(score).map(
+                    const SizedBox(height: 12),
+                    ..._getRecommendations(score.toInt()).map(
                       (recommendation) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 6),
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: HomeScreenTheme.accentGreen(isDark),
-                                shape: BoxShape.circle,
-                              ),
+                            Icon(
+                              Icons.check_circle,
+                              size: 20,
+                              color: HomeScreenTheme.accentBlue(isDark),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                recommendation,
+                                recommendation.tr(),
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: HomeScreenTheme.secondaryText(isDark),
-                                  height: 1.5,
                                 ),
                               ),
                             ),
@@ -244,169 +171,6 @@ class ResultsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Question Review
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: HomeScreenTheme.cardBackground(isDark),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [HomeScreenTheme.cardShadow(isDark)],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: HomeScreenTheme.accentOrange(
-                              isDark,
-                            ).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.quiz_outlined,
-                            color: HomeScreenTheme.accentOrange(isDark),
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          'question_review'.tr(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: HomeScreenTheme.primaryText(isDark),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ...questions.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      Question question = entry.value;
-                      int answerIndex = answers[index];
-
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 16),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Colors.black12
-                              : const Color(0xFFF7FAFC),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: isDark
-                                ? Colors.white.withValues(alpha: 0.1)
-                                : Colors.grey.withValues(alpha: 0.1),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${'question'.tr()} ${index + 1}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: HomeScreenTheme.accentBlue(isDark),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              tr(question.questionText),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: HomeScreenTheme.primaryText(isDark),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _getAnswerColor(
-                                  answerIndex,
-                                  isDark,
-                                ).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                answerIndex >= 0 &&
-                                        answerIndex < question.options.length
-                                    ? question.options[answerIndex]
-                                    : 'no_answer'.tr(),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: _getAnswerColor(answerIndex, isDark),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Action Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () =>
-                          Navigator.popUntil(context, (route) => route.isFirst),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark
-                            ? Colors.grey[800]
-                            : Colors.grey[100],
-                        foregroundColor: HomeScreenTheme.primaryText(isDark),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: Text('back_to_home'.tr()),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => _shareResults(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: HomeScreenTheme.accentBlue(isDark),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.share, size: 18),
-                          const SizedBox(width: 8),
-                          Text('share_results'.tr()),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -415,88 +179,76 @@ class ResultsScreen extends StatelessWidget {
     );
   }
 
-  IconData _getScoreIcon(double score) {
-    if (score >= 80) return Icons.sentiment_very_satisfied;
-    if (score >= 60) return Icons.sentiment_satisfied;
-    if (score >= 40) return Icons.sentiment_neutral;
-    return Icons.sentiment_dissatisfied;
+  IconData _getScoreIcon(int tScore) {
+    if (tScore >= 70) return Icons.error;
+    if (tScore >= 65) return Icons.warning;
+    if (tScore >= 60) return Icons.info;
+    if (tScore >= 45) return Icons.check_circle;
+    return Icons.thumb_up;
   }
 
-  String _getScoreTitle(double score) {
-    if (score >= 80) return 'excellent_performance'.tr();
-    if (score >= 60) return 'good_performance'.tr();
-    if (score >= 40) return 'moderate_performance'.tr();
-    return 'needs_attention'.tr();
+  String _getScoreTitle(int tScore) {
+    if (tScore >= 70) return 'very_high_risk'.tr();
+    if (tScore >= 65) return 'high_risk'.tr();
+    if (tScore >= 60) return 'moderately_high_risk'.tr();
+    if (tScore >= 45) return 'normal_range'.tr();
+    return 'low_range'.tr();
   }
 
-  String _getScoreInterpretation(double score) {
-    if (score >= 80) {
-      return 'high_score_interpretation'.tr();
-    } else if (score >= 60) {
-      return 'moderate_score_interpretation'.tr();
-    } else if (score >= 40) {
-      return 'low_score_interpretation'.tr();
+  String _getScoreInterpretation(int tScore) {
+    return 'sdq_score_${_getScoreTitle(tScore).toLowerCase()}'.tr();
+  }
+
+  List<String> _getRecommendations(int tScore) {
+    if (tScore >= 70) {
+      return [
+        'immediate_professional_consultation',
+        'comprehensive_evaluation_needed',
+        'create_support_plan',
+        'regular_monitoring',
+      ];
+    } else if (tScore >= 65) {
+      return [
+        'professional_consultation_recommended',
+        'behavioral_intervention_plan',
+        'parent_teacher_coordination',
+        'regular_follow_up',
+      ];
+    } else if (tScore >= 60) {
+      return [
+        'monitor_behavior_closely',
+        'consider_professional_consultation',
+        'implement_support_strategies',
+        'regular_assessment',
+      ];
+    } else if (tScore >= 45) {
+      return [
+        'continue_current_support',
+        'maintain_regular_monitoring',
+        'positive_reinforcement',
+        'age_appropriate_activities',
+      ];
     } else {
-      return 'very_low_score_interpretation'.tr();
+      return [
+        'maintain_current_strategies',
+        'encourage_positive_behaviors',
+        'regular_development_monitoring',
+        'age_appropriate_engagement',
+      ];
     }
   }
 
-  List<String> _getRecommendations(double score) {
-    if (score >= 80) {
-      return [
-        'continue_current_activities'.tr(),
-        'maintain_routine_activities'.tr(),
-        'regular_follow_up'.tr(),
-      ];
-    } else if (score >= 60) {
-      return [
-        'increase_social_activities'.tr(),
-        'work_on_communication_skills'.tr(),
-        'consult_specialist_if_needed'.tr(),
-        'create_structured_routine'.tr(),
-      ];
-    } else if (score >= 40) {
-      return [
-        'seek_professional_evaluation'.tr(),
-        'consider_therapy_programs'.tr(),
-        'focus_on_social_skills_development'.tr(),
-        'create_supportive_environment'.tr(),
-      ];
+  List<Color> _getScoreGradient(int tScore, bool isDark) {
+    if (tScore >= 70) {
+      return [Colors.red.shade700, Colors.red.shade900];
+    } else if (tScore >= 65) {
+      return [Colors.orange.shade700, Colors.orange.shade900];
+    } else if (tScore >= 60) {
+      return [Colors.yellow.shade700, Colors.yellow.shade900];
+    } else if (tScore >= 45) {
+      return [Colors.green.shade500, Colors.green.shade700];
     } else {
-      return [
-        'immediate_professional_consultation'.tr(),
-        'comprehensive_evaluation_needed'.tr(),
-        'consider_intensive_intervention'.tr(),
-        'family_support_programs'.tr(),
-      ];
+      return [Colors.blue.shade500, Colors.blue.shade700];
     }
-  }
-
-  Color _getAnswerColor(int answerIndex, bool isDark) {
-    switch (answerIndex) {
-      case 0:
-        return HomeScreenTheme.accentRed(isDark);
-      case 1:
-        return HomeScreenTheme.accentOrange(isDark);
-      case 2:
-        return isDark ? const Color(0xFFF6E05E) : const Color(0xFFECC94B);
-      case 3:
-        return HomeScreenTheme.accentGreen(isDark);
-      default:
-        return HomeScreenTheme.secondaryText(isDark);
-    }
-  }
-
-  void _shareResults(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('results_saved_successfully'.tr()),
-        backgroundColor: HomeScreenTheme.accentGreen(isDark),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
   }
 }

@@ -126,19 +126,6 @@ final Map<int, Map<String, String>> indexedTeacherQuestions = {
   },
 };
 
-final List<Question> teacherQuestions = List.generate(
-  indexedTeacherQuestions.length,
-  (index) {
-    return Question(
-      id: 't$index',
-      questionText: tr(indexedTeacherQuestions[index]!['text']!),
-      imageUrl: indexedTeacherQuestions[index]!['image']!,
-      options: [tr('never'), tr('rarely'), tr('sometimes'), tr('often')],
-      questionType: QuestionType.teacher,
-    );
-  },
-);
-
 final List<Question> parentQuestions = List.generate(48, (index) {
   // بيانات الأسئلة (بدون tr() هنا)
   const Map<int, Map<String, String>> indexedParentQuestions = {
@@ -355,3 +342,16 @@ final List<Question> parentQuestions = List.generate(48, (index) {
     questionType: QuestionType.parent,
   );
 });
+
+final List<Question> teacherQuestions = List.generate(
+  indexedTeacherQuestions.length,
+  (index) {
+    return Question(
+      id: 't$index',
+      questionText: tr(indexedTeacherQuestions[index]!['text']!),
+      imageUrl: indexedTeacherQuestions[index]!['image']!,
+      options: [tr('never'), tr('rarely'), tr('sometimes'), tr('often')],
+      questionType: QuestionType.teacher,
+    );
+  },
+);

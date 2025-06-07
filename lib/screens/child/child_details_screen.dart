@@ -310,10 +310,10 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.play_arrow, size: 20),
+                            const Icon(Icons.class_, color: Colors.white, size: 20),
                             const SizedBox(width: 8),
                             Text(
-                              'start_assessment'.tr(),
+                              'teacher_assessment'.tr(),
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
