@@ -18,20 +18,67 @@ class AnimatedBottomBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isRTL = context.locale.languageCode == 'ar';
 
-    return AnimatedBottomNavigationBar(
-      icons: [Icons.home_rounded, Icons.settings_rounded],
-      activeIndex: activeIndex,
-      gapLocation: GapLocation.none,
-      notchSmoothness: NotchSmoothness.smoothEdge,
+    return Container(
+      decoration: BoxDecoration(
+        color: HomeScreenTheme.cardBackground(isDark),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: AnimatedBottomNavigationBar.builder(
+        itemCount: 3,
+        tabBuilder: (int index, bool isActive) {
+          final icons = [
+            Icons.home_rounded,
 
-      onTap: onTap,
-      backgroundColor: HomeScreenTheme.cardBackground(isDark),
-      activeColor: HomeScreenTheme.accentBlue(isDark),
-      inactiveColor: HomeScreenTheme.secondaryText(isDark),
-      iconSize: 24,
+            Icons.settings_rounded,
+            Icons.info_rounded,
+          ];
+          final labels = [
+            'nav_home'.tr(),
 
-      splashSpeedInMilliseconds: 300,
-      splashColor: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+            'nav_settings'.tr(),
+
+            'nav_about'.tr(),
+          ];
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icons[index],
+                size: 24,
+                color: isActive
+                    ? HomeScreenTheme.accentBlue(isDark)
+                    : HomeScreenTheme.secondaryText(isDark),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                labels[index],
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isActive
+                      ? HomeScreenTheme.accentBlue(isDark)
+                      : HomeScreenTheme.secondaryText(isDark),
+                ),
+              ),
+            ],
+          );
+        },
+        activeIndex: activeIndex,
+        gapLocation: GapLocation.none,
+        notchSmoothness: NotchSmoothness.smoothEdge,
+
+        onTap: onTap,
+        backgroundColor: HomeScreenTheme.cardBackground(isDark),
+
+        splashSpeedInMilliseconds: 300,
+        splashColor: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+      ),
     );
   }
 }
