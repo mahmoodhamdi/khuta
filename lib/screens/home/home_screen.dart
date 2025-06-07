@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/models/child.dart';
+import 'package:khuta/screens/child/add_child_screen.dart';
 import 'package:khuta/screens/child/child_details_screen.dart';
 
 import '../../cubit/auth/auth_cubit.dart';
@@ -83,107 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _showAddChildDialog() {
-    final nameController = TextEditingController();
-    int selectedAge = 3;
-    String selectedGender = 'male';
-
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text('add_new_child'.tr()),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'child_name'.tr(),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: selectedGender,
-                decoration: InputDecoration(
-                  labelText: 'gender'.tr(),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                items: [
-                  DropdownMenuItem(value: 'male', child: Text('male'.tr())),
-                  DropdownMenuItem(value: 'female', child: Text('female'.tr())),
-                ],
-                onChanged: (value) {
-                  setDialogState(() {
-                    selectedGender = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<int>(
-                value: selectedAge,
-                decoration: InputDecoration(
-                  labelText: 'age'.tr(),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                items: List.generate(15, (index) => index + 3)
-                    .map(
-                      (age) => DropdownMenuItem(
-                        value: age,
-                        child: Text('$age ${'years'.tr()}'),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setDialogState(() {
-                    selectedAge = value!;
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('cancel'.tr()),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (nameController.text.trim().isNotEmpty) {
-                  final newChild = Child(
-                    id: '',
-                    name: nameController.text.trim(),
-                    gender: selectedGender,
-                    age: selectedAge,
-                    testResults: [],
-                    createdAt: DateTime.now(),
-                  );
-                  _addChild(newChild);
-                  Navigator.pop(context);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-                foregroundColor: Colors.white,
-              ),
-              child: Text('add'.tr()),
-            ),
-          ],
-        ),
+  void _showAddChildScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddChildScreen(onAddChild: _addChild),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthInitial) {
@@ -200,12 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.white,
           foregroundColor: const Color(0xFF2D3748),
           elevation: 0,
-          // actions: [
-          //   // IconButton(
-          //   //  onPressed: () => context.read<AuthCubit>().signOut(),
-          //   //   icon: const Icon(Icons.logout),
-          //   // ),
-          // ],
         ),
         body: SafeArea(
           child: isLoading
@@ -217,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
               : _buildChildrenList(),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _showAddChildDialog,
+          onPressed: _showAddChildScreen,
           backgroundColor: const Color(0xFF4299E1),
           child: const Icon(Icons.add, color: Colors.white),
         ),
@@ -290,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
-            onPressed: _showAddChildDialog,
+            onPressed: _showAddChildScreen,
             icon: const Icon(Icons.add),
             label: Text('add_first_child'.tr()),
             style: ElevatedButton.styleFrom(
