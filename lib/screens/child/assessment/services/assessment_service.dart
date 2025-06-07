@@ -27,7 +27,7 @@ class AssessmentService {
       final recommendations = SdqScoringService.getRecommendations(score);
 
       final testResult = TestResult(
-        testType: 'sdq_assessment',
+        testType: 'sdq_assessment'.tr(),
         score: score.toDouble(),
         date: DateTime.now(),
         notes: interpretation,

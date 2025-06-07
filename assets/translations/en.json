@@ -1,4 +1,11 @@
 { 
+  "sdq_assessment": "SDQ Assessment",
+  "very_high_risk": "Very High Risk",
+  "high_risk": "High Risk",
+  "moderately_high_risk": "Moderately High Risk",
+  "normal_range": "Normal Range",
+  "low_range": "Low Risk",
+
   "dark_mode_description": "Set dark mode",
   "light_mode_description": "Set light mode",
   "logout_confirmation_title": "Logout Confirmation",
@@ -14,11 +21,7 @@
   "age_required": "Age is required",
   "gender_required": "Gender is required",
   "teacher_assessment": "Teacher Assessment",
-  "moderately_high_risk": "Moderately High Risk",
-  "low_range": "Low Risk",
-  "very_low_risk": "Very Low Risk",
-  "high_risk": "High Risk",
-  "very_high_risk": "Very High Risk",
+
   
   "test_summary": "Test Summary",  "test_deleted": "Test deleted successfully",
   "error_deleting": "Error deleting",
@@ -215,8 +218,8 @@
   "too_many_requests": "Too many attempts. Please try again later",
   "operation_not_allowed": "Email/password sign-in is not enabled",
   "unknown_error": "An unknown error occurred. Please try again",
-  "assessment_title": "Autism Assessment",
-  "assessment_subtitle": "Comprehensive evaluation for autism spectrum",
+  "assessment_title": "ADHD Assessment",
+  "assessment_subtitle": "Comprehensive evaluation for ADHD",
   "previous_tests": "Previous Tests",
   "question": "Question",
   "previous": "Previous",

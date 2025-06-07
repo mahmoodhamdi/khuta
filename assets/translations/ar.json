@@ -1,4 +1,13 @@
-{"name_required": "الاسم مطلوب",
+{
+  "very_high_risk": "مرتفع جداً",
+  "high_risk": "مرتفع",
+  "moderately_high_risk": "مرتفع جداً",
+  "normal_range": "نطاق عادي",
+  "low_range": "نطاق منخفض",
+  "sdq_assessment": "تقييم صحة الطفل",
+  "test_summary": "ملخص الاختبار",
+  "test_deleted": "تم حذف الاختبار بنجاح",
+  "name_required": "الاسم مطلوب",
   "email_required": "البريد الالكتروني مطلوب",
   "password_required": "كلمة المرور مطلوبة",
   "confirm_password_required": "تأكيد كلمة المرور مطلوب",
@@ -16,10 +25,7 @@
   
   
   "teacher_assessment": "تقييم المعلم",
-  "very_high_risk": "مرتفع جداً",
-  "high_risk": "مرتفع",
-  "moderately_high_risk": "متوسط مرتفع",
-  "low_range": "منخفض",
+
   "mainttain_current_strategies": "الحفاظ على الاستراتيجيات الحالية",
   "sdq_score_very_low_range": "مبين",
   "T-Score": "T-Score",
@@ -43,7 +49,6 @@
   "test_history": "تاريخ الاختبار",
   "total_score": "الدرجة الكلية",
   "total_questions": "الاسئلة الكلية",
-  "autism_assessment": "تقييم التوحد",
   "parent_assessment": "تقييم الوالدين",
   "rude_with_adults": "بذى مع الكبار",
   "distracted_and_inattentive": "تشتت وقله انتباه",
@@ -234,8 +239,8 @@
 
   "gender": "النوع",
 
-  "assessment_title": "تقييم التوحد",
-  "assessment_subtitle": "تقييم شامل لطيف التوحد",
+  "assessment_title": "تقييم ADHD",
+  "assessment_subtitle": "تقييم شامل لتشتت الإنتباه و فرط الحركة" ,
   "previous_tests": "الاختبارات السابقة",
   "question": "السؤال",
   "previous": "السابق",
