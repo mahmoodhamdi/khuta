@@ -82,7 +82,7 @@ class SettingsScreen extends StatelessWidget {
                         radius: 40,
                         backgroundColor: HomeScreenTheme.accentBlue(
                           isDark,
-                        ).withOpacity(0.1),
+                        ).withValues(alpha: 0.1),
                         child: Icon(
                           Icons.person,
                           size: 40,
@@ -140,7 +140,7 @@ class SettingsScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: HomeScreenTheme.accentBlue(
                           isDark,
-                        ).withOpacity(0.1),
+                        ).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -207,7 +207,7 @@ class SettingsScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: HomeScreenTheme.accentPink(
                           isDark,
-                        ).withOpacity(0.1),
+                        ).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -260,7 +260,7 @@ class SettingsScreen extends StatelessWidget {
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
+                  color: Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -302,13 +302,13 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? HomeScreenTheme.accentPink(isDark).withOpacity(0.1)
+              ? HomeScreenTheme.accentPink(isDark).withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? HomeScreenTheme.accentPink(isDark)
-                : HomeScreenTheme.secondaryText(isDark).withOpacity(0.2),
+                : HomeScreenTheme.secondaryText(isDark).withValues(alpha: 0.2),
           ),
         ),
         child: Row(

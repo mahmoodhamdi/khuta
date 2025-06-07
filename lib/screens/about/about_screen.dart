@@ -48,7 +48,6 @@ class _AboutScreenState extends State<AboutScreen>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isRTL = context.locale.languageCode == 'ar';
 
     return Scaffold(
       backgroundColor: HomeScreenTheme.backgroundColor(isDark),
@@ -84,7 +83,7 @@ class _AboutScreenState extends State<AboutScreen>
                         decoration: BoxDecoration(
                           color: HomeScreenTheme.accentBlue(
                             isDark,
-                          ).withOpacity(0.1),
+                          ).withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -290,7 +289,7 @@ class _AboutScreenState extends State<AboutScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: color, size: 24),
@@ -315,7 +314,7 @@ class _AboutScreenState extends State<AboutScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+            color: HomeScreenTheme.accentBlue(isDark).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -365,7 +364,9 @@ class _AboutScreenState extends State<AboutScreen>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+                color: HomeScreenTheme.accentBlue(
+                  isDark,
+                ).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
