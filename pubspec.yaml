@@ -34,6 +34,8 @@ dependencies:
   flutter_tts:
   permission_handler: 
   connectivity_plus: ^6.1.4
+  animated_bottom_navigation_bar: ^1.4.0
+  animated_theme_switcher: ^2.0.10
 
 dev_dependencies:
   flutter_test:

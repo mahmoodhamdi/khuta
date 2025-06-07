@@ -33,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchChildren() async {
+    if (!mounted) return;
+
     try {
       setState(() {
         isLoading = true;
@@ -49,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .orderBy('createdAt', descending: false)
           .get();
 
+      if (!mounted) return;
+
       setState(() {
         children = querySnapshot.docs
             .map((doc) => Child.fromFirestore(doc))
@@ -56,14 +60,17 @@ class _HomeScreenState extends State<HomeScreen> {
         isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         error = e.toString();
         isLoading = false;
       });
     }
   }
-
   Future<void> _addChild(Child child) async {
+    if (!mounted) return;
+    
     try {
       final user = _auth.currentUser;
       if (user == null) return;
@@ -74,8 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
           .collection('children')
           .add(child.toFirestore());
 
-      _fetchChildren(); // Refresh the list
+      if (mounted) {
+        _fetchChildren(); // Refresh the list
+      }
     } catch (e) {
+      if (!mounted) return;
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('error_adding_child'.tr()),
@@ -84,8 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
   }
-
   void _showAddChildScreen() {
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -114,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: HomeScreenTheme.cardBackground(isDark),
           foregroundColor: HomeScreenTheme.primaryText(isDark),
           elevation: 0,
+          automaticallyImplyLeading: false,
         ),
         body: SafeArea(
           child: isLoading
@@ -258,9 +270,9 @@ class _HomeScreenState extends State<HomeScreen> {
         color: HomeScreenTheme.cardBackground(isDark),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [HomeScreenTheme.cardShadow(isDark)],
-      ),
-      child: InkWell(
+      ),      child: InkWell(
         onTap: () {
+          if (!mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -484,8 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-      ),
-    );
+      ));
   }
 
   Widget _buildScoreIndicator(double score, bool isDark) {
