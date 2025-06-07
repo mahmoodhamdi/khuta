@@ -58,7 +58,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                             (widget.child.gender == 'male'
                                     ? HomeScreenTheme.accentBlue(isDark)
                                     : HomeScreenTheme.accentPink(isDark))
-                                .withOpacity(0.1),
+                                .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: Icon(
@@ -127,8 +127,8 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isDark
-                                ? Colors.white.withOpacity(0.1)
-                                : Colors.grey.withOpacity(0.1),
+                                ? Colors.white.withValues(alpha: 0.1)
+                                : Colors.grey.withValues(alpha: 0.1),
                           ),
                         ),
                         child: Column(
@@ -205,7 +205,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           decoration: BoxDecoration(
                             color: HomeScreenTheme.accentBlue(
                               isDark,
-                            ).withOpacity(0.1),
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -349,7 +349,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                             decoration: BoxDecoration(
                               color: HomeScreenTheme.accentGreen(
                                 isDark,
-                              ).withOpacity(0.1),
+                              ).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Icon(
@@ -393,8 +393,8 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark
-              ? Colors.white.withOpacity(0.1)
-              : Colors.grey.withOpacity(0.1),
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.grey.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -438,7 +438,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
               color: HomeScreenTheme.getScoreColor(
                 test.score,
                 isDark,
-              ).withOpacity(0.1),
+              ).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -468,7 +468,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: color, size: 20),

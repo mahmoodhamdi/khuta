@@ -85,7 +85,9 @@ class _AddChildScreenState extends State<AddChildScreen> {
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.3 : 0.05,
+                      ),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -106,7 +108,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                                 (isDark
                                         ? const Color(0xFF63B3ED)
                                         : const Color(0xFF4299E1))
-                                    .withOpacity(0.1),
+                                    .withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -289,7 +291,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: isSelected
-              ? color.withOpacity(isDark ? 0.15 : 0.1)
+              ? color.withValues(alpha: isDark ? 0.15 : 0.1)
               : isDark
               ? const Color(0xFF2D3748)
               : Colors.white,
@@ -298,7 +300,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 ? color
                 : (isDark
                       ? Colors.grey.shade800
-                      : Colors.grey.withOpacity(0.3)),
+                      : Colors.grey.withValues(alpha: 0.3)),
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),

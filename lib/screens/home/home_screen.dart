@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+              color: HomeScreenTheme.accentBlue(isDark).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -284,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           (child.gender == 'male'
                                   ? HomeScreenTheme.accentBlue(isDark)
                                   : HomeScreenTheme.accentPink(isDark))
-                              .withOpacity(0.1),
+                              .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Icon(
@@ -359,8 +359,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isDark
-                          ? Colors.white.withOpacity(0.1)
-                          : Colors.grey.withOpacity(0.1),
+                          ? Colors.white.withValues(alpha: 0.1)
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Column(
@@ -384,7 +384,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                               color: HomeScreenTheme.accentGreen(
                                 isDark,
-                              ).withOpacity(0.1),
+                              ).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -414,7 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: HomeScreenTheme.getScoreColor(
                                             lastTest.score,
                                             isDark,
-                                          ).withOpacity(0.1),
+                                          ).withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(
                                             4,
                                           ),
@@ -459,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: HomeScreenTheme.getScoreColor(
                                   lastTest.score,
                                   isDark,
-                                ).withOpacity(0.1),
+                                ).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -505,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 8,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
             ),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,

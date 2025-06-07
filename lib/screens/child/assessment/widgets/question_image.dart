@@ -25,7 +25,7 @@ class QuestionImage extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
-              color: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
+              color: HomeScreenTheme.accentBlue(isDark).withValues(alpha: 0.1),
               child: Icon(
                 Icons.image,
                 size: 50,

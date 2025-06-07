@@ -29,21 +29,21 @@ class AnswerOption extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: isSelected
-                  ? HomeScreenTheme.accentBlue(isDark).withOpacity(0.1)
+                  ? HomeScreenTheme.accentBlue(isDark).withValues(alpha: 0.1)
                   : HomeScreenTheme.cardBackground(isDark),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: isSelected
                     ? HomeScreenTheme.accentBlue(isDark)
                     : (isDark
-                          ? Colors.grey.withOpacity(0.2)
-                          : Colors.grey.withOpacity(0.2)),
+                          ? Colors.grey.withValues(alpha: 0.2)
+                          : Colors.grey.withValues(alpha: 0.2)),
                 width: isSelected ? 2 : 1,
               ),
               boxShadow: [
                 if (!isDark)
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),

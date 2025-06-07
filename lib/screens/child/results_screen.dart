@@ -56,7 +56,7 @@ class ResultsScreen extends StatelessWidget {
                       HomeScreenTheme.getScoreColor(
                         score,
                         isDark,
-                      ).withOpacity(0.8),
+                      ).withValues(alpha: 0.8),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -65,7 +65,7 @@ class ResultsScreen extends StatelessWidget {
                       color: HomeScreenTheme.getScoreColor(
                         score,
                         isDark,
-                      ).withOpacity(0.3),
+                      ).withValues(alpha: 0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -77,7 +77,7 @@ class ResultsScreen extends StatelessWidget {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -109,7 +109,7 @@ class ResultsScreen extends StatelessWidget {
                       child.name,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -137,7 +137,7 @@ class ResultsScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: HomeScreenTheme.accentBlue(
                               isDark,
-                            ).withOpacity(0.1),
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -191,7 +191,7 @@ class ResultsScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: HomeScreenTheme.accentGreen(
                               isDark,
-                            ).withOpacity(0.1),
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -267,7 +267,7 @@ class ResultsScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: HomeScreenTheme.accentOrange(
                               isDark,
-                            ).withOpacity(0.1),
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -303,8 +303,8 @@ class ResultsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isDark
-                                ? Colors.white.withOpacity(0.1)
-                                : Colors.grey.withOpacity(0.1),
+                                ? Colors.white.withValues(alpha: 0.1)
+                                : Colors.grey.withValues(alpha: 0.1),
                           ),
                         ),
                         child: Column(
@@ -337,7 +337,7 @@ class ResultsScreen extends StatelessWidget {
                                 color: _getAnswerColor(
                                   answerIndex,
                                   isDark,
-                                ).withOpacity(0.1),
+                                ).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(

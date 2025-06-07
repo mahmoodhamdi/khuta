@@ -29,7 +29,7 @@ class HomeScreenTheme {
       isDark ? const Color(0xFFFC8181) : const Color(0xFFE53E3E);
 
   static BoxShadow cardShadow(bool isDark) => BoxShadow(
-    color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+    color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
     blurRadius: isDark ? 20 : 10,
     offset: const Offset(0, 4),
   );

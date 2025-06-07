@@ -7,11 +7,11 @@ class InputThemes {
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+      borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)),
+      borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
@@ -80,11 +80,13 @@ class InputThemes {
       color: isDark ? const Color(0xFF2D3748) : Colors.white,
       borderRadius: BorderRadius.circular(12),
       border: Border.all(
-        color: isDark ? Colors.grey.shade800 : Colors.grey.withOpacity(0.2),
+        color: isDark
+            ? Colors.grey.shade800
+            : Colors.grey.withValues(alpha: 0.2),
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
