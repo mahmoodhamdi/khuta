@@ -1,4 +1,7 @@
 {
+  "total_tests": "Total Tests",
+  "average_score": "Average Score",
+  "last_test": "Last Test",
   "latest_score": "Latest Score",
   "test_history": "Test History",
   "total_score": "Total Score",

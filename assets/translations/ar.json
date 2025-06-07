@@ -1,4 +1,8 @@
 {
+  "average_score": "متوسط الدرجة",
+  "test_date": "تاريخ الاختبار",
+  "total_tests": "اجمالي الاختبارات",
+  "last_test": "اخر اختبار",
   "latest_score": "احدث درجة",
   "test_history": "تاريخ الاختبار",
   "total_score": "الدرجة الكلية",
