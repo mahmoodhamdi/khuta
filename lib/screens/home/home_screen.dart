@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/screens/child/add_child_screen.dart';
 import 'package:khuta/screens/child/child_details_screen.dart';
@@ -95,6 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthInitial) {
@@ -105,32 +108,36 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FA),
+        backgroundColor: HomeScreenTheme.backgroundColor(isDark),
         appBar: AppBar(
           title: Text('my_children'.tr()),
-          backgroundColor: Colors.white,
-          foregroundColor: const Color(0xFF2D3748),
+          backgroundColor: HomeScreenTheme.cardBackground(isDark),
+          foregroundColor: HomeScreenTheme.primaryText(isDark),
           elevation: 0,
         ),
         body: SafeArea(
           child: isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: HomeScreenTheme.accentBlue(isDark),
+                  ),
+                )
               : error != null
-              ? _buildErrorWidget()
+              ? _buildErrorWidget(isDark)
               : children.isEmpty
-              ? _buildEmptyState()
+              ? _buildEmptyState(isDark)
               : _buildChildrenList(),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _showAddChildScreen,
-          backgroundColor: const Color(0xFF4299E1),
+          backgroundColor: HomeScreenTheme.accentBlue(isDark),
           child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );
   }
 
-  Widget _buildErrorWidget() {
+  Widget _buildErrorWidget(bool isDark) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -139,22 +146,36 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 16),
           Text(
             'error_loading_children'.tr(),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: HomeScreenTheme.primaryText(isDark),
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             error!,
-            style: TextStyle(color: Colors.grey[600]),
+            style: TextStyle(color: HomeScreenTheme.secondaryText(isDark)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          ElevatedButton(onPressed: _fetchChildren, child: Text('retry'.tr())),
+          ElevatedButton(
+            onPressed: _fetchChildren,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: HomeScreenTheme.accentBlue(isDark),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text('retry'.tr()),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(bool isDark) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -162,22 +183,22 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: const Color(0xFF4299E1).withValues(alpha: 0.1),
+              color: HomeScreenTheme.accentBlue(isDark).withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.child_care,
               size: 80,
-              color: Color(0xFF4299E1),
+              color: HomeScreenTheme.accentBlue(isDark),
             ),
           ),
           const SizedBox(height: 24),
           Text(
             'no_children_yet'.tr(),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
+              color: HomeScreenTheme.primaryText(isDark),
             ),
           ),
           const SizedBox(height: 12),
@@ -187,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'add_child_description'.tr(),
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: HomeScreenTheme.secondaryText(isDark),
                 height: 1.5,
               ),
               textAlign: TextAlign.center,
@@ -199,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.add),
             label: Text('add_first_child'.tr()),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4299E1),
+              backgroundColor: HomeScreenTheme.accentBlue(isDark),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
@@ -213,6 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildChildrenList() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: children.length,
@@ -223,27 +245,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // تحديث فقط في دالة _buildChildCard في HomeScreen
-
   Widget _buildChildCard(Child child) {
     final isRTL = context.locale.languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final lastTest = child.testResults.isNotEmpty
+        ? child.testResults.last
+        : null;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: HomeScreenTheme.cardBackground(isDark),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [HomeScreenTheme.cardShadow(isDark)],
       ),
       child: InkWell(
         onTap: () {
-          // Navigate to child details
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -254,76 +271,264 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Row(
+          child: Column(
             children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: child.gender == 'male'
-                      ? const Color(0xFF4299E1).withValues(alpha: 0.1)
-                      : const Color(0xFFED64A6).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Icon(
-                  child.gender == 'male' ? Icons.boy : Icons.girl,
-                  size: 30,
-                  color: child.gender == 'male'
-                      ? const Color(0xFF4299E1)
-                      : const Color(0xFFED64A6),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      child.name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D3748),
-                      ),
+              Row(
+                children: [
+                  // Avatar section
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color:
+                          (child.gender == 'male'
+                                  ? HomeScreenTheme.accentBlue(isDark)
+                                  : HomeScreenTheme.accentPink(isDark))
+                              .withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${child.age} ${'years_old'.tr()}',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    child: Icon(
+                      child.gender == 'male' ? Icons.boy : Icons.girl,
+                      size: 30,
+                      color: child.gender == 'male'
+                          ? HomeScreenTheme.accentBlue(isDark)
+                          : HomeScreenTheme.accentPink(isDark),
                     ),
-                    if (child.testResults.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF48BB78).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          '${child.testResults.length} ${'tests_completed'.tr()}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF48BB78),
-                            fontWeight: FontWeight.w500,
+                  ),
+                  const SizedBox(width: 16),
+
+                  // Info section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          child.name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: HomeScreenTheme.primaryText(isDark),
                           ),
                         ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.cake_outlined,
+                              size: 14,
+                              color: HomeScreenTheme.secondaryText(isDark),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${child.age} ${'years_old'.tr()}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: HomeScreenTheme.secondaryText(isDark),
+                              ),
+                            ),
+                            if (lastTest != null) ...[
+                              const SizedBox(width: 12),
+                              Icon(
+                                Icons.access_time,
+                                size: 14,
+                                color: HomeScreenTheme.secondaryText(isDark),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${'last_test'.tr()}: ${DateFormat.yMMMd().format(lastTest.date)}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: HomeScreenTheme.secondaryText(isDark),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (child.testResults.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                // Test results section
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: (isDark ? Colors.black12 : Colors.grey[50])!,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark
+                          ? Colors.white.withOpacity(0.1)
+                          : Colors.grey.withOpacity(0.1),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'test_history'.tr(),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: HomeScreenTheme.primaryText(isDark),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: HomeScreenTheme.accentGreen(
+                                isDark,
+                              ).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              '${child.testResults.length} ${'tests_completed'.tr()}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: HomeScreenTheme.accentGreen(isDark),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                      if (lastTest != null) ...[
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: HomeScreenTheme.getScoreColor(
+                                            lastTest.score,
+                                            isDark,
+                                          ).withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          lastTest.score >= 80
+                                              ? Icons.emoji_events
+                                              : lastTest.score >= 60
+                                              ? Icons.trending_up
+                                              : Icons.trending_down,
+                                          size: 12,
+                                          color: HomeScreenTheme.getScoreColor(
+                                            lastTest.score,
+                                            isDark,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'latest_score'.tr(),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: HomeScreenTheme.secondaryText(
+                                            isDark,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  _buildScoreIndicator(lastTest.score, isDark),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: HomeScreenTheme.getScoreColor(
+                                  lastTest.score,
+                                  isDark,
+                                ).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '${lastTest.score.toStringAsFixed(1)}%',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: HomeScreenTheme.getScoreColor(
+                                    lastTest.score,
+                                    isDark,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-              Icon(
-                isRTL ? Icons.arrow_back_ios : Icons.arrow_forward_ios,
-                color: Colors.grey[400],
-                size: 20,
-              ),
+              ],
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildScoreIndicator(double score, bool isDark) {
+    Color color;
+    if (score >= 80) {
+      color = HomeScreenTheme.accentGreen(isDark);
+    } else if (score >= 60) {
+      color = HomeScreenTheme.accentOrange(isDark);
+    } else {
+      color = HomeScreenTheme.accentRed(isDark);
+    }
+
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: color.withOpacity(0.3),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: score / 100,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: color,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          '${score.toStringAsFixed(1)}%',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 }
