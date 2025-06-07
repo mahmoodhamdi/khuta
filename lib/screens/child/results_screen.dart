@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 
@@ -19,12 +20,14 @@ class ResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: HomeScreenTheme.backgroundColor(isDark),
       appBar: AppBar(
         title: Text('assessment_results'.tr()),
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF2D3748),
+        backgroundColor: HomeScreenTheme.cardBackground(isDark),
+        foregroundColor: HomeScreenTheme.primaryText(isDark),
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
@@ -49,14 +52,20 @@ class ResultsScreen extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      _getScoreColor(score),
-                      _getScoreColor(score).withValues(alpha: 0.8),
+                      HomeScreenTheme.getScoreColor(score, isDark),
+                      HomeScreenTheme.getScoreColor(
+                        score,
+                        isDark,
+                      ).withOpacity(0.8),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: _getScoreColor(score).withValues(alpha: 0.3),
+                      color: HomeScreenTheme.getScoreColor(
+                        score,
+                        isDark,
+                      ).withOpacity(0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -68,7 +77,7 @@ class ResultsScreen extends StatelessWidget {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withOpacity(0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -100,7 +109,7 @@ class ResultsScreen extends StatelessWidget {
                       child.name,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: Colors.white.withOpacity(0.9),
                       ),
                     ),
                   ],
@@ -114,15 +123,9 @@ class ResultsScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: HomeScreenTheme.cardBackground(isDark),
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  boxShadow: [HomeScreenTheme.cardShadow(isDark)],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,24 +135,24 @@ class ResultsScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF4299E1,
-                            ).withValues(alpha: 0.1),
+                            color: HomeScreenTheme.accentBlue(
+                              isDark,
+                            ).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.info_outline,
-                            color: Color(0xFF4299E1),
+                            color: HomeScreenTheme.accentBlue(isDark),
                             size: 20,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Text(
                           'interpretation'.tr(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D3748),
+                            color: HomeScreenTheme.primaryText(isDark),
                           ),
                         ),
                       ],
@@ -159,7 +162,7 @@ class ResultsScreen extends StatelessWidget {
                       _getScoreInterpretation(score),
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[700],
+                        color: HomeScreenTheme.secondaryText(isDark),
                         height: 1.6,
                       ),
                     ),
@@ -174,15 +177,9 @@ class ResultsScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: HomeScreenTheme.cardBackground(isDark),
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  boxShadow: [HomeScreenTheme.cardShadow(isDark)],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,24 +189,24 @@ class ResultsScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF48BB78,
-                            ).withValues(alpha: 0.1),
+                            color: HomeScreenTheme.accentGreen(
+                              isDark,
+                            ).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.lightbulb_outline,
-                            color: Color(0xFF48BB78),
+                            color: HomeScreenTheme.accentGreen(isDark),
                             size: 20,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Text(
                           'recommendations'.tr(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D3748),
+                            color: HomeScreenTheme.primaryText(isDark),
                           ),
                         ),
                       ],
@@ -225,8 +222,8 @@ class ResultsScreen extends StatelessWidget {
                               margin: const EdgeInsets.only(top: 6),
                               width: 6,
                               height: 6,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF48BB78),
+                              decoration: BoxDecoration(
+                                color: HomeScreenTheme.accentGreen(isDark),
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -236,7 +233,7 @@ class ResultsScreen extends StatelessWidget {
                                 recommendation,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey[700],
+                                  color: HomeScreenTheme.secondaryText(isDark),
                                   height: 1.5,
                                 ),
                               ),
@@ -256,15 +253,9 @@ class ResultsScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: HomeScreenTheme.cardBackground(isDark),
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  boxShadow: [HomeScreenTheme.cardShadow(isDark)],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,24 +265,24 @@ class ResultsScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0xFFED8936,
-                            ).withValues(alpha: 0.1),
+                            color: HomeScreenTheme.accentOrange(
+                              isDark,
+                            ).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.quiz_outlined,
-                            color: Color(0xFFED8936),
+                            color: HomeScreenTheme.accentOrange(isDark),
                             size: 20,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Text(
                           'question_review'.tr(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D3748),
+                            color: HomeScreenTheme.primaryText(isDark),
                           ),
                         ),
                       ],
@@ -306,10 +297,14 @@ class ResultsScreen extends StatelessWidget {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF7FAFC),
+                          color: isDark
+                              ? Colors.black12
+                              : const Color(0xFFF7FAFC),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.grey.withValues(alpha: 0.1),
+                            color: isDark
+                                ? Colors.white.withOpacity(0.1)
+                                : Colors.grey.withOpacity(0.1),
                           ),
                         ),
                         child: Column(
@@ -317,19 +312,19 @@ class ResultsScreen extends StatelessWidget {
                           children: [
                             Text(
                               '${'question'.tr()} ${index + 1}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFF4299E1),
+                                color: HomeScreenTheme.accentBlue(isDark),
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               tr(question.questionText),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF2D3748),
+                                color: HomeScreenTheme.primaryText(isDark),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -341,7 +336,8 @@ class ResultsScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: _getAnswerColor(
                                   answerIndex,
-                                ).withValues(alpha: 0.1),
+                                  isDark,
+                                ).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -352,7 +348,7 @@ class ResultsScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
-                                  color: _getAnswerColor(answerIndex),
+                                  color: _getAnswerColor(answerIndex, isDark),
                                 ),
                               ),
                             ),
@@ -374,8 +370,10 @@ class ResultsScreen extends StatelessWidget {
                       onPressed: () =>
                           Navigator.popUntil(context, (route) => route.isFirst),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey[100],
-                        foregroundColor: const Color(0xFF2D3748),
+                        backgroundColor: isDark
+                            ? Colors.grey[800]
+                            : Colors.grey[100],
+                        foregroundColor: HomeScreenTheme.primaryText(isDark),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -388,12 +386,9 @@ class ResultsScreen extends StatelessWidget {
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // مشاركة النتائج أو طباعتها
-                        _shareResults(context);
-                      },
+                      onPressed: () => _shareResults(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4299E1),
+                        backgroundColor: HomeScreenTheme.accentBlue(isDark),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -418,13 +413,6 @@ class ResultsScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getScoreColor(double score) {
-    if (score >= 80) return const Color(0xFF48BB78);
-    if (score >= 60) return const Color(0xFFED8936);
-    if (score >= 40) return const Color(0xFFECC94B);
-    return const Color(0xFFE53E3E);
   }
 
   IconData _getScoreIcon(double score) {
@@ -484,27 +472,28 @@ class ResultsScreen extends StatelessWidget {
     }
   }
 
-  Color _getAnswerColor(int answerIndex) {
+  Color _getAnswerColor(int answerIndex, bool isDark) {
     switch (answerIndex) {
       case 0:
-        return const Color(0xFFE53E3E);
+        return HomeScreenTheme.accentRed(isDark);
       case 1:
-        return const Color(0xFFED8936);
+        return HomeScreenTheme.accentOrange(isDark);
       case 2:
-        return const Color(0xFFECC94B);
+        return isDark ? const Color(0xFFF6E05E) : const Color(0xFFECC94B);
       case 3:
-        return const Color(0xFF48BB78);
+        return HomeScreenTheme.accentGreen(isDark);
       default:
-        return Colors.grey;
+        return HomeScreenTheme.secondaryText(isDark);
     }
   }
 
   void _shareResults(BuildContext context) {
-    // يمكنك تنفيذ مشاركة النتائج هنا
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('results_saved_successfully'.tr()),
-        backgroundColor: const Color(0xFF48BB78),
+        backgroundColor: HomeScreenTheme.accentGreen(isDark),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
