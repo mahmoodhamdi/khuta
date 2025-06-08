@@ -308,5 +308,10 @@
   "high_functionality": "مستوى أداء عالي",
   "moderate_functionality": "مستوى أداء متوسط",
   "low_functionality": "مستوى أداء منخفض",
-  "very_low_functionality": "مستوى أداء منخفض جداً"
+  "very_low_functionality": "مستوى أداء منخفض جداً",
+  "recommendation_routine": "تأسيس وتثبيت روتين يومي منتظم لتوفير الهيكل والقدرة على التنبؤ",
+  "recommendation_reinforcement": "استخدام التعزيز الإيجابي لتشجيع السلوك الجيد والاحتفال بالإنجازات الصغيرة",
+  "recommendation_professional": "النظر في طلب التوجيه من متخصص في تنمية الطفل أو مستشار للحصول على دعم إضافي",
+  "recommendation_communication": "الحفاظ على قنوات اتصال مفتوحة مع الطفل لفهم أفكاره ومشاعره",
+  "recommendation_environment": "خلق بيئة داعمة وحاضنة تعزز الرفاهية العاطفية والتعلم"
 }

@@ -289,5 +289,15 @@
   "high_functionality": "High functionality level",
   "moderate_functionality": "Moderate functionality level",
   "low_functionality": "Low functionality level",
-  "very_low_functionality": "Very low functionality level"
+  "very_low_functionality": "Very low functionality level",
+  "establish_routine": "Establish and maintain a consistent daily routine to provide structure and predictability",
+  "provide_positive_reinforcement": "Use positive reinforcement to encourage good behavior and celebrate small achievements",
+  "seek_professional_support": "Consider seeking guidance from a child development professional or counselor for additional support",
+  "maintain_open_communication": "Maintain open communication channels with the child to understand their thoughts and feelings",
+  "create_supportive_environment": "Create a supportive and nurturing environment that promotes emotional well-being and learning",
+  "recommendation_routine": "Establish and maintain a consistent daily routine to provide structure and predictability",
+  "recommendation_reinforcement": "Use positive reinforcement to encourage good behavior and celebrate small achievements",
+  "recommendation_professional": "Consider seeking guidance from a child development professional or counselor for additional support",
+  "recommendation_communication": "Maintain open communication channels with the child to understand their thoughts and feelings",
+  "recommendation_environment": "Create a supportive and nurturing environment that promotes emotional well-being and learning"
 }

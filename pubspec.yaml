@@ -18,7 +18,7 @@ dependencies:
   path:
 
   # Firebase
-  firebase_core: 
+  firebase_core: ^3.13.1 
   firebase_auth: 
   cloud_firestore: 
 
@@ -37,6 +37,7 @@ dependencies:
   animated_bottom_navigation_bar: ^1.4.0
   animated_theme_switcher: ^2.0.10
   url_launcher: ^6.3.1
+  firebase_ai: ^2.0.0
 
 dev_dependencies:
   flutter_test:

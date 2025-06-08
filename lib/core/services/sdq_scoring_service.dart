@@ -181,42 +181,4 @@ class SdqScoringService {
   }
 
   /// Get recommendations based on T-score
-  static List<String> getRecommendations(int tScore) {
-    if (tScore >= 70) {
-      return [
-        'immediate_professional_consultation',
-        'comprehensive_evaluation_needed',
-        'create_support_plan',
-        'regular_monitoring',
-      ];
-    } else if (tScore >= 65) {
-      return [
-        'professional_consultation_recommended',
-        'behavioral_intervention_plan',
-        'parent_teacher_coordination',
-        'regular_follow_up',
-      ];
-    } else if (tScore >= 60) {
-      return [
-        'monitor_behavior_closely',
-        'consider_professional_consultation',
-        'implement_support_strategies',
-        'regular_assessment',
-      ];
-    } else if (tScore >= 45) {
-      return [
-        'continue_current_support',
-        'maintain_regular_monitoring',
-        'positive_reinforcement',
-        'age_appropriate_activities',
-      ];
-    } else {
-      return [
-        'maintain_current_strategies',
-        'encourage_positive_behaviors',
-        'regular_development_monitoring',
-        'age_appropriate_engagement',
-      ];
-    }
-  }
 }

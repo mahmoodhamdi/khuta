@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/services/ai_recommendations_service.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/services/assessment_service.dart';
 import 'package:khuta/screens/child/results_screen.dart';
+import 'package:khuta/screens/main_screen.dart';
 
 class AssessmentController {
   final AssessmentService _service;
@@ -56,18 +58,24 @@ class AssessmentController {
         (sum, entry) => sum + entry.value,
       );
       final interpretation = _service.getScoreInterpretation(score);
-
-      await _service.saveTestResult(score, interpretation);
+      final recommendations = await AiRecommendationsService.getRecommendations(
+        score,
+        questions,
+        answers,
+      );
+      await _service.saveTestResult(score, interpretation, recommendations);
 
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => ResultsScreen(
+              interpretation: interpretation,
               child: child,
-              score: score.toDouble(),
+              score: score,
               answers: answers,
               questions: questions,
+              recommendations: recommendations,
             ),
           ),
         );
@@ -116,7 +124,10 @@ class AssessmentController {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MainScreen()),
+            ),
             child: Text(
               'exit'.tr(),
               style: TextStyle(color: HomeScreenTheme.accentRed(isDark)),
