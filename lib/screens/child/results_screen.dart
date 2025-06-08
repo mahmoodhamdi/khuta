@@ -96,12 +96,21 @@ class ResultsScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Recommendations
-              Container(
+    Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: HomeScreenTheme.cardBackground(isDark),
                   borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark
+                          ? Colors.black.withOpacity(0.1)
+                          : Colors.grey.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,46 +118,82 @@ class ResultsScreen extends StatelessWidget {
                     Text(
                       'recommendations'.tr(),
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: HomeScreenTheme.primaryText(isDark),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    ...recommendations.map(
-                      (recommendation) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.check_circle,
-                              size: 20,
-                              color: HomeScreenTheme.accentBlue(isDark),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                recommendation.tr(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: HomeScreenTheme.secondaryText(isDark),
+                    const SizedBox(height: 16),
+
+                    Column(
+                      children: recommendations
+                          .map(
+                            (rec) => Container(
+                              margin: const EdgeInsets.only(bottom: 14),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 14,
+                              ),
+                              decoration: BoxDecoration(
+                                color: HomeScreenTheme.backgroundColor(isDark),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: HomeScreenTheme.accentBlue(
+                                    isDark,
+                                  ).withOpacity(0.1),
                                 ),
                               ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_outline,
+                                    size: 22,
+                                    color: HomeScreenTheme.accentBlue(isDark),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      _cleanRecommendation(rec.tr()),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        height: 1.6,
+                                        color: HomeScreenTheme.secondaryText(
+                                          isDark,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
+                          )
+                          .toList(),
                     ),
                   ],
                 ),
               ),
-            ],
+         ],
           ),
         ),
       ),
     );
   }
+String _cleanRecommendation(String input) {
+    return input
+        // إزالة الرموز في بداية السطر (* - •)
+        .replaceAll(RegExp(r'^[\*\-\•]\s*'), '')
+        // إزالة **bold** و __bold__
+        .replaceAllMapped(
+          RegExp(r'\*\*(.*?)\*\*'),
+          (match) => match.group(1) ?? '',
+        )
+        .replaceAllMapped(RegExp(r'__(.*?)__'), (match) => match.group(1) ?? '')
+        // إزالة *italic* و _italic_
+        .replaceAllMapped(RegExp(r'\*(.*?)\*'), (match) => match.group(1) ?? '')
+        .replaceAllMapped(RegExp(r'_(.*?)_'), (match) => match.group(1) ?? '');
+  }
+
 
   IconData _getScoreIcon(int tScore) {
     if (tScore >= 70) return Icons.error;
