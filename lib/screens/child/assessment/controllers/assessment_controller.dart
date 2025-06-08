@@ -7,6 +7,7 @@ import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/child/assessment/services/assessment_service.dart';
 import 'package:khuta/screens/child/results_screen.dart';
 import 'package:khuta/screens/main_screen.dart';
+import 'package:khuta/widgets/loading_overlay.dart';
 
 class AssessmentController {
   final AssessmentService _service;
@@ -53,6 +54,15 @@ class AssessmentController {
     if (questions.isEmpty) return;
 
     try {
+      if (!context.mounted) return;
+
+      // Show loading overlay
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const LoadingOverlay(),
+      );
+
       final score = answers.asMap().entries.fold<int>(
         0,
         (sum, entry) => sum + entry.value,
@@ -63,9 +73,12 @@ class AssessmentController {
         questions,
         answers,
       );
+
       await _service.saveTestResult(score, interpretation, recommendations);
 
+      // Hide loading overlay before showing results
       if (context.mounted) {
+        Navigator.pop(context); // Remove loading overlay
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -81,8 +94,9 @@ class AssessmentController {
         );
       }
     } catch (e) {
-      debugPrint('Error saving test result: $e');
+      // Hide loading overlay on error
       if (context.mounted) {
+        Navigator.pop(context); // Remove loading overlay
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
