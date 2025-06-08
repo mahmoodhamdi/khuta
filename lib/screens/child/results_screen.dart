@@ -96,7 +96,7 @@ class ResultsScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Recommendations
-    Container(
+              Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -105,8 +105,8 @@ class ResultsScreen extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: isDark
-                          ? Colors.black.withOpacity(0.1)
-                          : Colors.grey.withOpacity(0.1),
+                          ? Colors.black.withValues(alpha: 0.1)
+                          : Colors.grey.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -140,7 +140,7 @@ class ResultsScreen extends StatelessWidget {
                                 border: Border.all(
                                   color: HomeScreenTheme.accentBlue(
                                     isDark,
-                                  ).withOpacity(0.1),
+                                  ).withValues(alpha: 0.1),
                                 ),
                               ),
                               child: Row(
@@ -173,13 +173,14 @@ class ResultsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-         ],
+            ],
           ),
         ),
       ),
     );
   }
-String _cleanRecommendation(String input) {
+
+  String _cleanRecommendation(String input) {
     return input
         // إزالة الرموز في بداية السطر (* - •)
         .replaceAll(RegExp(r'^[\*\-\•]\s*'), '')
@@ -193,7 +194,6 @@ String _cleanRecommendation(String input) {
         .replaceAllMapped(RegExp(r'\*(.*?)\*'), (match) => match.group(1) ?? '')
         .replaceAllMapped(RegExp(r'_(.*?)_'), (match) => match.group(1) ?? '');
   }
-
 
   IconData _getScoreIcon(int tScore) {
     if (tScore >= 70) return Icons.error;
