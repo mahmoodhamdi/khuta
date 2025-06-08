@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
@@ -48,7 +49,7 @@ class ResultsScreen extends StatelessWidget {
           child: Column(
             children: [
               // Results Header with T-Score
-              Container(
+    Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -59,41 +60,56 @@ class ResultsScreen extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
-                          _getScoreIcon(score.toInt()),
-                          size: 32,
-                          color: Colors.white,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              _getScoreIcon(score.toInt()),
+                              size:
+                                  constraints.maxWidth *
+                                  0.08, // responsive icon size
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 12),
+                            Flexible(
+                              child: AutoSizeText(
+                                interpretation.tr(),
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                minFontSize: 14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 12),
-                        Text(
-                          interpretation.tr(),
+                        const SizedBox(height: 16),
+                        AutoSizeText(
+                          'T-Score: ${score.toInt()}',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
+                          minFontSize: 12,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'T-Score: ${score.toInt()}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ),
-
-              const SizedBox(height: 24),
+              ),          const SizedBox(height: 24),
 
               // Recommendations
               Container(

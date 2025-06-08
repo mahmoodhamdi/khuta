@@ -37,7 +37,7 @@ dependencies:
   animated_theme_switcher:
   url_launcher:
   firebase_ai: 
-
+  auto_size_text:
 dev_dependencies:
   flutter_test:
     sdk: flutter

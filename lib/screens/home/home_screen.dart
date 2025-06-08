@@ -389,26 +389,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: HomeScreenTheme.primaryText(isDark),
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: HomeScreenTheme.accentGreen(
-                                isDark,
-                              ).withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              '${child.testResults.length} ${'tests_completed'.tr()}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: HomeScreenTheme.accentGreen(isDark),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                       if (lastTest != null) ...[
@@ -457,8 +437,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 8),
-                                  _buildScoreIndicator(lastTest.score, isDark),
                                 ],
                               ),
                             ),
@@ -476,7 +454,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                '${lastTest.score.toStringAsFixed(1)}%',
+                                lastTest.score.toStringAsFixed(1),
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -498,50 +476,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildScoreIndicator(double score, bool isDark) {
-    Color color;
-    if (score >= 80) {
-      color = HomeScreenTheme.accentGreen(isDark);
-    } else if (score >= 60) {
-      color = HomeScreenTheme.accentOrange(isDark);
-    } else {
-      color = HomeScreenTheme.accentRed(isDark);
-    }
-
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 8,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: color.withValues(alpha: 0.3),
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: score / 100,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: color,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '${score.toStringAsFixed(1)}%',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-      ],
     );
   }
 }
