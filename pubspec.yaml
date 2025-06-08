@@ -26,18 +26,17 @@ dependencies:
   flutter_svg: 
   shimmer: 
   flutter_native_splash:
-
   # Utils
   uuid:
   intl: 
-
+  flutter_markdown:  
   flutter_tts:
   permission_handler: 
-  connectivity_plus: ^6.1.4
-  animated_bottom_navigation_bar: ^1.4.0
-  animated_theme_switcher: ^2.0.10
-  url_launcher: ^6.3.1
-  firebase_ai: ^2.0.0
+  connectivity_plus: 
+  animated_bottom_navigation_bar:
+  animated_theme_switcher:
+  url_launcher:
+  firebase_ai: 
 
 dev_dependencies:
   flutter_test:
@@ -48,10 +47,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  
   # Add assets here
   assets:
     - assets/translations/
     - assets/images/
     - assets/images/teacher_questions/
     - assets/images/parents_questions/
+    - assets/legal/

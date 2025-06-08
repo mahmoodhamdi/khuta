@@ -1,7 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/screens/legal/markdown_view_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// WhatsApp icon constant
+const IconData whatsappIcon = IconData(0xf232, fontFamily: 'FontAwesomeBrands');
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -118,7 +122,7 @@ class _AboutScreenState extends State<AboutScreen>
 
             const SizedBox(height: 20),
 
-            // Features Section
+            // Features Section with AI-powered feature
             FadeTransition(
               opacity: _animations[1],
               child: SlideTransition(
@@ -147,8 +151,8 @@ class _AboutScreenState extends State<AboutScreen>
                       const SizedBox(height: 16),
                       _buildFeatureItem(
                         isDark,
-                        Icons.wifi_off_rounded,
-                        'offline_support'.tr(),
+                        Icons.psychology_rounded,
+                        'ai_powered'.tr(),
                         HomeScreenTheme.accentGreen(isDark),
                       ),
                       const SizedBox(height: 12),
@@ -211,7 +215,7 @@ class _AboutScreenState extends State<AboutScreen>
 
             const SizedBox(height: 20),
 
-            // Legal Links
+            // Legal Links with WhatsApp contact
             FadeTransition(
               opacity: _animations[3],
               child: SlideTransition(
@@ -232,11 +236,16 @@ class _AboutScreenState extends State<AboutScreen>
                         isDark,
                         'privacy_policy'.tr(),
                         Icons.privacy_tip_rounded,
-                        () async {
-                          const url = 'https://khuta.app/privacy';
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url));
-                          }
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MarkdownViewScreen(
+                                title: 'privacy_policy'.tr(),
+                                filePath: 'assets/legal/privacy_policy_ar.md',
+                              ),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(height: 12),
@@ -244,26 +253,30 @@ class _AboutScreenState extends State<AboutScreen>
                         isDark,
                         'terms_of_service'.tr(),
                         Icons.description_rounded,
-                        () async {
-                          const url = 'https://khuta.app/terms';
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url));
-                          }
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MarkdownViewScreen(
+                                title: 'terms_of_service'.tr(),
+                                filePath: 'assets/legal/terms_of_service_ar.md',
+                              ),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(height: 12),
                       _buildLinkButton(
                         isDark,
-                        'feedback'.tr(),
-                        Icons.feedback_rounded,
+                        'contact_us'.tr(),
+                        whatsappIcon,
                         () async {
-                          final Uri emailLaunchUri = Uri(
-                            scheme: 'mailto',
-                            path: 'feedback@khuta.app',
-                            queryParameters: {'subject': 'Khuta App Feedback'},
-                          );
-                          if (await canLaunchUrl(emailLaunchUri)) {
-                            await launchUrl(emailLaunchUri);
+                          final url = 'https://wa.me/201019793768';
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(
+                              Uri.parse(url),
+                              mode: LaunchMode.externalApplication,
+                            );
                           }
                         },
                       ),

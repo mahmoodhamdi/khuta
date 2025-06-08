@@ -1,4 +1,5 @@
-{"Don\\'t have an account? Register": "Don't have an account? Register",
+{"contact_us": "Contact Us",
+  "Don\\'t have an account? Register": "Don't have an account? Register",
   "Already have an account? Login": "Already have an account? Login",
   "email_invalid": "Invalid email address",
   "password_confirm_required": "Password confirmation is required",
@@ -69,9 +70,9 @@
   "unable_to_stop_repetitive_behavior": "Unable to stop repetitive behavior",
   "disobedient": "Disobedient",
   "about_app": "About App",
-  "app_description": "A modern ADHD diagnosis app using Conners' Rating Scale",
+  "app_description": "AI-powered ADHD assessment app using Conners' Rating Scale",
   "app_features": "Features",
-  "offline_support": "Works Offline",
+  "online_required": "Internet Connection Required",
   "secure_storage": "Secure Data Storage",
   "multilingual": "Multiple Languages",
   "dark_mode": "Dark Mode",
@@ -299,5 +300,8 @@
   "recommendation_reinforcement": "Use positive reinforcement to encourage good behavior and celebrate small achievements",
   "recommendation_professional": "Consider seeking guidance from a child development professional or counselor for additional support",
   "recommendation_communication": "Maintain open communication channels with the child to understand their thoughts and feelings",
-  "recommendation_environment": "Create a supportive and nurturing environment that promotes emotional well-being and learning"
+  "recommendation_environment": "Create a supportive and nurturing environment that promotes emotional well-being and learning",
+  "ai_powered": "AI-Powered Analysis",
+  "contact_whatsapp": "Contact via WhatsApp",
+  "offline_removed": "Internet connection required for AI features"
 }

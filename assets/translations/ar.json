@@ -1,4 +1,10 @@
-{"Don\\'t have an account? Register": "لا يوجد لديك حساب؟ إنشاء حساب",
+{
+  "ai_powered": "تحليل بالذكاء الاصطناعي",
+  "contact_us": "تواصل معنا",
+  "contact_whatsapp": "تواصل عبر واتساب",
+  "app_description": "تطبيق تقييم ADHD مدعوم بالذكاء الاصطناعي باستخدام مقياس كونرز",
+  "offline_removed": "يتطلب اتصال بالإنترنت لميزات الذكاء الاصطناعي",
+  "Don\\'t have an account? Register": "لا يوجد لديك حساب؟ إنشاء حساب",
   "Already have an account? Login": "هل لديك حساب بالفعل؟ تسجيل الدخول",
   "email_invalid": "عنوان بريد إلكتروني غير صالح",
   "password_invalid": "كلمة المرور غير صالحة",
@@ -34,8 +40,7 @@
   "logout_confirmation_message": "هل تريد الخروج؟",
    "appearance": "المظهر",
   "language": "اللغة",
-  "dark_mode": "الوضع الداكن",
-   "edit_profile": "تعديل الملف الشخصي",
+    "edit_profile": "تعديل الملف الشخصي",
   "save_changes": "حفظ التغييرات",
   
   
@@ -74,8 +79,7 @@
   "unable_to_stop_repetitive_behavior": "غير قادر على ايقاف نشاط ما متكرر",
   "disobedient": "غير مطيع",
   "about_app": "عن التطبيق",
-  "app_description": "تطبيق حديث لتشخيص ADHD باستخدام مقياس كونرز",
-  "app_features": "المميزات",
+   "app_features": "المميزات",
   "offline_support": "يعمل بدون إنترنت",
   "secure_storage": "تخزين آمن للبيانات",
   "multilingual": "متعدد اللغات",

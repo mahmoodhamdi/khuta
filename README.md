@@ -1,18 +1,18 @@
-# Khuta – ADHD Diagnosis App 🧠
+# Khuta – AI-Powered ADHD Assessment App 🧠
 
-A modern, privacy-focused Flutter application for assessing ADHD symptoms in children using the **Conners' Rating Scale**. Khuta empowers parents and teachers to evaluate multiple children, generate detailed PDF reports, and store all data securely on their device—no internet required.
+A modern Flutter application for assessing ADHD symptoms in children using the **Conners' Rating Scale** enhanced with AI recommendations. Khuta empowers parents and teachers to evaluate multiple children, receive personalized AI-powered insights, and generate detailed PDF reports.
 
 ## 1. 📱 App Overview
 
-**Khuta** is a mobile application designed to help users screen for ADHD symptoms in children using the clinically validated Conners' Rating Scale.
+**Khuta** is a mobile application designed to help users screen for ADHD symptoms in children using the clinically validated Conners' Rating Scale, enhanced with advanced AI analysis for personalized recommendations.
 
 Key features include:
 
-- Assessment of multiple children using professional diagnostic criteria
+- AI-powered assessment analysis using advanced machine learning models
+- Personalized recommendations based on individual responses
 - Comprehensive, shareable PDF reports for each evaluation
-- Secure local data storage using SQLite—no cloud servers involved
-- Complete offline functionality for privacy and convenience
-- Guided pathways to help parents and teachers understand potential next steps
+- Secure cloud data storage with end-to-end encryption
+- Smart insights to help parents and teachers understand potential next steps
 
 ## 2. 🔐 Authentication
 
