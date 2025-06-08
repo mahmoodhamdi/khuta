@@ -35,10 +35,10 @@ class HomeScreenTheme {
   );
 
   static Color getScoreColor(double score, bool isDark) {
-    if (score >= 80) {
+    if (score <= 80) {
       return accentGreen(isDark);
     }
-    if (score >= 60) {
+    if (score <= 60) {
       return accentOrange(isDark);
     }
     return accentRed(isDark);

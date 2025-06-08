@@ -444,10 +444,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         child: Icon(
                                           lastTest.score >= 80
-                                              ? Icons.emoji_events
+                                              ? Icons.trending_down
                                               : lastTest.score >= 60
                                               ? Icons.trending_up
-                                              : Icons.trending_down,
+                                              : Icons.emoji_events,
                                           size: 12,
                                           color: HomeScreenTheme.getScoreColor(
                                             lastTest.score,
