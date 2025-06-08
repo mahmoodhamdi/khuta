@@ -1,4 +1,6 @@
-{
+{ "welcome": "Welcome",
+"no_recommendations": "No Recommendations",
+
   "onboarding_title_1": "Comprehensive Assessments",
   "onboarding_desc_1": "Access professional evaluations for early detection of developmental and behavioral concerns.",
   "onboarding_title_2": "Detailed Reports",

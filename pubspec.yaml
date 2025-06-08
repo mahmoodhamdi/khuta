@@ -38,6 +38,7 @@ dependencies:
   url_launcher:
   firebase_ai: 
   auto_size_text:
+  flutter_animate: 
 dev_dependencies:
   flutter_test:
     sdk: flutter
