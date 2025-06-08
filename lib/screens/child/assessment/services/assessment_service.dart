@@ -11,8 +11,9 @@ class AssessmentService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   final Child child;
+  final String assessmentType;
 
-  AssessmentService({
+  AssessmentService( {required this.assessmentType,
     required this.child,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
@@ -29,7 +30,7 @@ class AssessmentService {
       if (user == null) return;
 
       final testResult = TestResult(
-        testType: 'sdq_assessment'.tr(),
+        testType: assessmentType.tr(),
         score: score.toDouble(),
         date: DateTime.now(),
         notes: interpretation,

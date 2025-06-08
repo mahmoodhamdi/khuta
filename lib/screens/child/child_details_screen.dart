@@ -156,10 +156,10 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                 _buildStatItem(
                                   context,
                                   Icons.trending_up,
-                                  '${_calculateAverageScore().toStringAsFixed(1)}%',
-                                  'average_score'.tr(),
+                                  '${widget.child.testResults.last.score}',
+                                  'last_score'.tr(),
                                   HomeScreenTheme.getScoreColor(
-                                    _calculateAverageScore(),
+                                    widget.child.testResults.last.score,
                                     isDark,
                                   ),
                                   isDark,
@@ -310,7 +310,11 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.class_, color: Colors.white, size: 20),
+                            const Icon(
+                              Icons.class_,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'teacher_assessment'.tr(),
@@ -328,7 +332,94 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
               ),
 
               const SizedBox(height: 24),
-
+              // Recommendations from the latest test
+              if (widget.child.testResults.isNotEmpty &&
+                  widget.child.testResults.last.recommendations.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: HomeScreenTheme.cardBackground(isDark),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [HomeScreenTheme.cardShadow(isDark)],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: HomeScreenTheme.accentBlue(
+                                isDark,
+                              ).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.lightbulb_outline,
+                              color: HomeScreenTheme.accentBlue(isDark),
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Text(
+                            'recommendations'.tr(),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: HomeScreenTheme.primaryText(isDark),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      ...widget.child.testResults.last.recommendations.map(
+                        (recommendation) => Container(
+                          margin: const EdgeInsets.only(bottom: 14),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 14,
+                          ),
+                          decoration: BoxDecoration(
+                            color: HomeScreenTheme.backgroundColor(isDark),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: HomeScreenTheme.accentBlue(
+                                isDark,
+                              ).withValues(alpha: 0.1),
+                            ),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline,
+                                size: 22,
+                                color: HomeScreenTheme.accentBlue(isDark),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  recommendation.tr(),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    height: 1.6,
+                                    color: HomeScreenTheme.secondaryText(
+                                      isDark,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               // Previous Tests Section
               if (widget.child.testResults.isNotEmpty) ...[
                 Container(
@@ -376,6 +467,8 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                     ],
                   ),
                 ),
+
+             
               ],
             ],
           ),
@@ -493,14 +586,5 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
         ),
       ],
     );
-  }
-
-  double _calculateAverageScore() {
-    if (widget.child.testResults.isEmpty) return 0;
-    final sum = widget.child.testResults.fold(
-      0.0,
-      (sum, test) => sum + test.score,
-    );
-    return sum / widget.child.testResults.length;
   }
 }

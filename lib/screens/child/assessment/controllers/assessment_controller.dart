@@ -25,7 +25,10 @@ class AssessmentController {
     required this.questions,
     required this.onQuestionChanged,
     required this.onAnswersChanged,
-  }) : _service = AssessmentService(child: child);
+  }) : _service = AssessmentService(
+         child: child,
+         assessmentType: questions[0].questionType.toString(),
+       );
 
   void previousQuestion(int currentIndex) {
     if (currentIndex > 0) {
