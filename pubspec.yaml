@@ -16,7 +16,7 @@ dependencies:
   shared_preferences: 
   sqflite: 
   path:
-
+  lottie:
   # Firebase
   firebase_core: ^3.13.1 
   firebase_auth: 
@@ -55,3 +55,4 @@ flutter:
     - assets/images/teacher_questions/
     - assets/images/parents_questions/
     - assets/legal/
+    - assets/animations/

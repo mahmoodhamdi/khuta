@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       },
-                      child: Text('Don\'t have an account? Register'.tr()),
+                      child: Text('Dont have an account? Register'.tr()),
                     ),
                   ],
                 ),
