@@ -346,14 +346,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 14,
                                 color: HomeScreenTheme.secondaryText(isDark),
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                '${'last_test'.tr()}: ${DateFormat.yMMMd().format(lastTest.date)}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: HomeScreenTheme.secondaryText(isDark),
-                                ),
-                              ),
                             ],
                           ],
                         ),
@@ -391,6 +383,44 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                        children: [
+                          if (lastTest != null) ...[
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+
+                                  size: 24,
+                                  color: HomeScreenTheme.secondaryText(isDark),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'last_test'.tr(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: HomeScreenTheme.secondaryText(
+                                      isDark,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            Text(
+                              DateFormat.yMMMd().format(lastTest.date),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: HomeScreenTheme.secondaryText(isDark),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+
                       if (lastTest != null) ...[
                         const SizedBox(height: 12),
                         Row(
