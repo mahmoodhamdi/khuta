@@ -1,4 +1,14 @@
-{ "generating_recommendations": "توليد الاقتراحات",
+{
+  "onboarding_title_1": "تقييمات شاملة",
+  "onboarding_desc_1": "الوصول إلى تقييمات احترافية للكشف المبكر عن مخاوف النمو والسلوك.",
+  "onboarding_title_2": "تقارير مفصلة",
+  "onboarding_desc_2": "احصل على تقارير شاملة مع رؤى وتوصيات مخصصة لتطور طفلك.",
+  "onboarding_title_3": "تحليل مدعوم بالذكاء الاصطناعي",
+  "onboarding_desc_3": "استفد من تحليل الذكاء الاصطناعي المتقدم الذي يساعد في تحديد الأنماط ويوفر إرشادات مخصصة.",
+  "skip": "تخطي",
+  "get_started": "البدء",
+
+  "generating_recommendations": "توليد الاقتراحات",
   "analyzing_responses": "تحليل الإجابات",
   "ai_powered": "تحليل بالذكاء الاصطناعي",
   "contact_us": "تواصل معنا",
