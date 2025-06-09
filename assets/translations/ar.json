@@ -1,7 +1,9 @@
 {"no_recommendations": "لا يوجد تقييمات",
-  "no_children": "لا يوجد طفلك",
+"no_results": "لا يوجد نتائج",
+"select_assessment": "اختر تقييمًا",
+  "no_children": "لا يوجد أطفال",
   "no_children_description": "قم بإضافة طفلك الأول لبدء تتبع نموه ونتائج اختباراته.",
-  
+  "profile_results": "نتائج الملف الشخصي",
   "onboarding_title_1": "تقييمات شاملة",
   "onboarding_desc_1": "الوصول إلى تقييمات احترافية للكشف المبكر عن مخاوف النمو والسلوك.",
   "onboarding_title_2": "تقارير مفصلة",
