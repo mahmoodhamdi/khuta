@@ -265,21 +265,6 @@ class _AboutScreenState extends State<AboutScreen>
                           );
                         },
                       ),
-                      const SizedBox(height: 12),
-                      _buildLinkButton(
-                        isDark,
-                        'contact_us'.tr(),
-                        whatsappIcon,
-                        () async {
-                          final url = 'https://wa.me/201019793768';
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(
-                              Uri.parse(url),
-                              mode: LaunchMode.externalApplication,
-                            );
-                          }
-                        },
-                      ),
                     ],
                   ),
                 ),
