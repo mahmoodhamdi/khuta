@@ -39,7 +39,7 @@ class ResultsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () =>
-                Navigator.popUntil(context, (route) => route.isFirst),
+                Navigator.pushReplacementNamed(context, '/home'),
           ),
         ],
       ),

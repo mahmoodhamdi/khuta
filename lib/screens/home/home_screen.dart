@@ -339,14 +339,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: HomeScreenTheme.secondaryText(isDark),
                               ),
                             ),
-                            if (lastTest != null) ...[
-                              const SizedBox(width: 12),
-                              Icon(
-                                Icons.access_time,
-                                size: 14,
-                                color: HomeScreenTheme.secondaryText(isDark),
-                              ),
-                            ],
                           ],
                         ),
                       ],

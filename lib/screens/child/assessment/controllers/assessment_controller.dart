@@ -141,7 +141,7 @@ class AssessmentController {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.push(
+            onPressed: () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => const MainScreen()),
             ),
