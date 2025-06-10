@@ -5,9 +5,11 @@ import '../../core/utils/auth_exception_handler.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth;
 
-  AuthCubit() : super(AuthInitial());
+  AuthCubit({FirebaseAuth? auth})
+    : _auth = auth ?? FirebaseAuth.instance,
+      super(AuthInitial());
 
   Future<void> checkLoginStatus() async {
     emit(AuthLoading());
