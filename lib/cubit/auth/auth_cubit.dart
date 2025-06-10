@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -85,12 +84,18 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> resetPassword(String email) async {
     emit(AuthLoading());
     try {
-      final methods = await _auth.fetchSignInMethodsForEmail(email);
-      if (methods.isNotEmpty) {
-        await _auth.sendPasswordResetEmail(email: email);
-        emit(AuthPasswordResetSent(email: email));
+      // Attempt to send reset email
+      await _auth.sendPasswordResetEmail(email: email);
+      emit(AuthPasswordResetSent(email: email));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        emit(
+          const AuthFailure(
+            message: 'No account found with this email address',
+          ),
+        );
       } else {
-        emit(const AuthFailure(message: "email_not_registered"));
+        emit(AuthFailure(message: AuthExceptionHandler.handleException(e)));
       }
     } catch (e) {
       emit(AuthFailure(message: AuthExceptionHandler.handleException(e)));

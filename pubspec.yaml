@@ -39,6 +39,7 @@ dependencies:
   firebase_ai: 
   auto_size_text:
   flutter_animate: 
+  firebase_app_check: ^0.3.2+6
 dev_dependencies:
   flutter_test:
     sdk: flutter

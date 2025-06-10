@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
+import '../../core/theme/home_screen_theme.dart';
 import '../main_screen.dart';
 import 'login_screen.dart';
 
@@ -83,6 +84,8 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthEmailVerified) {
@@ -95,23 +98,36 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('verification_email_sent'.tr()),
-              backgroundColor: Colors.green,
+              backgroundColor: HomeScreenTheme.accentGreen(isDark),
             ),
           );
         } else if (state is AuthFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: HomeScreenTheme.accentRed(isDark),
+            ),
+          );
         }
       },
       child: Scaffold(
+        backgroundColor: HomeScreenTheme.backgroundColor(isDark),
         appBar: AppBar(
-          title: Text('verify_email'.tr()),
+          title: Text(
+            'verify_email'.tr(),
+            style: TextStyle(color: HomeScreenTheme.primaryText(isDark)),
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,
           actions: [
-            TextButton(onPressed: _handleLogout, child: Text('logout'.tr())),
+            TextButton(
+              onPressed: _handleLogout,
+              child: Text(
+                'logout'.tr(),
+                style: TextStyle(color: HomeScreenTheme.accentBlue(isDark)),
+              ),
+            ),
           ],
         ),
         body: SafeArea(
@@ -125,19 +141,21 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   Icon(
                     Icons.mark_email_unread,
                     size: 80,
-                    color: Theme.of(context).primaryColor,
+                    color: HomeScreenTheme.accentBlue(isDark),
                   ),
                   const SizedBox(height: 32),
                   Text(
                     'verify_your_email'.tr(),
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: HomeScreenTheme.primaryText(isDark),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'verification_email_description'.tr(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: HomeScreenTheme.secondaryText(isDark),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -145,15 +163,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
+                      color: HomeScreenTheme.cardBackground(isDark),
                       borderRadius: BorderRadius.circular(8),
+                      boxShadow: [HomeScreenTheme.cardShadow(isDark)],
                     ),
                     child: Text(
                       widget.email,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color: HomeScreenTheme.primaryText(isDark),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -172,6 +190,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   const SizedBox(height: 16),
                   OutlinedButton(
                     onPressed: _isResendEnabled ? _handleResendEmail : null,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: _isResendEnabled
+                          ? HomeScreenTheme.accentBlue(isDark)
+                          : HomeScreenTheme.secondaryText(isDark),
+                      side: BorderSide(
+                        color: _isResendEnabled
+                            ? HomeScreenTheme.accentBlue(isDark)
+                            : HomeScreenTheme.secondaryText(isDark),
+                      ),
+                    ),
                     child: Text(
                       _isResendEnabled
                           ? 'resend_verification_email'.tr()
@@ -184,21 +212,21 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primaryContainer.withOpacity(0.3),
+                      color: HomeScreenTheme.accentBlue(
+                        isDark,
+                      ).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.primary.withOpacity(0.3),
+                        color: HomeScreenTheme.accentBlue(
+                          isDark,
+                        ).withOpacity(0.3),
                       ),
                     ),
                     child: Column(
                       children: [
                         Icon(
                           Icons.info_outline,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: HomeScreenTheme.accentBlue(isDark),
                           size: 20,
                         ),
                         const SizedBox(height: 8),
@@ -206,9 +234,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           'verification_tips'.tr(),
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
+                                color: HomeScreenTheme.secondaryText(isDark),
                               ),
                           textAlign: TextAlign.center,
                         ),
@@ -218,7 +244,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   const SizedBox(height: 24),
                   TextButton(
                     onPressed: _handleLogout,
-                    child: Text('use_different_email'.tr()),
+                    child: Text(
+                      'use_different_email'.tr(),
+                      style: TextStyle(
+                        color: HomeScreenTheme.accentBlue(isDark),
+                      ),
+                    ),
                   ),
                 ],
               ),
