@@ -9,6 +9,7 @@ import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
 import 'register_screen.dart';
 import 'reset_password_screen.dart';
+import 'email_verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,6 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is AuthSuccess) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const MainScreen()),
+          );
+        } else if (state is AuthEmailVerificationRequired) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => EmailVerificationScreen(email: state.email),
+            ),
           );
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(

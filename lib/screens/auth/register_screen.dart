@@ -1,12 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:khuta/screens/main_screen.dart';
 
 import '../../core/constants/app_strings.dart';
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
+import 'email_verification_screen.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -42,9 +43,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is AuthSuccess) {
+        if (state is AuthEmailVerificationRequired) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const MainScreen()),
+            MaterialPageRoute(
+              builder: (_) => EmailVerificationScreen(email: state.email),
+            ),
           );
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(
@@ -53,7 +56,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text('Register'.tr())),
+        appBar: AppBar(
+          title: Text('register'.tr()),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -64,8 +71,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Icon(
+                      Icons.person_add_outlined,
+                      size: 64,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    const SizedBox(height: 32),
                     Text(
-                      'Create Account'.tr(),
+                      'create_account'.tr(),
                       style: Theme.of(context).textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -93,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return 'password_required'.tr();
                         }
                         if (value!.length < 6) {
-                          return 'invalid_password_length'.tr();
+                          return 'password_too_short'.tr();
                         }
                         return null;
                       },
@@ -106,10 +119,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSubmitted: (_) => _handleRegister(),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'password_confirm_required'.tr();
+                          return 'confirm_password_required'.tr();
                         }
                         if (value != _passwordController.text) {
-                          return 'password_mismatch'.tr();
+                          return 'passwords_dont_match'.tr();
                         }
                         return null;
                       },
@@ -123,6 +136,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           isLoading: state is AuthLoading,
                         );
                       },
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text('already_have_account'.tr()),
                     ),
                   ],
                 ),

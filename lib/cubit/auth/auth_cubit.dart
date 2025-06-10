@@ -14,7 +14,16 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        emit(AuthSuccess(email: user.email!));
+        await user.reload(); // Refresh user data
+        final refreshedUser = _auth.currentUser;
+
+        if (refreshedUser != null && refreshedUser.emailVerified) {
+          emit(AuthSuccess(email: refreshedUser.email!));
+        } else if (refreshedUser != null) {
+          emit(AuthEmailVerificationRequired(email: refreshedUser.email!));
+        } else {
+          emit(AuthInitial());
+        }
       } else {
         emit(AuthInitial());
       }
@@ -32,7 +41,9 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (userCredential.user != null) {
-        emit(AuthSuccess(email: email));
+        // Send verification email immediately after registration
+        await userCredential.user!.sendEmailVerification();
+        emit(AuthEmailVerificationRequired(email: email));
       } else {
         emit(const AuthFailure(message: 'Registration failed'));
       }
@@ -50,7 +61,18 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (userCredential.user != null) {
-        emit(AuthSuccess(email: email));
+        // Check if email is verified
+        await userCredential.user!.reload();
+        final user = _auth.currentUser;
+
+        if (user != null && user.emailVerified) {
+          emit(AuthSuccess(email: email));
+        } else if (user != null) {
+          // Email not verified, require verification
+          emit(AuthEmailVerificationRequired(email: email));
+        } else {
+          emit(const AuthFailure(message: 'Login failed'));
+        }
       } else {
         emit(const AuthFailure(message: 'Login failed'));
       }
@@ -74,6 +96,35 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await _auth.signOut();
       emit(AuthInitial());
+    } catch (e) {
+      emit(AuthFailure(message: AuthExceptionHandler.handleException(e)));
+    }
+  }
+
+  Future<void> sendEmailVerification() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        emit(AuthEmailVerificationSent(email: user.email!));
+      }
+    } catch (e) {
+      emit(AuthFailure(message: AuthExceptionHandler.handleException(e)));
+    }
+  }
+
+  Future<void> checkEmailVerification() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        await user.reload();
+        final refreshedUser = _auth.currentUser;
+
+        if (refreshedUser != null && refreshedUser.emailVerified) {
+          emit(AuthEmailVerified(email: refreshedUser.email!));
+        }
+        // If not verified, we don't emit anything to avoid disrupting the UI
+      }
     } catch (e) {
       emit(AuthFailure(message: AuthExceptionHandler.handleException(e)));
     }

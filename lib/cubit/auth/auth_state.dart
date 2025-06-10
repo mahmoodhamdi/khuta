@@ -37,3 +37,30 @@ class AuthPasswordResetSent extends AuthState {
   @override
   List<Object?> get props => [email];
 }
+
+class AuthEmailVerificationRequired extends AuthState {
+  final String email;
+
+  const AuthEmailVerificationRequired({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
+class AuthEmailVerificationSent extends AuthState {
+  final String email;
+
+  const AuthEmailVerificationSent({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
+class AuthEmailVerified extends AuthState {
+  final String email;
+
+  const AuthEmailVerified({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}

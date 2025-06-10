@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/cubit/auth/auth_cubit.dart';
 import 'package:khuta/cubit/theme/theme_cubit.dart';
+import 'package:khuta/screens/auth/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -32,7 +33,14 @@ class SettingsScreen extends StatelessWidget {
             child: Text('cancel'.tr()),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () async {
+              await context.read<AuthCubit>().logout();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
+              );
+            },
             child: Text(
               'logout'.tr(),
               style: const TextStyle(color: Colors.red),
