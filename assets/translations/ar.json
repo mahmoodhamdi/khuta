@@ -1,4 +1,17 @@
-{"email_not_registered": "البريد الإلكتروني غير مسجل",
+{
+
+  "date": "التاريخ",
+  "score_interpretation": "تفسير الدرجة",
+  "questions_and_answers": "الأسئلة والإجابات",
+  "answer": "الإجابة",
+ 
+  "always": "دائمًا",
+  "unknown": "غير معروف",
+  "assessment_results_for": "نتائج التقييم لـ",
+  "generated_on": "تم الإنشاء في",
+  "error_generating_pdf": "حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.",
+
+  "email_not_registered": "البريد الإلكتروني غير مسجل",
 
    "auth.email_already_in_use": "هذا البريد الإلكتروني مستخدم بالفعل",
   "auth.invalid_email": "البريد الإلكتروني غير صالح",

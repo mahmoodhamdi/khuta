@@ -20,11 +20,14 @@ Key features include:
 - Universal user access—no complex role management
 - Complete data isolation—users can only access their own registered children and reports
 - Secure local storage of credentials and user data
+- full reset password functionality
+- full email verification process
 
 ## 3. 🧠 How It Works
 
 1. **Sign In / Sign Up:**  
-   Create an account or log in using your email and password
+   - Create an account or log in using your email and password
+   - Verify your account
 
 2. **Add Child Profile:**  
    Enter basic information about the child to be assessed
@@ -40,8 +43,6 @@ Key features include:
 
 6. **Share Results:**  
    Export and securely share the assessment as a PDF
-
-![App Flowchart](assets/flowchart.png)
 
 ## 4. 🛠️ Technologies Used
 

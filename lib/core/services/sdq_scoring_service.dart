@@ -160,25 +160,24 @@ class SdqScoringService {
   /// Get interpretation of T-score
   static String getScoreInterpretation(int tScore) {
     if (tScore >= 70) {
-      return 'extremely_above_average';
+      return 'extremely_above_average'.tr();
     } else if (tScore >= 66) {
-      return 'significantly_above_average';
+      return 'significantly_above_average'.tr();
     } else if (tScore >= 61) {
-      return 'above_average';
+      return 'above_average'.tr();
     } else if (tScore >= 56) {
-      return 'slightly_above_average';
+      return 'slightly_above_average'.tr();
     } else if (tScore >= 45) {
       return 'average';
     } else if (tScore >= 40) {
-      return 'slightly_below_average';
+      return 'slightly_below_average'.tr();
     } else if (tScore >= 35) {
       return 'below_average';
     } else if (tScore >= 30) {
-      return 'significantly_below_average';
+      return 'significantly_below_average'.tr();
     } else {
-      return 'extremely_below_average';
+      return 'extremely_below_average'.tr();
     }
   }
 
-  /// Get recommendations based on T-score
 }
