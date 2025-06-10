@@ -234,7 +234,7 @@ class ResultsScreen extends StatelessWidget {
       pdf.addPage(
         pw.MultiPage(
           pageFormat: PdfPageFormat.a4,
-          margin: const pw.EdgeInsets.all(20),
+          margin: const pw.EdgeInsets.all(30),
           textDirection:
               EasyLocalization.of(context)?.currentLocale?.languageCode == 'ar'
               ? pw.TextDirection.rtl
@@ -242,164 +242,337 @@ class ResultsScreen extends StatelessWidget {
           theme: pw.ThemeData.withFont(base: arabicFont, bold: arabicFont),
           build: (pw.Context context) {
             return [
-              // Header
+              // Header with enhanced design
               pw.Container(
                 width: double.infinity,
-                padding: const pw.EdgeInsets.all(20),
                 decoration: pw.BoxDecoration(
-                  color: _getPDFScoreColor(score),
-                  borderRadius: pw.BorderRadius.circular(10),
-                ),
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.center,
-                  children: [
-                    pw.Text(
-                      'assessment_results'.tr(),
-                      style: pw.TextStyle(
-                        fontSize: 24,
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.white,
-                      ),
-                    ),
-                    pw.SizedBox(height: 10),
-                    pw.Text(
-                      '${'child_name'.tr()}: ${child.name}',
-                      style: const pw.TextStyle(
-                        fontSize: 16,
-                        color: PdfColors.white,
-                      ),
-                    ),
-                    pw.SizedBox(height: 5),
-                    pw.Text(
-                      '${'date'.tr()}: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-                      style: const pw.TextStyle(
-                        fontSize: 14,
-                        color: PdfColors.white,
-                      ),
+                  gradient: pw.LinearGradient(
+                    colors: [
+                      _getPDFScoreColor(score),
+                      _getPDFScoreColor(score).shade(0.8),
+                    ],
+                    begin: pw.Alignment.topLeft,
+                    end: pw.Alignment.bottomRight,
+                  ),
+                  borderRadius: pw.BorderRadius.circular(15),
+                  boxShadow: [
+                    pw.BoxShadow(
+                      color: PdfColors.grey300,
+                      offset: const PdfPoint(0, 4),
+                      blurRadius: 8,
                     ),
                   ],
                 ),
+                child: pw.Padding(
+                  padding: const pw.EdgeInsets.all(25),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    children: [
+                      pw.Text(
+                        'assessment_results'.tr(),
+                        style: pw.TextStyle(
+                          fontSize: 28,
+                          fontWeight: pw.FontWeight.bold,
+                          color: PdfColors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      pw.SizedBox(height: 15),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.white,
+                          ),
+                        child: pw.Text(
+                          '${'child_name'.tr()}: ${child.name}',
+                          style: pw.TextStyle(
+                            fontSize: 18,
+                            fontWeight: pw.FontWeight.bold,
+                            color: _getPDFScoreColor(
+                              score,
+                            ), // Enhanced: Use score color instead of white
+                          ),
+                        ),
+                      ),
+                      pw.SizedBox(height: 8),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.white.shade(
+                            0.9,
+                          ), // Enhanced: Semi-transparent white background
+                          borderRadius: pw.BorderRadius.circular(12),
+                        ),
+                        child: pw.Text(
+
+                          '${'date'.tr()}: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                          style: pw.TextStyle(
+                            fontSize: 16,
+                            fontWeight:
+                                pw.FontWeight.bold, // Enhanced: Medium weight
+                            color: PdfColors
+                                .grey800, // Enhanced: Dark grey instead of white
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
-              pw.SizedBox(height: 20),
+              pw.SizedBox(height: 25),
 
-              // Score Section
+              // Score Section with enhanced design
               pw.Container(
-                padding: const pw.EdgeInsets.all(15),
+                padding: const pw.EdgeInsets.all(20),
                 decoration: pw.BoxDecoration(
-                  border: pw.Border.all(color: PdfColors.grey300),
-                  borderRadius: pw.BorderRadius.circular(8),
+                  color: PdfColors.white,
+                  border: pw.Border.all(
+                    color: _getPDFScoreColor(score),
+                    width: 2,
+                  ),
+                  borderRadius: pw.BorderRadius.circular(12),
+                  boxShadow: [
+                    pw.BoxShadow(
+                      color: PdfColors.grey200,
+                      offset: const PdfPoint(0, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
                 ),
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text(
-                      'score_interpretation'.tr(),
-                      style: pw.TextStyle(
-                        fontSize: 18,
-                        fontWeight: pw.FontWeight.bold,
+                    pw.Row(
+                      children: [
+                        pw.Container(
+                          width: 4,
+                          height: 30,
+                          color: _getPDFScoreColor(score),
+                        ),
+                        pw.SizedBox(width: 12),
+                        pw.Text(
+                          'score_interpretation'.tr(),
+                          style: pw.TextStyle(
+                            fontSize: 22,
+                            fontWeight: pw.FontWeight.bold,
+                            color: PdfColors.grey800,
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                    pw.Container(
+                      padding: const pw.EdgeInsets.all(15),
+                      decoration: pw.BoxDecoration(
+                        color: _getPDFScoreColor(score).shade(0.1),
+                        borderRadius: pw.BorderRadius.circular(8),
+                        border: pw.Border.all(
+                          color: _getPDFScoreColor(score),
+                          width: 1,
+                        ),
+                      ),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text(
+                            'T-Score:',
+                            style: pw.TextStyle(
+                              fontSize: 18,
+                              fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.grey700,
+                            ),
+                          ),
+                          pw.Text(
+                            '${score.toInt()}',
+                            style: pw.TextStyle(
+                              fontSize: 24,
+                              fontWeight: pw.FontWeight.bold,
+                              color: _getPDFScoreColor(score),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    pw.SizedBox(height: 10),
-                    pw.Text(
-                      'T-Score: ${score.toInt()}',
-                      style: pw.TextStyle(
-                        fontSize: 16,
-                        fontWeight: pw.FontWeight.bold,
-                        color: _getPDFScoreColor(score),
-                      ),
-                    ),
-                    pw.SizedBox(height: 5),
+                    pw.SizedBox(height: 12),
                     pw.Text(
                       interpretation.tr(),
-                      style: const pw.TextStyle(fontSize: 14),
+                      style: pw.TextStyle(
+                        fontSize: 16,
+                        color: PdfColors.grey700,
+                        lineSpacing: 1.4,
+                      ),
                     ),
                   ],
                 ),
               ),
 
-              pw.SizedBox(height: 20),
+              pw.SizedBox(height: 25),
 
-              // Questions and Answers Section
-              pw.Text(
-                'questions_and_answers'.tr(),
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
+              // Questions and Answers Section with enhanced design
+              pw.Container(
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      children: [
+                        pw.Container(
+                          width: 4,
+                          height: 30,
+                          color: PdfColors.blue600,
+                        ),
+                        pw.SizedBox(width: 12),
+                        pw.Text(
+                          'questions_and_answers'.tr(),
+                          style: pw.TextStyle(
+                            fontSize: 22,
+                            fontWeight: pw.FontWeight.bold,
+                            color: PdfColors.grey800,
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                  ],
                 ),
               ),
-              pw.SizedBox(height: 10),
 
               ...List.generate(questions.length, (index) {
                 final question = questions[index];
                 final answer = answers[index];
                 return pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 15),
-                  padding: const pw.EdgeInsets.all(12),
+                  margin: const pw.EdgeInsets.only(bottom: 12),
                   decoration: pw.BoxDecoration(
-                    color: PdfColors.grey100,
-                    borderRadius: pw.BorderRadius.circular(6),
+                    color: index % 2 == 0 ? PdfColors.grey50 : PdfColors.white,
+                    borderRadius: pw.BorderRadius.circular(8),
+                    border: pw.Border.all(color: PdfColors.grey200),
                   ),
-                  child: pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Text(
-                        '${index + 1}. ${question.questionText.tr()}',
-                        style: pw.TextStyle(
-                          fontSize: 12,
-                          fontWeight: pw.FontWeight.bold,
+                  child: pw.Padding(
+                    padding: const pw.EdgeInsets.all(15),
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          '${index + 1}. ${question.questionText.tr()}',
+                          style: pw.TextStyle(
+                            fontSize: 14,
+                            fontWeight: pw.FontWeight.bold,
+                            color: PdfColors.grey800,
+                            lineSpacing: 1.3,
+                          ),
                         ),
-                      ),
-                      pw.SizedBox(height: 5),
-                      pw.Text(
-                        '${'answer'.tr()}: ${_getAnswerText(answer)}',
-                        style: const pw.TextStyle(fontSize: 11),
-                      ),
-                    ],
+                        pw.SizedBox(height: 8),
+                        pw.Container(
+                          padding: const pw.EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: pw.BoxDecoration(
+                            color: _getAnswerColor(answer),
+                            borderRadius: pw.BorderRadius.circular(15),
+                          ),
+                          child: pw.Text(
+                            '${'answer'.tr()}: ${_getAnswerText(answer)}',
+                            style: pw.TextStyle(
+                              fontSize: 13,
+                              fontWeight: pw.FontWeight.normal,
+                              color: PdfColors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }),
 
-              pw.SizedBox(height: 20),
+              pw.SizedBox(height: 25),
 
-              // Recommendations Section
-              pw.Text(
-                'recommendations'.tr(),
-                style: pw.TextStyle(
-                  fontSize: 18,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-              pw.SizedBox(height: 10),
-
-              ...recommendations.map(
-                (rec) => pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 8),
-                  child: pw.Row(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Text('• ', style: const pw.TextStyle(fontSize: 12)),
-                      pw.Expanded(
-                        child: pw.Text(
-                          _cleanRecommendation(rec.tr()),
-                          style: const pw.TextStyle(fontSize: 12),
+              // Recommendations Section with enhanced design
+              pw.Container(
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Row(
+                      children: [
+                        pw.Container(
+                          width: 4,
+                          height: 30,
+                          color: PdfColors.green600,
                         ),
-                      ),
-                    ],
-                  ),
+                        pw.SizedBox(width: 12),
+                        pw.Text(
+                          'recommendations'.tr(),
+                          style: pw.TextStyle(
+                            fontSize: 22,
+                            fontWeight: pw.FontWeight.bold,
+                            color: PdfColors.grey800,
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(height: 15),
+                  ],
                 ),
               ),
 
-              pw.SizedBox(height: 30),
-
-              // Footer
-              pw.Center(
-                child: pw.Text(
-                  '${'generated_on'.tr()} ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}',
-                  style: const pw.TextStyle(
-                    fontSize: 10,
-                    color: PdfColors.grey600,
-                  ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(20),
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.green50,
+                  borderRadius: pw.BorderRadius.circular(12),
+                  border: pw.Border.all(color: PdfColors.green200),
+                ),
+                child: pw.Column(
+                  children: recommendations.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final rec = entry.value;
+                    return pw.Container(
+                      margin: pw.EdgeInsets.only(
+                        bottom: index < recommendations.length - 1 ? 15 : 0,
+                      ),
+                      child: pw.Row(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Container(
+                            width: 24,
+                            height: 24,
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.green600,
+                              shape: pw.BoxShape.circle,
+                            ),
+                            child: pw.Center(
+                              child: pw.Text(
+                                '${index + 1}',
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold,
+                                  color: PdfColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          pw.SizedBox(width: 12),
+                          pw.Expanded(
+                            child: pw.Text(
+                              _cleanRecommendation(rec.tr()),
+                              style: pw.TextStyle(
+                                fontSize: 14,
+                                color: PdfColors.grey800,
+                                lineSpacing: 1.4,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ];
@@ -462,6 +635,24 @@ class ResultsScreen extends StatelessWidget {
     if (tScore >= 60) return PdfColors.yellow700;
     if (tScore >= 45) return PdfColors.green500;
     return PdfColors.blue500;
+  }
+
+  // Helper method to get answer color based on response
+  PdfColor _getAnswerColor(int answer) {
+    switch (answer) {
+      case 0:
+        return PdfColors.green600;
+      case 1:
+        return PdfColors.lightGreen600;
+      case 2:
+        return PdfColors.yellow600;
+      case 3:
+        return PdfColors.orange600;
+      case 4:
+        return PdfColors.red600;
+      default:
+        return PdfColors.grey500;
+    }
   }
 
   String _cleanRecommendation(String input) {
