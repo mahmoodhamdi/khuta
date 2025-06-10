@@ -1,4 +1,6 @@
-{ "auth.email_already_in_use": "هذا البريد الإلكتروني مستخدم بالفعل",
+{"email_not_registered": "البريد الإلكتروني غير مسجل",
+
+   "auth.email_already_in_use": "هذا البريد الإلكتروني مستخدم بالفعل",
   "auth.invalid_email": "البريد الإلكتروني غير صالح",
   "auth.user_not_found": "لم يتم العثور على المستخدم",
   "auth.wrong_password": "كلمة المرور غير صحيحة",

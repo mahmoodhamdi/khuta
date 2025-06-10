@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -84,8 +85,13 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> resetPassword(String email) async {
     emit(AuthLoading());
     try {
-      await _auth.sendPasswordResetEmail(email: email);
-      emit(AuthPasswordResetSent(email: email));
+      final methods = await _auth.fetchSignInMethodsForEmail(email);
+      if (methods.isNotEmpty) {
+        await _auth.sendPasswordResetEmail(email: email);
+        emit(AuthPasswordResetSent(email: email));
+      } else {
+        emit(const AuthFailure(message: "email_not_registered"));
+      }
     } catch (e) {
       emit(AuthFailure(message: AuthExceptionHandler.handleException(e)));
     }
