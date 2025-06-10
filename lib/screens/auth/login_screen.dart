@@ -8,6 +8,7 @@ import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
 import 'register_screen.dart';
+import 'reset_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -104,7 +105,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const ResetPasswordScreen(),
+                            ),
+                          );
+                        },
+                        child: Text('forgot_password'.tr()),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     BlocBuilder<AuthCubit, AuthState>(
                       builder: (context, state) {
                         return AuthButton(
