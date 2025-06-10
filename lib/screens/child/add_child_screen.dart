@@ -212,7 +212,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                                   : const Color(0xFF2D3748),
                               fontSize: 16,
                             ),
-                            items: List.generate(18, (index) => index + 6)
+                            items: List.generate(12, (index) => index + 6)
                                 .map(
                                   (age) => DropdownMenuItem(
                                     value: age,
