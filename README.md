@@ -83,28 +83,69 @@ Our typeface selection prioritizes readability and accessibility:
 
 ## 7. 📂 Project Structure
 
-```
+```Project Structure
+project_root/
+├── assets/
+│   ├── animations/           # Animation files (Lottie, GIF, etc.)
+│   ├── fonts/               # Custom font files
+│   ├── images/              # Image assets (PNG, JPG, SVG, etc.)
+│   ├── legal/
+│   │   ├── privacy_policy_ar.md
+│   │   └── terms_of_service_ar.md
+│   └── translations/
+│       ├── ar.json          # Arabic translations
+│       └── en.json          # English translations
+│
 lib/
 ├── core/
 │   ├── constants/
+│   │   ├── app_strings.dart      # App-wide string constants
+│   │   └── questions.dart        # Question-related constants
+│   ├── services/
+│   │   ├── ai_recommendations_service.dart  # AI-based recommendations
+│   │   └── sdq_scoring_service.dart         # SDQ scoring service
 │   ├── theme/
+│   │   ├── app_colors.dart       # Color definitions
+│   │   ├── app_theme.dart        # Main app theme configuration
+│   │   ├── home_screen_theme.dart # Home screen specific theming
+│   │   └── input_themes.dart     # Input field theming
 │   └── utils/
-├── data/
-│   ├── models/
-│   ├── repositories/
-│   └── services/
-├── features/
+│       └── auth_exception_handler.dart  # Authentication error handling
+│
+├── cubit/              # State management using Cubit (BLoC pattern)
 │   ├── auth/
-│   ├── assessment/
-│   ├── children/
-│   └── reports/
-├── presentation/
-│   ├── screens/
-│   ├── widgets/
-│   └── cubit/
+│   │   ├── auth_cubit.dart       # Authentication business logic
+│   │   └── auth_state.dart       # Authentication states
+│   ├── onboarding/
+│   │   └── onboarding_cubit.dart     # Onboarding flow management
+│   └── theme/
+│       └── theme_cubit.dart          # Theme switching logic
+│
+├── models/             # Data models
+│   ├── child.dart      # Child entity model
+│   ├── question.dart   # Question model for assessments
+│   └── test_result.dart # Test result model
+│
+├── screens/            # UI screens
+│   ├── about/
+│   ├── auth/
+│   ├── child/
+│   ├── home/
+│   ├── legal/
+│   ├── onboarding/
+│   ├── settings/
+│   ├── splash/
+│   └── main_screen.dart
+│
+├── widgets/            # Reusable UI components
+│   ├── animated_bottom_bar.dart
+│   ├── auth_widgets.dart
+│   ├── connection_status_banner.dart
+│   └── loading_overlay.dart
+│
+├── firebase_options.dart
 └── main.dart
 ```
-
 ## 8. 📄 License
 
 This project is open-source and available under the MIT License.
