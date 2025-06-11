@@ -403,7 +403,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
 
                             Text(
-                              DateFormat.yMMMd().format(lastTest.date),
+                              context.locale.languageCode == 'ar'
+                                  ? DateFormat.yMMMd('ar').format(lastTest.date)
+                                  : DateFormat.yMMMd(
+                                      'en',
+                                    ).format(lastTest.date),
                               style: TextStyle(
                                 fontSize: 14,
                                 color: HomeScreenTheme.secondaryText(isDark),

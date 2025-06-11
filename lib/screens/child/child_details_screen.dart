@@ -543,7 +543,9 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  DateFormat('dd/MM/yyyy').format(test.date),
+                  context.locale.languageCode == 'ar'
+                      ? DateFormat('dd/MM/yyyy', 'ar').format(test.date)
+                      : DateFormat('dd/MM/yyyy', 'en').format(test.date),
                   style: TextStyle(
                     fontSize: 14,
                     color: HomeScreenTheme.secondaryText(isDark),
@@ -572,7 +574,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen>
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${test.score.toStringAsFixed(1)}%',
+              test.score.toStringAsFixed(1),
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

@@ -7,30 +7,82 @@ class AiRecommendationsService {
   static final model = FirebaseAI.googleAI().generativeModel(
     model: 'gemini-2.0-flash',
   );
+
+  // Detect language based on question content
+  static String _detectLanguage(List<Question> questions) {
+    if (questions.isEmpty) return 'en';
+
+    // Check if first question contains Arabic characters
+    final firstQuestion = questions[0].questionText;
+    final arabicRegex = RegExp(r'[\u0600-\u06FF]');
+
+    return arabicRegex.hasMatch(firstQuestion) ? 'ar' : 'en';
+  }
+
   static String _formatPrompt(
     List<Question> questions,
     List<int> answers,
     int tScore,
+    int? childAge,
+    String? childGender,
   ) {
-    final List<String> promptBuilder = [
-      'فيما يلي نتائج تقييم مقياس كونرز لتقييم أعراض اضطراب فرط الحركة ونقص الانتباه (ADHD) لدى طفل، حيث تُظهر كل إجابة تقييم المعلم أو الوالد.',
-      '',
-    ];
+    final language = _detectLanguage(questions);
+    final isArabic = language == 'ar';
 
+    List<String> promptBuilder = [];
+
+    // Add intro based on language
+    if (isArabic) {
+      promptBuilder.addAll([
+        'تم تقييم طفل باستخدام مقياس كونرز لأعراض اضطراب فرط الحركة ونقص الانتباه (ADHD).',
+        childAge != null ? 'عمر الطفل: $childAge سنة' : '',
+        childGender != null ? 'جنس الطفل: $childGender' : '',
+        'النتيجة الإجمالية: $tScore',
+        '',
+        'الأسئلة والإجابات:',
+      ]);
+    } else {
+      promptBuilder.addAll([
+        'A child has been assessed using the Conners Scale for ADHD symptoms.',
+        childAge != null ? 'Child age: $childAge years' : '',
+        childGender != null ? 'Child gender: $childGender' : '',
+        'Total score: $tScore',
+        '',
+        'Questions and answers:',
+      ]);
+    }
+
+    // Add questions and answers
     for (int i = 0; i < questions.length; i++) {
       if (answers[i] >= 0) {
         promptBuilder.add(
-          'السؤال ${i + 1}: ${questions[i].questionText}\nالإجابة: ${_translateAnswer(answers[i])}',
+          '${i + 1}. ${questions[i].questionText} - ${_translateAnswer(answers[i])}',
         );
       }
     }
 
-    promptBuilder.addAll([
-      '',
-      'بناءً على هذه النتائج، قدم نصائح محددة لاستراتيجيات أو تدخلات يمكن أن تساعد الطفل. قدم النصائح في شكل قائمة نقطية.',
-    ]);
+    // Add instructions based on language
+    if (isArabic) {
+      promptBuilder.addAll([
+        '',
+        'المطلوب: قائمة توصيات مباشرة فقط (5-8 توصيات) بدون أي مقدمات أو كلمات مثل "بناءً على" أو "بالتأكيد" أو "مختصر بسيط".',
+        'اكتب التوصيات مباشرة بصيغة الأمر باللغة العربية:',
+        '• التوصية الأولى',
+        '• التوصية الثانية',
+        'وهكذا...',
+      ]);
+    } else {
+      promptBuilder.addAll([
+        '',
+        'Required: Direct recommendations list only (5-8 recommendations) without any introductions or words like "based on", "certainly", or "brief summary".',
+        'Write recommendations directly in imperative form in English:',
+        '• First recommendation',
+        '• Second recommendation',
+        'And so on...',
+      ]);
+    }
 
-    return promptBuilder.join('\n');
+    return promptBuilder.where((line) => line.isNotEmpty).join('\n');
   }
 
   static String _translateAnswer(int answer) {
@@ -43,80 +95,187 @@ class AiRecommendationsService {
         return "sometimes".tr();
       case 3:
         return "often".tr();
-
       default:
         return 'Not Answered';
     }
   }
 
   static Future<List<String>> getRecommendations(
-    int s,
+    int tScore,
     List<Question> questions,
-    List<int> answers,
-  ) async {
+    List<int> answers, {
+    int? childAge,
+    String? childGender,
+  }) async {
     try {
+      final prompt = [
+        Content.text(
+          _formatPrompt(questions, answers, tScore, childAge, childGender),
+        ),
+      ];
 
-      final prompt = [Content.text(_formatPrompt(questions, answers, s))];
       debugPrint('Prompt: ${prompt[0].parts[0].toString()}');
       final response = await model.generateContent(prompt);
 
-
       if (response.text == null || response.text!.isEmpty) {
-        return _getFallbackRecommendations( tScore: s);
+        return _getFallbackRecommendations(
+          tScore: tScore,
+          language: _detectLanguage(questions),
+        );
       }
 
-      // Split the response into individual recommendations
-      final recommendations = response.text!
-          .split('\n')
-          .where((line) => line.trim().isNotEmpty)
-          .map((line) => line.trim())
-          .toList();
+      // Parse the response to extract recommendations
+      final responseText = response.text!;
+      final recommendations = _parseRecommendations(responseText);
 
       return recommendations.isEmpty
-          ? _getFallbackRecommendations()
+          ? _getFallbackRecommendations(
+              tScore: tScore,
+              language: _detectLanguage(questions),
+            )
           : recommendations;
     } catch (e) {
       debugPrint('Error generating AI recommendations: $e');
-      return _getFallbackRecommendations();
+      return _getFallbackRecommendations(
+        tScore: tScore,
+        language: _detectLanguage(questions),
+      );
     }
   }
 
-  static List<String> _getFallbackRecommendations( {int tScore = 0}) {
+  static List<String> _parseRecommendations(String responseText) {
+    final recommendations = <String>[];
+    final lines = responseText.split('\n');
+
+    for (String line in lines) {
+      final trimmedLine = line.trim();
+
+      // Skip empty lines
+      if (trimmedLine.isEmpty) continue;
+
+      // Skip introductory phrases in Arabic
+      if (trimmedLine.contains('بناءً على') ||
+          trimmedLine.contains('بالتأكيد') ||
+          trimmedLine.contains('مختصر') ||
+          trimmedLine.contains('التوصيات') ||
+          trimmedLine.contains('النتائج') ||
+          trimmedLine.contains('التحليل')) {
+        continue;
+      }
+
+      // Skip introductory phrases in English
+      if (trimmedLine.toLowerCase().contains('based on') ||
+          trimmedLine.toLowerCase().contains('certainly') ||
+          trimmedLine.toLowerCase().contains('summary') ||
+          trimmedLine.toLowerCase().contains('recommendations') ||
+          trimmedLine.toLowerCase().contains('analysis')) {
+        continue;
+      }
+
+      // Extract bullet points or numbered items
+      if (trimmedLine.startsWith('•') ||
+          trimmedLine.startsWith('-') ||
+          RegExp(r'^\d+\.').hasMatch(trimmedLine)) {
+        // Clean up the recommendation text
+        String recommendation = trimmedLine
+            .replaceFirst(RegExp(r'^[•\-\d\.]+\s*'), '')
+            .trim();
+
+        if (recommendation.isNotEmpty && recommendation.length > 5) {
+          recommendations.add(recommendation);
+        }
+      }
+    }
+
+    return recommendations;
+  }
+
+  static List<String> _getFallbackRecommendations({
+    int tScore = 0,
+    String language = 'en',
+  }) {
+    final isArabic = language == 'ar';
+
     if (tScore >= 70) {
-      return [
-        'immediate_professional_consultation',
-        'comprehensive_evaluation_needed',
-        'create_support_plan',
-        'regular_monitoring',
-      ];
+      return isArabic
+          ? [
+              'استشارة فورية مع أخصائي نفسي أو طبيب نفسي',
+              'إجراء تقييم شامل لاضطراب فرط الحركة ونقص الانتباه',
+              'وضع خطة دعم متكاملة في المنزل والمدرسة',
+              'مراقبة منتظمة للسلوك والأعراض',
+              'التنسيق بين الأهل والمعلمين',
+              'النظر في التدخلات السلوكية المكثفة',
+            ]
+          : [
+              'Immediate consultation with psychologist or psychiatrist',
+              'Comprehensive ADHD evaluation needed',
+              'Create integrated support plan for home and school',
+              'Regular monitoring of behavior and symptoms',
+              'Coordinate between parents and teachers',
+              'Consider intensive behavioral interventions',
+            ];
     } else if (tScore >= 65) {
-      return [
-        'professional_consultation_recommended',
-        'behavioral_intervention_plan',
-        'parent_teacher_coordination',
-        'regular_follow_up',
-      ];
+      return isArabic
+          ? [
+              'استشارة مع أخصائي نفسي أو تربوي',
+              'وضع خطة تدخل سلوكي',
+              'تحسين التنسيق بين الأهل والمعلمين',
+              'متابعة دورية للتقدم',
+              'تطبيق استراتيجيات الدعم في البيئات المختلفة',
+            ]
+          : [
+              'Consultation with psychologist or educational specialist',
+              'Develop behavioral intervention plan',
+              'Improve parent-teacher coordination',
+              'Regular follow-up for progress',
+              'Implement support strategies across environments',
+            ];
     } else if (tScore >= 60) {
-      return [
-        'monitor_behavior_closely',
-        'consider_professional_consultation',
-        'implement_support_strategies',
-        'regular_assessment',
-      ];
+      return isArabic
+          ? [
+              'مراقبة السلوك عن كثب',
+              'النظر في استشارة مهنية',
+              'تطبيق استراتيجيات الدعم',
+              'تقييم منتظم للوضع',
+              'تعزيز السلوكيات الإيجابية',
+            ]
+          : [
+              'Monitor behavior closely',
+              'Consider professional consultation',
+              'Implement support strategies',
+              'Regular assessment of situation',
+              'Reinforce positive behaviors',
+            ];
     } else if (tScore >= 45) {
-      return [
-        'continue_current_support',
-        'maintain_regular_monitoring',
-        'positive_reinforcement',
-        'age_appropriate_activities',
-      ];
+      return isArabic
+          ? [
+              'مواصلة الدعم الحالي',
+              'المراقبة المنتظمة',
+              'التعزيز الإيجابي',
+              'الأنشطة المناسبة للعمر',
+              'التشجيع المستمر',
+            ]
+          : [
+              'Continue current support',
+              'Maintain regular monitoring',
+              'Positive reinforcement',
+              'Age-appropriate activities',
+              'Ongoing encouragement',
+            ];
     } else {
-      return [
-        'maintain_current_strategies',
-        'encourage_positive_behaviors',
-        'regular_development_monitoring',
-        'age_appropriate_engagement',
-      ];
+      return isArabic
+          ? [
+              'المحافظة على الاستراتيجيات الحالية',
+              'تشجيع السلوكيات الإيجابية',
+              'مراقبة النمو العادي',
+              'المشاركة المناسبة للعمر',
+            ]
+          : [
+              'Maintain current strategies',
+              'Encourage positive behaviors',
+              'Regular development monitoring',
+              'Age-appropriate engagement',
+            ];
     }
   }
 }
