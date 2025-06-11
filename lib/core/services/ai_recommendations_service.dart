@@ -11,11 +11,11 @@ class AiRecommendationsService {
   // Detect language based on question content
   static String _detectLanguage(List<Question> questions) {
     if (questions.isEmpty) return 'en';
-
+    
     // Check if first question contains Arabic characters
     final firstQuestion = questions[0].questionText;
     final arabicRegex = RegExp(r'[\u0600-\u06FF]');
-
+    
     return arabicRegex.hasMatch(firstQuestion) ? 'ar' : 'en';
   }
 
@@ -28,9 +28,9 @@ class AiRecommendationsService {
   ) {
     final language = _detectLanguage(questions);
     final isArabic = language == 'ar';
-
+    
     List<String> promptBuilder = [];
-
+    
     // Add intro based on language
     if (isArabic) {
       promptBuilder.addAll([
@@ -65,20 +65,18 @@ class AiRecommendationsService {
     if (isArabic) {
       promptBuilder.addAll([
         '',
-        'المطلوب: قائمة توصيات مباشرة فقط (5-8 توصيات) بدون أي مقدمات أو كلمات مثل "بناءً على" أو "بالتأكيد" أو "مختصر بسيط".',
-        'اكتب التوصيات مباشرة بصيغة الأمر باللغة العربية:',
-        '• التوصية الأولى',
-        '• التوصية الثانية',
-        'وهكذا...',
+        'المطلوب:',
+        'قائمة بالتوصيات العملية فقط (5-7 توصيات) لا تضف أي مقدمات أو عبارات ترحيبية أو ملخصات. اذكر التوصيات مباشرة.',
+        '',
+        'يرجى الكتابة باللغة العربية بشكل مختصر ومفيد.',
       ]);
     } else {
       promptBuilder.addAll([
         '',
-        'Required: Direct recommendations list only (5-8 recommendations) without any introductions or words like "based on", "certainly", or "brief summary".',
-        'Write recommendations directly in imperative form in English:',
-        '• First recommendation',
-        '• Second recommendation',
-        'And so on...',
+        'Required:',
+        'List ONLY practical recommendations (5-7 recommendations). Do NOT include any introductions, welcome phrases, or summaries. Provide ONLY the direct recommendations.',
+        '',
+        'Please write in English, keeping it concise and helpful.',
       ]);
     }
 
@@ -109,11 +107,9 @@ class AiRecommendationsService {
   }) async {
     try {
       final prompt = [
-        Content.text(
-          _formatPrompt(questions, answers, tScore, childAge, childGender),
-        ),
+        Content.text(_formatPrompt(questions, answers, tScore, childAge, childGender))
       ];
-
+      
       debugPrint('Prompt: ${prompt[0].parts[0].toString()}');
       final response = await model.generateContent(prompt);
 
@@ -146,47 +142,49 @@ class AiRecommendationsService {
   static List<String> _parseRecommendations(String responseText) {
     final recommendations = <String>[];
     final lines = responseText.split('\n');
-
+    
     for (String line in lines) {
       final trimmedLine = line.trim();
-
+      
       // Skip empty lines
       if (trimmedLine.isEmpty) continue;
-
-      // Skip introductory phrases in Arabic
-      if (trimmedLine.contains('بناءً على') ||
-          trimmedLine.contains('بالتأكيد') ||
-          trimmedLine.contains('مختصر') ||
-          trimmedLine.contains('التوصيات') ||
-          trimmedLine.contains('النتائج') ||
-          trimmedLine.contains('التحليل')) {
+      
+      // Skip lines that look like introductions or summaries
+      if (trimmedLine.toLowerCase().contains('summary') ||
+          trimmedLine.toLowerCase().contains('analysis') ||
+          trimmedLine.toLowerCase().contains('based on') ||
+          trimmedLine.toLowerCase().contains('according to') ||
+          trimmedLine.contains('ملخص') ||
+          trimmedLine.contains('تحليل')) {
         continue;
       }
-
-      // Skip introductory phrases in English
-      if (trimmedLine.toLowerCase().contains('based on') ||
-          trimmedLine.toLowerCase().contains('certainly') ||
-          trimmedLine.toLowerCase().contains('summary') ||
-          trimmedLine.toLowerCase().contains('recommendations') ||
-          trimmedLine.toLowerCase().contains('analysis')) {
-        continue;
-      }
-
+      
       // Extract bullet points or numbered items
-      if (trimmedLine.startsWith('•') ||
+      if (trimmedLine.startsWith('•') || 
           trimmedLine.startsWith('-') ||
           RegExp(r'^\d+\.').hasMatch(trimmedLine)) {
+        
         // Clean up the recommendation text
         String recommendation = trimmedLine
             .replaceFirst(RegExp(r'^[•\-\d\.]+\s*'), '')
             .trim();
-
-        if (recommendation.isNotEmpty && recommendation.length > 5) {
+            
+        if (recommendation.isNotEmpty) {
           recommendations.add(recommendation);
         }
       }
+      // Also add lines that look like recommendations but without bullets
+      // Only if they don't contain common introduction phrases
+      else if (trimmedLine.length > 10 &&
+               !trimmedLine.toLowerCase().contains('recommend') &&
+               !trimmedLine.toLowerCase().contains('following') &&
+               !trimmedLine.toLowerCase().contains('here') &&
+               !trimmedLine.contains('توصيات') &&
+               !trimmedLine.contains('فيما يلي')) {
+        recommendations.add(trimmedLine);
+      }
     }
-
+    
     return recommendations;
   }
 
@@ -195,87 +193,77 @@ class AiRecommendationsService {
     String language = 'en',
   }) {
     final isArabic = language == 'ar';
-
+    
     if (tScore >= 70) {
-      return isArabic
-          ? [
-              'استشارة فورية مع أخصائي نفسي أو طبيب نفسي',
-              'إجراء تقييم شامل لاضطراب فرط الحركة ونقص الانتباه',
-              'وضع خطة دعم متكاملة في المنزل والمدرسة',
-              'مراقبة منتظمة للسلوك والأعراض',
-              'التنسيق بين الأهل والمعلمين',
-              'النظر في التدخلات السلوكية المكثفة',
-            ]
-          : [
-              'Immediate consultation with psychologist or psychiatrist',
-              'Comprehensive ADHD evaluation needed',
-              'Create integrated support plan for home and school',
-              'Regular monitoring of behavior and symptoms',
-              'Coordinate between parents and teachers',
-              'Consider intensive behavioral interventions',
-            ];
+      return isArabic ? [
+        'استشارة فورية مع أخصائي نفسي أو طبيب نفسي',
+        'إجراء تقييم شامل لاضطراب فرط الحركة ونقص الانتباه',
+        'وضع خطة دعم متكاملة في المنزل والمدرسة',
+        'مراقبة منتظمة للسلوك والأعراض',
+        'التنسيق بين الأهل والمعلمين',
+        'النظر في التدخلات السلوكية المكثفة',
+      ] : [
+        'Immediate consultation with psychologist or psychiatrist',
+        'Comprehensive ADHD evaluation needed',
+        'Create integrated support plan for home and school',
+        'Regular monitoring of behavior and symptoms',
+        'Coordinate between parents and teachers',
+        'Consider intensive behavioral interventions',
+      ];
     } else if (tScore >= 65) {
-      return isArabic
-          ? [
-              'استشارة مع أخصائي نفسي أو تربوي',
-              'وضع خطة تدخل سلوكي',
-              'تحسين التنسيق بين الأهل والمعلمين',
-              'متابعة دورية للتقدم',
-              'تطبيق استراتيجيات الدعم في البيئات المختلفة',
-            ]
-          : [
-              'Consultation with psychologist or educational specialist',
-              'Develop behavioral intervention plan',
-              'Improve parent-teacher coordination',
-              'Regular follow-up for progress',
-              'Implement support strategies across environments',
-            ];
+      return isArabic ? [
+        'استشارة مع أخصائي نفسي أو تربوي',
+        'وضع خطة تدخل سلوكي',
+        'تحسين التنسيق بين الأهل والمعلمين',
+        'متابعة دورية للتقدم',
+        'تطبيق استراتيجيات الدعم في البيئات المختلفة',
+      ] : [
+        'Consultation with psychologist or educational specialist',
+        'Develop behavioral intervention plan',
+        'Improve parent-teacher coordination',
+        'Regular follow-up for progress',
+        'Implement support strategies across environments',
+      ];
     } else if (tScore >= 60) {
-      return isArabic
-          ? [
-              'مراقبة السلوك عن كثب',
-              'النظر في استشارة مهنية',
-              'تطبيق استراتيجيات الدعم',
-              'تقييم منتظم للوضع',
-              'تعزيز السلوكيات الإيجابية',
-            ]
-          : [
-              'Monitor behavior closely',
-              'Consider professional consultation',
-              'Implement support strategies',
-              'Regular assessment of situation',
-              'Reinforce positive behaviors',
-            ];
+      return isArabic ? [
+        'مراقبة السلوك عن كثب',
+        'النظر في استشارة مهنية',
+        'تطبيق استراتيجيات الدعم',
+        'تقييم منتظم للوضع',
+        'تعزيز السلوكيات الإيجابية',
+      ] : [
+        'Monitor behavior closely',
+        'Consider professional consultation',
+        'Implement support strategies',
+        'Regular assessment of situation',
+        'Reinforce positive behaviors',
+      ];
     } else if (tScore >= 45) {
-      return isArabic
-          ? [
-              'مواصلة الدعم الحالي',
-              'المراقبة المنتظمة',
-              'التعزيز الإيجابي',
-              'الأنشطة المناسبة للعمر',
-              'التشجيع المستمر',
-            ]
-          : [
-              'Continue current support',
-              'Maintain regular monitoring',
-              'Positive reinforcement',
-              'Age-appropriate activities',
-              'Ongoing encouragement',
-            ];
+      return isArabic ? [
+        'مواصلة الدعم الحالي',
+        'المراقبة المنتظمة',
+        'التعزيز الإيجابي',
+        'الأنشطة المناسبة للعمر',
+        'التشجيع المستمر',
+      ] : [
+        'Continue current support',
+        'Maintain regular monitoring',
+        'Positive reinforcement',
+        'Age-appropriate activities',
+        'Ongoing encouragement',
+      ];
     } else {
-      return isArabic
-          ? [
-              'المحافظة على الاستراتيجيات الحالية',
-              'تشجيع السلوكيات الإيجابية',
-              'مراقبة النمو العادي',
-              'المشاركة المناسبة للعمر',
-            ]
-          : [
-              'Maintain current strategies',
-              'Encourage positive behaviors',
-              'Regular development monitoring',
-              'Age-appropriate engagement',
-            ];
+      return isArabic ? [
+        'المحافظة على الاستراتيجيات الحالية',
+        'تشجيع السلوكيات الإيجابية',
+        'مراقبة النمو العادي',
+        'المشاركة المناسبة للعمر',
+      ] : [
+        'Maintain current strategies',
+        'Encourage positive behaviors',
+        'Regular development monitoring',
+        'Age-appropriate engagement',
+      ];
     }
   }
 }

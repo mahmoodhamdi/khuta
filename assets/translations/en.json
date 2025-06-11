@@ -92,8 +92,8 @@
   "gender_required": "Gender is required",
   "teacher_assessment": "Teacher Assessment",
   "teacher": "Teacher Assessment",
-
-  "test_summary": "Test Summary",
+"Denies mistakes and blames others"
+:"Denies mistakes and blames others",  "test_summary": "Test Summary",
   "test_deleted": "Test deleted successfully",
   "error_deleting": "Error deleting",
   "error_deleting_child": "Error deleting child",
