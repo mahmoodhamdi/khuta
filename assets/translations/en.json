@@ -91,6 +91,7 @@
   "age_required": "Age is required",
   "gender_required": "Gender is required",
   "teacher_assessment": "Teacher Assessment",
+  "teacher": "Teacher Assessment",
 
   "test_summary": "Test Summary",
   "test_deleted": "Test deleted successfully",
@@ -112,6 +113,7 @@
   "total_score": "Total Score",
   "total_questions": "Total Questions",
   "parent_assessment": "Parent Assessment",
+  "parent": "Parent Assessment",
 
   "rude_with_adults": "Rude with adults",
   "distracted_and_inattentive": "Distracted and inattentive",

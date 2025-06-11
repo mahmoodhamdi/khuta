@@ -121,7 +121,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AppBar(
-      title: Text('assessment'.tr()),
+      title: Text(questions[0].questionType.tr()),
       backgroundColor: HomeScreenTheme.cardBackground(isDark),
       foregroundColor: HomeScreenTheme.primaryText(isDark),
       elevation: 0,

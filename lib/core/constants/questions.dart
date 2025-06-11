@@ -333,7 +333,7 @@ final List<Question> parentQuestions = List.generate(48, (index) {
     id: 'p$index',
     questionText: tr(indexedParentQuestions[index]!['text']!),
     imageUrl: indexedParentQuestions[index]!['image']!,
-    questionType: QuestionType.parent,
+    questionType: "parent",
   );
 });
 
@@ -344,7 +344,7 @@ final List<Question> teacherQuestions = List.generate(
       id: 't$index',
       questionText: tr(indexedTeacherQuestions[index]!['text']!),
       imageUrl: indexedTeacherQuestions[index]!['image']!,
-      questionType: QuestionType.teacher,
+      questionType: "teacher",
     );
   },
 );

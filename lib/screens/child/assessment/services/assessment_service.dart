@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/core/services/sdq_scoring_service.dart';
 import 'package:khuta/models/child.dart';
-import 'package:khuta/models/question.dart';
 import 'package:khuta/models/test_result.dart';
 
 class AssessmentService {
@@ -13,7 +12,8 @@ class AssessmentService {
   final Child child;
   final String assessmentType;
 
-  AssessmentService( {required this.assessmentType,
+  AssessmentService({
+    required this.assessmentType,
     required this.child,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
@@ -61,7 +61,7 @@ class AssessmentService {
   }
 
   /// Calculate the SDQ T-score based on raw answers
-  int calculateScore(List<int> answers, QuestionType questionType) {
+  int calculateScore(List<int> answers, String questionType) {
     if (child.age < 6 || child.age > 17) {
       throw Exception('Age must be between 6 and 17');
     }
@@ -77,9 +77,7 @@ class AssessmentService {
       answers: validAnswers,
       gender: child.gender.toLowerCase(),
       age: child.age,
-      assessmentType: questionType == QuestionType.parent
-          ? 'parent'
-          : 'teacher',
+      assessmentType: questionType,
     );
   }
 }

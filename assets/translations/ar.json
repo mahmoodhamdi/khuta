@@ -104,7 +104,7 @@
   "edit_profile": "تعديل الملف الشخصي",
   "save_changes": "حفظ التغييرات",
 
-  "teacher_assessment": "تقييم المعلم",
+  "teacher_assessment": "تقييم المعلم","teacher": "تقييم المعلم",
 
   "mainttain_current_strategies": "الحفاظ على الاستراتيجيات الحالية",
   "sdq_score_very_low_range": "مبين",
@@ -129,7 +129,9 @@
   "test_history": "تاريخ الاختبار",
   "total_score": "الدرجة الكلية",
   "total_questions": "الاسئلة الكلية",
+  "parent":"تقييم الوالدين",
   "parent_assessment": "تقييم الوالدين",
+
   "rude_with_adults": "بذى مع الكبار",
   "distracted_and_inattentive": "تشتت وقله انتباه",
   "shy": "خجول",

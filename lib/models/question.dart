@@ -1,16 +1,15 @@
-enum QuestionType { parent, teacher }
 
 class Question {
   final String id;
   final String imageUrl;
   final String questionText;
-  final QuestionType questionType;
+  final String questionType;
 
   Question({
     required this.id,
     required this.imageUrl,
     required this.questionText,
-    this.questionType = QuestionType.parent,
+    this.questionType = "parent",
   });
 
   factory Question.fromMap(Map<String, dynamic> map) {
@@ -18,7 +17,7 @@ class Question {
       id: map['id'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
       questionText: map['questionText'] ?? '',
-      questionType: map['questionType'] ?? QuestionType.parent,
+      questionType: map['questionType'] ?? "parent",
     );
   }
   Map<String, dynamic> toMap() {
