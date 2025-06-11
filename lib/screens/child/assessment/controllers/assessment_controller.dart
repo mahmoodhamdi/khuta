@@ -141,9 +141,10 @@ class AssessmentController {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.pushReplacement(
+            onPressed: () => Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const MainScreen()),
+              MaterialPageRoute(builder: (context) => MainScreen()),
+              (route) => false,
             ),
             child: Text(
               'exit'.tr(),

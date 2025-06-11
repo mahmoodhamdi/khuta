@@ -18,7 +18,7 @@ class AssessmentProgressBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       color: HomeScreenTheme.cardBackground(isDark),
       child: Column(
         children: [
@@ -42,14 +42,14 @@ class AssessmentProgressBar extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
             backgroundColor: isDark ? Colors.grey[800] : Colors.grey[200],
             valueColor: AlwaysStoppedAnimation<Color>(
               HomeScreenTheme.accentBlue(isDark),
             ),
-            minHeight: 6,
+            minHeight: 8,
           ),
         ],
       ),

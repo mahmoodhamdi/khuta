@@ -25,38 +25,12 @@ class NavigationButtons extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       color: HomeScreenTheme.cardBackground(isDark),
       child: Row(
+        spacing: 16,
         children: [
-          if (!isFirstQuestion)
-            Expanded(
-              child: ElevatedButton(
-                onPressed: onPrevious,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isDark ? Colors.grey[800] : Colors.grey[100],
-                  foregroundColor: HomeScreenTheme.primaryText(isDark),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      isRTL ? Icons.arrow_forward : Icons.arrow_back,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text('previous'.tr()),
-                  ],
-                ),
-              ),
-            ),
-
-          if (!isFirstQuestion) const SizedBox(width: 16),
+          if (!isFirstQuestion) const SizedBox(width: 0),
 
           Expanded(
             child: ElevatedButton(
@@ -77,19 +51,32 @@ class NavigationButtons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(isLastQuestion ? 'show_results'.tr() : 'next'.tr()),
-                  const SizedBox(width: 8),
-                  Icon(
-                    isLastQuestion
-                        ? Icons.check
-                        : isRTL
-                        ? Icons.arrow_back
-                        : Icons.arrow_forward,
-                    size: 20,
-                  ),
+
+                  Icon(isLastQuestion ? Icons.check : null, size: 20),
                 ],
               ),
             ),
           ),
+
+          if (!isFirstQuestion)
+            Expanded(
+              child: ElevatedButton(
+                onPressed: onPrevious,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                  foregroundColor: HomeScreenTheme.primaryText(isDark),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text('previous'.tr())],
+                ),
+              ),
+            ),
         ],
       ),
     );

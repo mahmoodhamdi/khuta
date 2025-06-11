@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
+import 'package:khuta/screens/main_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -51,7 +52,12 @@ class ResultsScreen extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+            onPressed: () => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+              (route) => false,
+            ),
+            tooltip: 'exit_assessment'.tr(),
           ),
         ],
       ),
@@ -283,9 +289,7 @@ class ResultsScreen extends StatelessWidget {
                           horizontal: 20,
                           vertical: 8,
                         ),
-                        decoration: pw.BoxDecoration(
-                          color: PdfColors.white,
-                          ),
+                        decoration: pw.BoxDecoration(color: PdfColors.white),
                         child: pw.Text(
                           '${'child_name'.tr()}: ${child.name}',
                           style: pw.TextStyle(
@@ -310,7 +314,6 @@ class ResultsScreen extends StatelessWidget {
                           borderRadius: pw.BorderRadius.circular(12),
                         ),
                         child: pw.Text(
-
                           '${'date'.tr()}: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
                           style: pw.TextStyle(
                             fontSize: 16,

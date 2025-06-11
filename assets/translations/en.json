@@ -1,4 +1,7 @@
-{ "email_not_registered": "Email is not registered",
+{
+  
+  "exit_assessment_confirmation":"Do you want to exit the assessment?",
+   "email_not_registered": "Email is not registered",
   "Password_not_correct": "Password is not correct",
   "Email_already_in_use": "Email already in use",
   "Password_too_short": "Password is too short",

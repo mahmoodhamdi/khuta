@@ -21,7 +21,7 @@ class QuestionText extends StatelessWidget {
         boxShadow: [HomeScreenTheme.cardShadow(isDark)],
       ),
       child: Text(
-        tr(text),
+       text.tr(),
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,

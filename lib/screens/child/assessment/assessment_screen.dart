@@ -35,15 +35,6 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   void initState() {
     super.initState();
 
-    // Validate child's age first
-    if (widget.child.age < 6 || widget.child.age > 17) {
-      setState(() {
-        error = 'error_invalid_age'.tr();
-        isLoading = false;
-      });
-      return;
-    }
-
     questions = List.from(widget.questions);
     if (questions.isEmpty) {
       setState(() {
@@ -135,7 +126,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       foregroundColor: HomeScreenTheme.primaryText(isDark),
       elevation: 0,
       leading: IconButton(
-        icon: Icon(isRTL ? Icons.arrow_forward : Icons.arrow_back),
+        icon: Icon(Icons.arrow_back),
         onPressed: _controller.showExitConfirmation,
       ),
     );
