@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/screens/legal/markdown_view_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // WhatsApp icon constant
 const IconData whatsappIcon = IconData(0xf232, fontFamily: 'FontAwesomeBrands');

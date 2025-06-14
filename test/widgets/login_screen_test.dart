@@ -5,7 +5,6 @@ import 'package:khuta/cubit/auth/auth_cubit.dart';
 import 'package:khuta/screens/auth/login_screen.dart';
 import 'package:mockito/annotations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mockito/mockito.dart';
 
 import '../helpers/test_helpers.dart';
 
