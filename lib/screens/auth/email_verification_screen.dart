@@ -4,10 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/theme/home_screen_theme.dart';
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
-import '../../core/theme/home_screen_theme.dart';
 import '../main_screen.dart';
 import 'login_screen.dart';
 
@@ -214,12 +214,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     decoration: BoxDecoration(
                       color: HomeScreenTheme.accentBlue(
                         isDark,
-                      ).withOpacity(0.1),
+                      ).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: HomeScreenTheme.accentBlue(
                           isDark,
-                        ).withOpacity(0.3),
+                        ).withValues(alpha: 0.3),
                       ),
                     ),
                     child: Column(

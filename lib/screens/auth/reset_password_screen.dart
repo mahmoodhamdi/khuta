@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/constants/app_strings.dart';
+import '../../core/theme/home_screen_theme.dart';
 import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../../widgets/auth_widgets.dart';
-import '../../core/theme/home_screen_theme.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -189,7 +189,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: HomeScreenTheme.accentGreen(isDark).withOpacity(0.1),
+              color: HomeScreenTheme.accentGreen(isDark).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(50),
             ),
             child: Icon(
