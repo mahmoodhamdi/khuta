@@ -17,6 +17,9 @@ import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/test_helpers.dart';
+import 'navigation_flow_test.mocks.dart';
+
+@GenerateMocks([FirebaseAuth, SharedPreferences])
 
 /// Mock implementation of ChildRepository for testing
 class MockChildRepository implements ChildRepository {
@@ -38,9 +41,6 @@ class MockChildRepository implements ChildRepository {
   @override
   Stream<List<Child>> watchChildren() => Stream.value([]);
 }
-
-@GenerateMocks([FirebaseAuth, SharedPreferences])
-import 'navigation_flow_test.mocks.dart';
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();

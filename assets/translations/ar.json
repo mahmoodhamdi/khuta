@@ -386,5 +386,14 @@
   "recommendation_environment": "خلق بيئة داعمة وحاضنة تعزز الرفاهية العاطفية والتعلم",
   "please_answer_all_questions": "يرجى الإجابة على جميع الأسئلة قبل الإرسال",
   "error_saving_results": "خطأ في حفظ النتائج. يرجى المحاولة مرة أخرى",
-  "error_invalid_age": "هذا التقييم غير صالح لهذا النطاق العمري"
+  "error_invalid_age": "هذا التقييم غير صالح لهذا النطاق العمري",
+  "unexpected_error": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى",
+  "no_internet_connection": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة",
+  "error_permission_denied": "ليس لديك صلاحية لتنفيذ هذا الإجراء",
+  "error_service_unavailable": "الخدمة غير متاحة مؤقتاً. يرجى المحاولة لاحقاً",
+  "error_data_not_found": "لم يتم العثور على البيانات",
+  "error_data_generic": "حدث خطأ أثناء الوصول إلى البيانات",
+  "error_auth_generic": "خطأ في المصادقة. يرجى المحاولة مرة أخرى",
+  "something_went_wrong": "حدث خطأ ما",
+  "try_again": "حاول مرة أخرى"
 }

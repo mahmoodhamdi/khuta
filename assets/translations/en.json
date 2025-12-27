@@ -365,5 +365,14 @@
   "offline_removed": "Internet connection required for AI features",
   "please_answer_all_questions": "Please answer all questions before submitting",
   "error_saving_results": "Error saving results. Please try again",
-  "error_invalid_age": "This assessment is not valid for this age range"
+  "error_invalid_age": "This assessment is not valid for this age range",
+  "unexpected_error": "An unexpected error occurred. Please try again",
+  "no_internet_connection": "No internet connection. Please check your network",
+  "error_permission_denied": "You don't have permission to perform this action",
+  "error_service_unavailable": "Service temporarily unavailable. Please try again later",
+  "error_data_not_found": "Data not found",
+  "error_data_generic": "An error occurred while accessing data",
+  "error_auth_generic": "Authentication error. Please try again",
+  "something_went_wrong": "Something went wrong",
+  "try_again": "Try Again"
 }

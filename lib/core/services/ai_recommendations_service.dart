@@ -1,9 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter/foundation.dart';
+import 'package:khuta/core/services/connectivity_service.dart';
+import 'package:khuta/core/utils/retry_helper.dart';
 import 'package:khuta/models/question.dart';
 
 class AiRecommendationsService {
+  static final ConnectivityService _connectivityService = ConnectivityService();
   static final model = FirebaseAI.googleAI().generativeModel(
     model: 'gemini-2.0-flash',
   );
@@ -106,12 +109,27 @@ class AiRecommendationsService {
     String? childGender,
   }) async {
     try {
-      final prompt = [
-        Content.text(_formatPrompt(questions, answers, tScore, childAge, childGender))
-      ];
-      
-      debugPrint('Prompt: ${prompt[0].parts[0].toString()}');
-      final response = await model.generateContent(prompt);
+      // Check connectivity first
+      if (!await _connectivityService.hasConnection()) {
+        debugPrint('No internet connection, using fallback recommendations');
+        return _getFallbackRecommendations(
+          tScore: tScore,
+          language: _detectLanguage(questions),
+        );
+      }
+
+      // Retry AI call up to 3 times with exponential backoff
+      final response = await RetryHelper.retry(
+        operation: () async {
+          final prompt = [
+            Content.text(_formatPrompt(questions, answers, tScore, childAge, childGender))
+          ];
+          debugPrint('Prompt: ${prompt[0].parts[0].toString()}');
+          return await model.generateContent(prompt);
+        },
+        maxAttempts: 3,
+        initialDelay: const Duration(seconds: 2),
+      );
 
       if (response.text == null || response.text!.isEmpty) {
         return _getFallbackRecommendations(
