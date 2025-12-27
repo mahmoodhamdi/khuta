@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/core/utils/accessibility_utils.dart';
+import 'package:khuta/core/utils/haptic_utils.dart';
+import 'package:khuta/core/utils/page_transitions.dart';
+import 'package:khuta/core/widgets/shimmer_loading.dart';
 import 'package:khuta/cubit/child/child_cubit.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/screens/child/add_child_screen.dart';
@@ -67,11 +70,7 @@ class _HomeView extends StatelessWidget {
               switch (state.status) {
                 case ChildStatus.initial:
                 case ChildStatus.loading:
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: HomeScreenTheme.accentBlue(isDark),
-                    ),
-                  );
+                  return const ChildListSkeleton();
                 case ChildStatus.error:
                   if (state.children.isEmpty) {
                     return _ErrorWidget(
@@ -111,10 +110,10 @@ class _HomeView extends StatelessWidget {
   }
 
   void _showAddChildScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => AddChildScreen(
+    HapticUtils.buttonPress();
+    Navigator.of(context).push(
+      SlideUpPageRoute(
+        page: AddChildScreen(
           onAddChild: (child) {
             context.read<ChildCubit>().addChild(child);
           },
@@ -283,10 +282,10 @@ class _ChildCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChildDetailsScreen(child: child),
+          HapticUtils.cardTap();
+          Navigator.of(context).push(
+            SlidePageRoute(
+              page: ChildDetailsScreen(child: child),
             ),
           );
         },

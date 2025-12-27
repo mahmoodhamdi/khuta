@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/core/utils/haptic_utils.dart';
 import 'package:khuta/cubit/assessment/assessment_cubit.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
@@ -131,11 +132,16 @@ class _AssessmentView extends StatelessWidget {
                     ),
                   ),
                   NavigationButtons(
-                    onPrevious: cubit.previousQuestion,
+                    onPrevious: () {
+                      HapticUtils.navigation();
+                      cubit.previousQuestion();
+                    },
                     onNext: () {
                       if (cubit.isLastQuestion) {
+                        HapticUtils.assessmentComplete();
                         cubit.submitAssessment();
                       } else {
+                        HapticUtils.navigation();
                         cubit.nextQuestion();
                       }
                     },
@@ -187,8 +193,10 @@ class _AssessmentView extends StatelessWidget {
           const SizedBox(height: 24),
           AnswerOptionsList(
             selectedAnswer: state.answers[state.currentIndex],
-            onSelect: (optionIndex) =>
-                cubit.selectAnswer(state.currentIndex, optionIndex),
+            onSelect: (optionIndex) {
+              HapticUtils.answerSelected();
+              cubit.selectAnswer(state.currentIndex, optionIndex);
+            },
           ),
         ],
       ),

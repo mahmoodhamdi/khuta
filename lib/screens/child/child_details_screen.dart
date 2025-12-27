@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:khuta/core/constants/questions.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/core/utils/haptic_utils.dart';
+import 'package:khuta/core/utils/page_transitions.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/test_result.dart';
 import 'package:khuta/screens/child/assessment/assessment_screen.dart';
@@ -65,6 +67,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          HapticUtils.buttonPress();
           showModalBottomSheet(
             context: context,
             builder: (context) => _buildAssessmentOptions(
@@ -472,11 +475,12 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen>
               ),
             ),
             onTap: () {
+              HapticUtils.buttonPress();
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => AssessmentScreen(
+                SlidePageRoute(
+                  page: AssessmentScreen(
                     child: widget.child,
                     questions: parentQuestions,
                   ),
@@ -497,11 +501,12 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen>
               ),
             ),
             onTap: () {
+              HapticUtils.buttonPress();
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => AssessmentScreen(
+                SlidePageRoute(
+                  page: AssessmentScreen(
                     questions: teacherQuestions,
                     child: widget.child,
                   ),

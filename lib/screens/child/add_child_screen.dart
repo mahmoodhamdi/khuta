@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:khuta/core/theme/input_themes.dart';
+import 'package:khuta/core/utils/haptic_utils.dart';
 import 'package:khuta/models/child.dart';
 
 class AddChildScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
 
   void _handleSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
+      HapticUtils.success();
       setState(() => _isLoading = true);
 
       final newChild = Child(
@@ -222,6 +224,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                                 .toList(),
                             onChanged: (value) {
                               if (value != null) {
+                                HapticUtils.selectionClick();
                                 setState(() => _selectedAge = value);
                               }
                             },
@@ -285,7 +288,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
   ) {
     final isSelected = _selectedGender == gender;
     return InkWell(
-      onTap: () => setState(() => _selectedGender = gender),
+      onTap: () {
+        HapticUtils.selectionClick();
+        setState(() => _selectedGender = gender);
+      },
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),

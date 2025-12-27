@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/core/utils/haptic_utils.dart';
 import 'package:khuta/cubit/auth/auth_cubit.dart';
 import 'package:khuta/cubit/theme/theme_cubit.dart';
 import 'package:khuta/screens/auth/login_screen.dart';
@@ -12,6 +13,7 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   Future<void> _changeLanguage(BuildContext context, String code) async {
+    HapticUtils.selectionClick();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language', code);
     if (code == 'ar') {
@@ -185,8 +187,10 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                       value: state is ThemeDark,
-                      onChanged: (_) =>
-                          context.read<ThemeCubit>().toggleTheme(),
+                      onChanged: (_) {
+                        HapticUtils.selectionClick();
+                        context.read<ThemeCubit>().toggleTheme();
+                      },
                       activeTrackColor: HomeScreenTheme.accentBlue(isDark).withValues(alpha: 0.5),
                       thumbColor: WidgetStateProperty.resolveWith((states) {
                         if (states.contains(WidgetState.selected)) {
@@ -270,7 +274,10 @@ class SettingsScreen extends StatelessWidget {
               boxShadow: [HomeScreenTheme.cardShadow(isDark)],
             ),
             child: ListTile(
-              onTap: () => _handleLogout(context),
+              onTap: () {
+                HapticUtils.buttonPress();
+                _handleLogout(context);
+              },
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
