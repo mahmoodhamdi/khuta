@@ -1,7 +1,7 @@
 # Khuta Code Review Master Plan
 
 > **Last Updated:** 2025-12-27
-> **Overall Progress:** 58% (11/19)
+> **Overall Progress:** 74% (14/19)
 > **Current Phase:** Phase 4 - Testing & Documentation
 
 ---
@@ -26,7 +26,7 @@ Read the file at D:\khuta\.code-review\prompts\{phase}\{milestone}.md and execut
 | 1 | Critical Bug Fixes | CRITICAL | 4 | 4/4 |
 | 2 | Security Hardening | HIGH | 3 | 2/3 |
 | 3 | Code Quality & Architecture | MEDIUM | 5 | 5/5 |
-| 4 | Testing & Documentation | MEDIUM | 4 | 0/4 |
+| 4 | Testing & Documentation | MEDIUM | 4 | 3/4 |
 | 5 | Performance & Polish | LOW | 3 | 0/3 |
 
 **Total Milestones:** 19
@@ -94,9 +94,9 @@ Read the file at D:\khuta\.code-review\prompts\{phase}\{milestone}.md and execut
 
 | ID | Milestone | Status | Prompt File |
 |----|-----------|--------|-------------|
-| 4.1 | Unit Tests for Core Services | Pending | `prompts/phase-4/4.1-unit-tests-services.md` |
-| 4.2 | Widget Tests for Screens | Pending | `prompts/phase-4/4.2-widget-tests.md` |
-| 4.3 | Integration Tests | Pending | `prompts/phase-4/4.3-integration-tests.md` |
+| 4.1 | Unit Tests for Core Services | **Done** | `prompts/phase-4/4.1-unit-tests-services.md` |
+| 4.2 | Widget Tests for Screens | **Done** | `prompts/phase-4/4.2-widget-tests.md` |
+| 4.3 | Integration Tests | **Done** | `prompts/phase-4/4.3-integration-tests.md` |
 | 4.4 | Code Documentation | Pending | `prompts/phase-4/4.4-documentation.md` |
 
 ---

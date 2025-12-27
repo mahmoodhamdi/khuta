@@ -357,5 +357,12 @@
   "recommendation_environment": "Create a supportive and nurturing environment that promotes emotional well-being and learning",
   "ai_powered": "AI-Powered Analysis",
   "contact_whatsapp": "Contact via WhatsApp",
-  "offline_removed": "Internet connection required for AI features"
+  "offline_removed": "Internet connection required for AI features",
+  "error_prorated_score": "Error calculating prorated score",
+  "score_severity_very_low": "Very low concern",
+  "score_severity_low": "Low concern",
+  "score_severity_average": "Average range",
+  "score_severity_elevated": "Elevated concern",
+  "score_severity_high": "High concern - professional consultation recommended",
+  "accessibility_add_child_button": "Add new child"
 }
