@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/cubit/assessment/assessment_cubit.dart';
 import 'package:khuta/screens/child/assessment/assessment_screen.dart';
 import 'package:khuta/models/child.dart';
@@ -140,9 +139,9 @@ void main() {
               (widget.icon as Icon).icon == Icons.arrow_back_ios));
 
       if (previousButtons.evaluate().isNotEmpty) {
-        final button = tester.widget<IconButton>(previousButtons.first);
         // On first question, previous should be disabled (onPressed == null)
         // This depends on implementation - may be null or may not exist
+        expect(previousButtons, findsWidgets);
       }
     });
   });

@@ -26,7 +26,7 @@ class RetryHelper {
           rethrow;
         }
 
-        debugPrint('Retry attempt $attempt failed: $e. Retrying in $delay...');
+        if (kDebugMode) debugPrint('Retry attempt $attempt failed: $e. Retrying in $delay...');
         await Future.delayed(delay);
         delay = Duration(
           milliseconds: (delay.inMilliseconds * backoffFactor).round(),
@@ -57,7 +57,7 @@ class RetryHelper {
           rethrow;
         }
 
-        debugPrint('Retry attempt $attempt failed: $e. Retrying in $delay...');
+        if (kDebugMode) debugPrint('Retry attempt $attempt failed: $e. Retrying in $delay...');
         await Future.delayed(delay);
       }
     }

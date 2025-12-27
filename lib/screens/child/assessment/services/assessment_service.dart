@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:khuta/core/di/service_locator.dart';
 import 'package:khuta/core/repositories/child_repository.dart';
 import 'package:khuta/core/repositories/test_result_repository.dart';
@@ -42,7 +42,7 @@ class AssessmentService {
       child.testResults.add(testResult);
       await _childRepository.updateChild(child);
     } catch (e) {
-      debugPrint('Error saving test result: $e');
+      if (kDebugMode) debugPrint('Error saving test result: $e');
       rethrow;
     }
   }

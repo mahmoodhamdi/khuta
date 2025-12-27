@@ -6,7 +6,7 @@ import '../exceptions/app_exceptions.dart';
 class ErrorHandlerService {
   /// Converts any exception to an AppException with user-friendly message
   static AppException handleException(dynamic error) {
-    debugPrint('Error occurred: $error');
+    if (kDebugMode) debugPrint('Error occurred: $error');
 
     // Firebase Auth errors
     if (error is FirebaseAuthException) {

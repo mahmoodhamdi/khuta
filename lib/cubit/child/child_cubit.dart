@@ -26,7 +26,7 @@ class ChildCubit extends Cubit<ChildState> {
         children: children,
       ));
     } catch (e) {
-      debugPrint('Error loading children: $e');
+      if (kDebugMode) debugPrint('Error loading children: $e');
       emit(state.copyWith(
         status: ChildStatus.error,
         errorMessage: ErrorHandlerService.getErrorMessage(e),
@@ -43,7 +43,7 @@ class ChildCubit extends Cubit<ChildState> {
       await loadChildren(); // Refresh the list
       return true;
     } catch (e) {
-      debugPrint('Error adding child: $e');
+      if (kDebugMode) debugPrint('Error adding child: $e');
       emit(state.copyWith(
         status: ChildStatus.error,
         errorMessage: ErrorHandlerService.getErrorMessage(e),
@@ -59,7 +59,7 @@ class ChildCubit extends Cubit<ChildState> {
       await loadChildren(); // Refresh the list
       return true;
     } catch (e) {
-      debugPrint('Error updating child: $e');
+      if (kDebugMode) debugPrint('Error updating child: $e');
       emit(state.copyWith(
         status: ChildStatus.error,
         errorMessage: ErrorHandlerService.getErrorMessage(e),
@@ -77,7 +77,7 @@ class ChildCubit extends Cubit<ChildState> {
       await loadChildren(); // Refresh the list
       return true;
     } catch (e) {
-      debugPrint('Error deleting child: $e');
+      if (kDebugMode) debugPrint('Error deleting child: $e');
       emit(state.copyWith(
         status: ChildStatus.error,
         errorMessage: ErrorHandlerService.getErrorMessage(e),

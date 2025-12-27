@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
@@ -257,7 +258,7 @@ class ResultsScreen extends StatelessWidget {
         arabicFont = pw.Font.ttf(fontData);
       } catch (e) {
         // Fallback to default font if Arabic font not available
-        debugPrint('Arabic font not found, using default font');
+        if (kDebugMode) debugPrint('Arabic font not found, using default font');
       }
 
       // Add page to PDF
@@ -651,7 +652,7 @@ class ResultsScreen extends StatelessWidget {
           ),
         );
       }
-      debugPrint('Error generating PDF: $e');
+      if (kDebugMode) debugPrint('Error generating PDF: $e');
     }
   }
 
@@ -684,7 +685,7 @@ class ResultsScreen extends StatelessWidget {
         }
       }
     } catch (e) {
-      debugPrint('Error cleaning up old reports: $e');
+      if (kDebugMode) debugPrint('Error cleaning up old reports: $e');
     }
   }
 

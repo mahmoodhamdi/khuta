@@ -40,6 +40,13 @@ class MockChildRepository implements ChildRepository {
 
   @override
   Stream<List<Child>> watchChildren() => Stream.value([]);
+
+  @override
+  Future<PaginatedChildren> getChildrenPaginated({
+    int limit = 20,
+    Object? startAfter,
+  }) async =>
+      const PaginatedChildren(children: []);
 }
 
 void main() async {

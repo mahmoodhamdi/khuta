@@ -1,5 +1,22 @@
 import 'package:khuta/models/child.dart';
 
+/// Result of a paginated query containing children and pagination cursor.
+class PaginatedChildren {
+  /// The list of children returned by the query.
+  final List<Child> children;
+
+  /// Cursor for fetching the next page. Null if no more pages.
+  final Object? nextPageCursor;
+
+  /// Whether there are more children to load.
+  bool get hasMore => nextPageCursor != null;
+
+  const PaginatedChildren({
+    required this.children,
+    this.nextPageCursor,
+  });
+}
+
 /// Abstract repository interface for child data operations.
 ///
 /// This interface defines the contract for managing child profiles in the app.
@@ -64,4 +81,31 @@ abstract class ChildRepository {
   /// The stream emits a new list whenever the children collection changes.
   /// Only non-deleted children are included in the emitted lists.
   Stream<List<Child>> watchChildren();
+
+  /// Retrieves children with pagination support.
+  ///
+  /// Parameters:
+  /// - [limit]: Maximum number of children to return (default: 20)
+  /// - [startAfter]: Cursor from previous query for fetching next page
+  ///
+  /// Returns a [PaginatedChildren] containing the children and a cursor
+  /// for fetching the next page if more children exist.
+  ///
+  /// Example:
+  /// ```dart
+  /// // First page
+  /// final page1 = await repository.getChildrenPaginated(limit: 10);
+  ///
+  /// // Next page
+  /// if (page1.hasMore) {
+  ///   final page2 = await repository.getChildrenPaginated(
+  ///     limit: 10,
+  ///     startAfter: page1.nextPageCursor,
+  ///   );
+  /// }
+  /// ```
+  Future<PaginatedChildren> getChildrenPaginated({
+    int limit = 20,
+    Object? startAfter,
+  });
 }

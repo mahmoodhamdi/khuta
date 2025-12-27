@@ -76,4 +76,39 @@ class FirebaseChildRepository implements ChildRepository {
             .where((child) => !child.isDeleted)
             .toList());
   }
+
+  @override
+  Future<PaginatedChildren> getChildrenPaginated({
+    int limit = 20,
+    Object? startAfter,
+  }) async {
+    var query = _childrenCollection
+        .orderBy('createdAt', descending: false)
+        .limit(limit + 1); // Fetch one extra to check if more exist
+
+    if (startAfter != null && startAfter is DocumentSnapshot) {
+      query = query.startAfterDocument(startAfter);
+    }
+
+    final snapshot = await query.get();
+    final docs = snapshot.docs;
+
+    // Filter out soft-deleted children
+    final children = docs
+        .map((doc) => Child.fromFirestore(doc))
+        .where((child) => !child.isDeleted)
+        .toList();
+
+    // Determine if there are more pages
+    final hasMore = docs.length > limit;
+    final childrenToReturn = hasMore ? children.take(limit).toList() : children;
+
+    // Use the last document as cursor for next page
+    final nextCursor = hasMore && docs.isNotEmpty ? docs[limit - 1] : null;
+
+    return PaginatedChildren(
+      children: childrenToReturn,
+      nextPageCursor: nextCursor,
+    );
+  }
 }

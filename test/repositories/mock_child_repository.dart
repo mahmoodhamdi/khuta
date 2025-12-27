@@ -109,6 +109,29 @@ class MockChildRepository implements ChildRepository {
     return _childrenController.stream;
   }
 
+  @override
+  Future<PaginatedChildren> getChildrenPaginated({
+    int limit = 20,
+    Object? startAfter,
+  }) async {
+    _checkThrow();
+    final nonDeleted = _children.where((c) => !c.isDeleted).toList();
+
+    int startIndex = 0;
+    if (startAfter != null && startAfter is int) {
+      startIndex = startAfter;
+    }
+
+    final endIndex = (startIndex + limit).clamp(0, nonDeleted.length);
+    final children = nonDeleted.sublist(startIndex, endIndex);
+    final hasMore = endIndex < nonDeleted.length;
+
+    return PaginatedChildren(
+      children: children,
+      nextPageCursor: hasMore ? endIndex : null,
+    );
+  }
+
   void dispose() {
     _childrenController.close();
   }

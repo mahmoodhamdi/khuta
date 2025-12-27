@@ -31,7 +31,7 @@ class AssessmentCubit extends Cubit<AssessmentState> {
     final newAnswers = List<int>.from(state.answers);
     newAnswers[questionIndex] = answerIndex;
     emit(state.copyWith(answers: newAnswers));
-    debugPrint('Answer selected for question $questionIndex: $answerIndex');
+    if (kDebugMode) debugPrint('Answer selected for question $questionIndex: $answerIndex');
   }
 
   /// Navigate to the next question
@@ -104,7 +104,7 @@ class AssessmentCubit extends Cubit<AssessmentState> {
         recommendations: recommendations,
       ));
     } catch (e) {
-      debugPrint('Error submitting assessment: $e');
+      if (kDebugMode) debugPrint('Error submitting assessment: $e');
       final errorMessage = e.toString().contains('Age must be between')
           ? 'error_invalid_age'
           : 'error_saving_results';

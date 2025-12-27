@@ -1,26 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/cubit/child/child_cubit.dart';
-import 'package:khuta/cubit/auth/auth_cubit.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/test_result.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mockito/annotations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import '../helpers/test_helpers.dart';
 import '../repositories/mock_child_repository.dart';
-
-@GenerateMocks([FirebaseAuth])
-import 'home_screen_test.mocks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late MockChildRepository mockChildRepository;
-  late MockFirebaseAuth mockFirebaseAuth;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
@@ -30,7 +20,6 @@ void main() {
 
   setUp(() {
     mockChildRepository = MockChildRepository();
-    mockFirebaseAuth = MockFirebaseAuth();
     TestChildFactory.reset();
   });
 
@@ -291,10 +280,11 @@ void main() {
   group('Child with TestResults', () {
     test('child displays latest score correctly', () {
       final testResult = TestResult(
+        testType: 'parent',
         date: DateTime.now(),
         score: 55.5,
+        notes: 'Average score',
         recommendations: ['Test recommendation'],
-        answers: [1, 2, 1, 2],
       );
 
       final child = Child(
@@ -313,16 +303,18 @@ void main() {
     test('child handles multiple test results', () {
       final testResults = [
         TestResult(
+          testType: 'parent',
           date: DateTime.now().subtract(const Duration(days: 7)),
           score: 50.0,
+          notes: 'Previous result',
           recommendations: ['First recommendation'],
-          answers: [1, 1, 1, 1],
         ),
         TestResult(
+          testType: 'parent',
           date: DateTime.now(),
           score: 55.0,
+          notes: 'Latest result',
           recommendations: ['Latest recommendation'],
-          answers: [2, 2, 2, 2],
         ),
       ];
 

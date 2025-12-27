@@ -183,7 +183,7 @@ class AiRecommendationsService {
     try {
       // Check connectivity first
       if (!await _connectivityService.hasConnection()) {
-        debugPrint('No internet connection, using fallback recommendations');
+        if (kDebugMode) debugPrint('No internet connection, using fallback recommendations');
         return _getFallbackRecommendations(
           tScore: tScore,
           language: _detectLanguage(questions),
@@ -196,7 +196,7 @@ class AiRecommendationsService {
           final prompt = [
             Content.text(_formatPrompt(questions, answers, tScore, childAge, childGender))
           ];
-          debugPrint('Prompt: ${prompt[0].parts[0].toString()}');
+          if (kDebugMode) debugPrint('Prompt: ${prompt[0].parts[0].toString()}');
           return await model.generateContent(prompt);
         },
         maxAttempts: 3,
@@ -221,7 +221,7 @@ class AiRecommendationsService {
             )
           : recommendations;
     } catch (e) {
-      debugPrint('Error generating AI recommendations: $e');
+      if (kDebugMode) debugPrint('Error generating AI recommendations: $e');
       return _getFallbackRecommendations(
         tScore: tScore,
         language: _detectLanguage(questions),

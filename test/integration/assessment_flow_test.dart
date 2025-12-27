@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/cubit/assessment/assessment_cubit.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
@@ -10,8 +8,6 @@ import 'package:khuta/core/repositories/test_result_repository.dart';
 import 'package:khuta/models/test_result.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../helpers/test_helpers.dart';
 
 /// Mock ChildRepository for testing
 class MockChildRepository implements ChildRepository {
@@ -32,6 +28,13 @@ class MockChildRepository implements ChildRepository {
 
   @override
   Stream<List<Child>> watchChildren() => Stream.value([]);
+
+  @override
+  Future<PaginatedChildren> getChildrenPaginated({
+    int limit = 20,
+    Object? startAfter,
+  }) async =>
+      const PaginatedChildren(children: []);
 }
 
 /// Mock TestResultRepository for testing

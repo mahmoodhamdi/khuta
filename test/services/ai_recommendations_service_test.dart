@@ -301,7 +301,7 @@ void main() {
       });
 
       test('invalid answer values return default', () {
-        final getAnswerLabel = (int answer) {
+        String getAnswerLabel(int answer) {
           switch (answer) {
             case 0:
               return 'never';
@@ -314,7 +314,7 @@ void main() {
             default:
               return 'Not Answered';
           }
-        };
+        }
 
         expect(getAnswerLabel(-1), equals('Not Answered'));
         expect(getAnswerLabel(4), equals('Not Answered'));
