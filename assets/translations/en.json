@@ -374,5 +374,30 @@
   "error_data_generic": "An error occurred while accessing data",
   "error_auth_generic": "Authentication error. Please try again",
   "something_went_wrong": "Something went wrong",
-  "try_again": "Try Again"
+  "try_again": "Try Again",
+
+  "accessibility_assessment_icon": "Assessment icon",
+  "accessibility_child_icon": "Child profile",
+  "accessibility_score_indicator": "Score indicator",
+  "accessibility_loading": "Loading content",
+  "accessibility_error_icon": "Error occurred",
+  "accessibility_success_icon": "Success",
+  "accessibility_add_child_button": "Add new child",
+  "accessibility_settings_button": "Open settings",
+  "accessibility_home_button": "Go to home",
+  "accessibility_back_button": "Go back",
+  "accessibility_delete_button": "Delete item",
+  "accessibility_edit_button": "Edit item",
+  "accessibility_share_button": "Share content",
+
+  "score_severity_very_low": "Very low concern",
+  "score_severity_low": "Low concern",
+  "score_severity_average": "Average range",
+  "score_severity_elevated": "Elevated concern",
+  "score_severity_high": "High concern - professional consultation recommended",
+
+  "accessibility_question_progress": "Question {current} of {total}",
+  "accessibility_assessment_completed": "Assessment completed successfully",
+  "accessibility_child_added": "Child added successfully",
+  "accessibility_results_ready": "Results are ready to view"
 }

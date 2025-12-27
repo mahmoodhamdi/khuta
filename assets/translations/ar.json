@@ -395,5 +395,30 @@
   "error_data_generic": "حدث خطأ أثناء الوصول إلى البيانات",
   "error_auth_generic": "خطأ في المصادقة. يرجى المحاولة مرة أخرى",
   "something_went_wrong": "حدث خطأ ما",
-  "try_again": "حاول مرة أخرى"
+  "try_again": "حاول مرة أخرى",
+
+  "accessibility_assessment_icon": "أيقونة التقييم",
+  "accessibility_child_icon": "ملف الطفل",
+  "accessibility_score_indicator": "مؤشر الدرجة",
+  "accessibility_loading": "جاري التحميل",
+  "accessibility_error_icon": "حدث خطأ",
+  "accessibility_success_icon": "نجاح",
+  "accessibility_add_child_button": "إضافة طفل جديد",
+  "accessibility_settings_button": "فتح الإعدادات",
+  "accessibility_home_button": "الذهاب للرئيسية",
+  "accessibility_back_button": "رجوع",
+  "accessibility_delete_button": "حذف العنصر",
+  "accessibility_edit_button": "تعديل العنصر",
+  "accessibility_share_button": "مشاركة المحتوى",
+
+  "score_severity_very_low": "قلق منخفض جداً",
+  "score_severity_low": "قلق منخفض",
+  "score_severity_average": "النطاق المتوسط",
+  "score_severity_elevated": "قلق مرتفع",
+  "score_severity_high": "قلق عالي - يُنصح باستشارة متخصص",
+
+  "accessibility_question_progress": "السؤال {current} من {total}",
+  "accessibility_assessment_completed": "تم إكمال التقييم بنجاح",
+  "accessibility_child_added": "تمت إضافة الطفل بنجاح",
+  "accessibility_results_ready": "النتائج جاهزة للعرض"
 }

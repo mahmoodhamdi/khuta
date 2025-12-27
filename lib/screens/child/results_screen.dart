@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/core/utils/accessibility_utils.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/question.dart';
 import 'package:khuta/screens/main_screen.dart';
@@ -67,63 +68,86 @@ class ResultsScreen extends StatelessWidget {
           child: Column(
             children: [
               // Results Header with T-Score
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: _getScoreGradient(score.toInt(), isDark),
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              Semantics(
+                label: AccessibilityUtils.getScoreAccessibilityLabel(score.toDouble()),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: _getScoreGradient(score.toInt(), isDark),
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              _getScoreIcon(score.toInt()),
-                              size: constraints.maxWidth * 0.08,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 12),
-                            Flexible(
-                              child: AutoSizeText(
-                                interpretation.tr(),
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Semantics(
+                                excludeSemantics: true,
+                                child: Icon(
+                                  _getScoreIcon(score.toInt()),
+                                  size: constraints.maxWidth * 0.08,
                                   color: Colors.white,
                                 ),
-                                minFontSize: 14,
-                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(width: 12),
+                              Flexible(
+                                child: AutoSizeText(
+                                  interpretation.tr(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  minFontSize: 14,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          AutoSizeText(
+                            'T-Score: ${score.toInt()}',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                            minFontSize: 12,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+                          // Text label for score severity (accessibility)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              AccessibilityUtils.getScoreSeverityText(score.toDouble()),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        AutoSizeText(
-                          'T-Score: ${score.toInt()}',
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
                           ),
-                          minFontSize: 12,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

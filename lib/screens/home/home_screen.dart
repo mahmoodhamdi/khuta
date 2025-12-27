@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/core/utils/accessibility_utils.dart';
 import 'package:khuta/cubit/child/child_cubit.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/screens/child/add_child_screen.dart';
@@ -94,10 +95,16 @@ class _HomeView extends StatelessWidget {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _showAddChildScreen(context),
-          backgroundColor: HomeScreenTheme.accentBlue(isDark),
-          child: const Icon(Icons.add, color: Colors.white),
+        floatingActionButton: Tooltip(
+          message: 'accessibility_add_child_button'.tr(),
+          child: FloatingActionButton(
+            onPressed: () => _showAddChildScreen(context),
+            backgroundColor: HomeScreenTheme.accentBlue(isDark),
+            child: Semantics(
+              label: 'accessibility_add_child_button'.tr(),
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
+          ),
         ),
       ),
     );
@@ -473,28 +480,48 @@ class _TestResultsSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: HomeScreenTheme.getScoreColor(
-                    lastTest.score,
-                    isDark,
-                  ).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  lastTest.score.toStringAsFixed(1),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: HomeScreenTheme.getScoreColor(
-                      lastTest.score,
-                      isDark,
+              Semantics(
+                label: AccessibilityUtils.getScoreAccessibilityLabel(lastTest.score),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: HomeScreenTheme.getScoreColor(
+                          lastTest.score,
+                          isDark,
+                        ).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        lastTest.score.toStringAsFixed(1),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: HomeScreenTheme.getScoreColor(
+                            lastTest.score,
+                            isDark,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 4),
+                    // Text label for score severity (accessibility)
+                    Text(
+                      AccessibilityUtils.getScoreSeverityText(lastTest.score),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: HomeScreenTheme.getScoreColor(
+                          lastTest.score,
+                          isDark,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
