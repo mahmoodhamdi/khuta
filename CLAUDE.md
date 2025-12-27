@@ -43,14 +43,29 @@ flutter build ios --release
 
 ### State Management
 - Uses **BLoC/Cubit** pattern with `flutter_bloc`
-- Three main Cubits initialized in `main.dart`:
+- Main Cubits:
   - `AuthCubit` - Firebase authentication (login, register, email verification, password reset)
   - `ThemeCubit` - Light/dark theme switching via SharedPreferences
   - `OnboardingCubit` - First-time user onboarding flow
+  - `ChildCubit` - Manages child profiles (CRUD operations)
+  - `AssessmentCubit` - Manages assessment flow (navigation, answers, submission)
 
 ### Core Services
-- `lib/core/services/ai_recommendations_service.dart` - Uses Firebase AI (Gemini 2.0 Flash) to generate personalized ADHD recommendations based on assessment answers. Auto-detects Arabic vs English from question content using regex (`[\u0600-\u06FF]`). Has fallback recommendations if AI fails.
-- `lib/core/services/sdq_scoring_service.dart` - Calculates T-scores from assessment answers using age/gender-based scoring tables. Supports age groups 6-8, 9-11, 12-14, 15-17. Score interpretation ranges from "extremely below average" (<30) to "extremely above average" (>=70).
+- `SdqScoringService` - Calculates T-scores from assessment answers using age/gender-based scoring tables
+  - Supports age groups: 6-8, 9-11, 12-14, 15-17
+  - Score interpretation: "extremely below average" (<30) to "extremely above average" (≥70)
+  - Average range: 45-55
+
+- `AiRecommendationsService` - Uses Firebase AI (Gemini 2.0 Flash) for personalized recommendations
+  - Auto-detects Arabic vs English from question content using regex (`[\u0600-\u06FF]`)
+  - Retry logic with exponential backoff (3 attempts)
+  - Fallback recommendations based on T-score severity when AI fails
+
+- `ConnectivityService` - Checks network connectivity before making AI calls
+
+- `ErrorHandlerService` - Centralized error handling with localized messages
+
+- `AccessibilityUtils` - Helper methods for screen reader accessibility
 
 ### Repository Pattern & Dependency Injection
 - Abstract repository interfaces in `lib/core/repositories/` define contracts:
@@ -63,10 +78,21 @@ flutter build ios --release
 ### Assessment Flow
 1. User selects child from home screen
 2. `AssessmentScreen` displays questions from `lib/core/constants/questions.dart`
-3. `AssessmentController` manages navigation and answer collection
+3. `AssessmentCubit` manages state (navigation, answers, submission status)
 4. On completion, T-score is calculated via `SdqScoringService`
-5. AI recommendations are fetched via `AiRecommendationsService` (with fallback recommendations if AI fails)
-6. Results and recommendations are saved and displayed in `ResultsScreen`
+5. AI recommendations are fetched via `AiRecommendationsService` (with fallback if AI fails)
+6. Results and recommendations are saved via `TestResultRepository`
+7. `ResultsScreen` displays score, interpretation, and recommendations with PDF export option
+
+### Error Handling Architecture
+- Custom exception classes in `lib/core/exceptions/`:
+  - `AppException` - Base class for all app exceptions
+  - `NetworkException` - Network/connectivity errors
+  - `AuthException` - Authentication errors
+  - `DataException` - Data/storage errors
+  - `AIServiceException` - AI recommendation errors
+- `RetryHelper` - Retry logic with exponential backoff
+- `ErrorBoundary` widget for graceful error display
 
 ### Data Layer
 - **Firebase Auth** - User authentication with email verification flow
@@ -98,12 +124,28 @@ flutter build ios --release
 ### Testing Structure
 ```
 test/
-├── cubit/          # Unit tests for Cubits
+├── cubit/          # Unit tests for Cubits (AuthCubit, etc.)
 ├── widgets/        # Widget tests for UI components
+│   ├── assessment_screen_test.dart
+│   ├── home_screen_test.dart
+│   └── results_screen_test.dart
 ├── integration/    # Integration tests for feature flows
+│   ├── assessment_flow_test.dart
+│   └── navigation_flow_test.dart
 ├── services/       # Service unit tests
+│   ├── sdq_scoring_service_test.dart
+│   └── ai_recommendations_service_test.dart
+├── repositories/   # Repository tests with mocks
+│   ├── mock_child_repository.dart
+│   └── child_repository_test.dart
 └── helpers/        # Test utilities and mock translations
 ```
+
+### Test Coverage Targets
+- Services: T-score calculation, AI recommendation parsing, fallback logic
+- Cubits: State transitions, error handling, data operations
+- Widgets: Rendering, user interactions, navigation
+- Integration: End-to-end assessment flow
 
 ### PDF Report Generation
 - Uses `pdf` package for generating assessment reports

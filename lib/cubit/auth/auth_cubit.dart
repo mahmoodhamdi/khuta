@@ -4,13 +4,58 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/utils/auth_exception_handler.dart';
 import 'auth_state.dart';
 
+/// Cubit for managing Firebase authentication state.
+///
+/// Handles all authentication operations including:
+/// - User registration with email verification
+/// - Login with verification check
+/// - Password reset
+/// - Logout
+/// - Email verification flow
+///
+/// ## State Flow
+///
+/// ```
+/// AuthInitial → AuthLoading → AuthSuccess/AuthFailure
+///                          ↘ AuthEmailVerificationRequired
+/// ```
+///
+/// ## Email Verification
+///
+/// The app requires email verification before granting access:
+/// 1. User registers → verification email sent
+/// 2. User clicks verification link
+/// 3. User returns to app and logs in
+/// 4. If verified → AuthSuccess, else → AuthEmailVerificationRequired
+///
+/// ## Dependency Injection
+///
+/// The cubit accepts an optional [FirebaseAuth] instance for testing:
+///
+/// ```dart
+/// // Production
+/// final cubit = AuthCubit();
+///
+/// // Testing with mock
+/// final cubit = AuthCubit(auth: mockFirebaseAuth);
+/// ```
 class AuthCubit extends Cubit<AuthState> {
   final FirebaseAuth _auth;
 
+  /// Creates an [AuthCubit] with an optional [FirebaseAuth] instance.
+  ///
+  /// If [auth] is not provided, uses [FirebaseAuth.instance].
   AuthCubit({FirebaseAuth? auth})
     : _auth = auth ?? FirebaseAuth.instance,
       super(AuthInitial());
 
+  /// Checks if the user is currently logged in and email verified.
+  ///
+  /// Emits:
+  /// - [AuthSuccess] if user is logged in and email is verified
+  /// - [AuthEmailVerificationRequired] if user is logged in but email not verified
+  /// - [AuthInitial] if no user is logged in
+  /// - [AuthFailure] if an error occurs
   Future<void> checkLoginStatus() async {
     emit(AuthLoading());
     try {
@@ -34,6 +79,14 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Registers a new user with email and password.
+  ///
+  /// After successful registration:
+  /// 1. Creates user account in Firebase
+  /// 2. Sends verification email automatically
+  /// 3. Emits [AuthEmailVerificationRequired]
+  ///
+  /// Emits [AuthFailure] if registration fails (e.g., email already in use).
   Future<void> register(String email, String password) async {
     emit(AuthLoading());
     try {
@@ -54,6 +107,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Logs in a user with email and password.
+  ///
+  /// The login flow checks email verification status:
+  /// - If verified → emits [AuthSuccess]
+  /// - If not verified → emits [AuthEmailVerificationRequired]
+  ///
+  /// Emits [AuthFailure] if credentials are invalid.
   Future<void> login(String email, String password) async {
     emit(AuthLoading());
     try {
@@ -83,6 +143,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Sends a password reset email to the specified address.
+  ///
+  /// Emits:
+  /// - [AuthPasswordResetSent] on success
+  /// - [AuthFailure] if email is not registered or other error occurs
   Future<void> resetPassword(String email) async {
     emit(AuthLoading());
     try {
@@ -104,6 +169,9 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Signs out the current user.
+  ///
+  /// Clears the authentication session and emits [AuthInitial].
   Future<void> logout() async {
     emit(AuthLoading());
     try {
@@ -114,6 +182,10 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Resends the email verification link.
+  ///
+  /// Use this when the user requests a new verification email.
+  /// Emits [AuthEmailVerificationSent] on success.
   Future<void> sendEmailVerification() async {
     try {
       final user = _auth.currentUser;
@@ -126,6 +198,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Checks if the user's email has been verified.
+  ///
+  /// Call this periodically or when the user returns to the app
+  /// to detect when they've clicked the verification link.
+  ///
+  /// Emits [AuthEmailVerified] if verification is complete.
+  /// Does not emit anything if still unverified (to avoid UI disruption).
   Future<void> checkEmailVerification() async {
     try {
       final user = _auth.currentUser;

@@ -1,5 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 
+/// T-Score lookup table for SDQ (Strengths and Difficulties Questionnaire) scoring.
+///
+/// Structure: `assessmentType` -> `gender` -> `ageGroup` -> `rawScore` -> `tScore`
+///
+/// T-Scores are standardized scores with mean=50 and SD=10.
+/// - 45-55: Average range
+/// - 56-60: Slightly above average (mild concern)
+/// - 61-65: Above average (moderate concern)
+/// - 66-69: Significantly above average (high concern)
+/// - ≥70: Extremely above average (very high concern)
 Map<String, Map<String, Map<String, Map<int, int>>>> sdqParentTScoreTable = {
   'parent': {
     'male': {
@@ -113,7 +123,15 @@ Map<String, Map<String, Map<String, Map<int, int>>>> sdqParentTScoreTable = {
   },
 };
 
-// دالة لجلب درجة T بناءً على البيانات المدخلة
+/// Retrieves the T-score from the lookup table based on input parameters.
+///
+/// Parameters:
+/// - [assessmentType]: The type of assessment ('parent' or 'teacher')
+/// - [gender]: The child's gender ('male' or 'female')
+/// - [ageGroup]: The age group string ('6-8', '9-11', '12-14', '15-17')
+/// - [proratedScore]: The sum of answer values (0-10 for 10 questions)
+///
+/// Returns the T-score from the table, or -1 if the combination is not found.
 int getTScore(
   String assessmentType,
   String gender,
@@ -124,12 +142,61 @@ int getTScore(
       -1;
 }
 
+/// Service for calculating T-scores using the SDQ (Strengths and Difficulties
+/// Questionnaire) scoring tables.
+///
+/// The T-score is a standardized score calculated based on:
+/// - The sum of answer values (raw/prorated score)
+/// - Child's age group (6-8, 9-11, 12-14, 15-17)
+/// - Child's gender (male or female)
+/// - Assessment type (parent or teacher questionnaire)
+///
+/// ## T-Score Interpretation
+///
+/// | T-Score Range | Interpretation |
+/// |---------------|----------------|
+/// | ≥70 | Extremely above average - very high concern |
+/// | 66-69 | Significantly above average - high concern |
+/// | 61-65 | Above average - moderate concern |
+/// | 56-60 | Slightly above average - mild concern |
+/// | 45-55 | Average - typical behavior |
+/// | 40-44 | Slightly below average |
+/// | 35-39 | Below average |
+/// | 30-34 | Significantly below average |
+/// | <30 | Extremely below average |
+///
+/// ## Example Usage
+///
+/// ```dart
+/// final tScore = SdqScoringService.calculateTScore(
+///   answers: [1, 2, 1, 0, 3, 2, 1, 0, 2, 1],
+///   gender: 'male',
+///   age: 8,
+///   assessmentType: 'parent',
+/// );
+///
+/// final interpretation = SdqScoringService.getScoreInterpretation(tScore);
+/// ```
 class SdqScoringService {
+  /// Calculates the T-score for a given set of assessment answers.
+  ///
+  /// Parameters:
+  /// - [answers]: List of answer values (typically 0-3 for each question).
+  ///   Unanswered questions (-1) should be filtered before calling this method.
+  /// - [gender]: The child's gender ('male' or 'female')
+  /// - [age]: The child's age in years (must be between 6 and 17)
+  /// - [assessmentType]: The type of assessment ('parent' or 'teacher')
+  ///
+  /// Returns the calculated T-score.
+  ///
+  /// Throws an [Exception] if:
+  /// - Age is outside the valid range (6-17)
+  /// - The score lookup fails (invalid combination of parameters)
   static int calculateTScore({
     required List<int> answers,
-    required String gender, // 'male' or 'female'
+    required String gender,
     required int age,
-    required String assessmentType, // 'parent' or 'teacher'
+    required String assessmentType,
   }) {
     // Calculate prorated score (sum of all answers)
     int proratedScore = answers.fold<int>(0, (sum, value) => sum + value);
@@ -157,7 +224,14 @@ class SdqScoringService {
     return tScore;
   }
 
-  /// Get interpretation of T-score
+  /// Returns a human-readable interpretation of the T-score.
+  ///
+  /// The interpretation is localized using easy_localization.
+  ///
+  /// Parameters:
+  /// - [tScore]: The T-score to interpret
+  ///
+  /// Returns a translated string describing the severity level.
   static String getScoreInterpretation(int tScore) {
     if (tScore >= 70) {
       return 'extremely_above_average'.tr();

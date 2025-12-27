@@ -1,23 +1,67 @@
 import 'package:khuta/models/child.dart';
 
 /// Abstract repository interface for child data operations.
-/// Implementations can use Firebase, local storage, or mock data.
+///
+/// This interface defines the contract for managing child profiles in the app.
+/// Implementations can use different data sources:
+/// - [FirebaseChildRepository]: Cloud Firestore storage (production)
+/// - MockChildRepository: In-memory storage (testing)
+///
+/// ## Key Features
+///
+/// - **Soft Delete Pattern**: Children are never permanently deleted. Instead,
+///   the `isDeleted` flag is set to true, preserving data for potential recovery.
+/// - **Real-time Updates**: The [watchChildren] method provides a stream for
+///   reactive UI updates when child data changes.
+/// - **User Scoping**: All operations are scoped to the authenticated user's
+///   children collection.
+///
+/// ## Usage with Dependency Injection
+///
+/// ```dart
+/// // Get the repository from ServiceLocator
+/// final repository = ServiceLocator().childRepository;
+///
+/// // Load children
+/// final children = await repository.getChildren();
+///
+/// // Watch for real-time updates
+/// repository.watchChildren().listen((children) {
+///   // Update UI
+/// });
+/// ```
 abstract class ChildRepository {
-  /// Get all children for the current user (excluding soft-deleted)
+  /// Retrieves all children for the current user.
+  ///
+  /// Returns only non-deleted children (where `isDeleted == false`).
+  /// The list is ordered by creation date (newest first).
   Future<List<Child>> getChildren();
 
-  /// Get a single child by ID
+  /// Retrieves a single child by their unique ID.
+  ///
+  /// Returns `null` if the child doesn't exist or is soft-deleted.
   Future<Child?> getChild(String childId);
 
-  /// Add a new child
+  /// Adds a new child to the repository.
+  ///
+  /// Returns the generated ID of the new child document.
   Future<String> addChild(Child child);
 
-  /// Update a child
+  /// Updates an existing child's data.
+  ///
+  /// The child is identified by their ID property.
+  /// This also updates the `updatedAt` timestamp.
   Future<void> updateChild(Child child);
 
-  /// Soft delete a child (sets isDeleted = true)
+  /// Soft-deletes a child by setting `isDeleted = true`.
+  ///
+  /// The child's data is preserved for potential recovery.
+  /// Use this instead of permanent deletion to maintain data integrity.
   Future<void> deleteChild(String childId);
 
-  /// Stream of children for real-time updates
+  /// Returns a stream of children for real-time updates.
+  ///
+  /// The stream emits a new list whenever the children collection changes.
+  /// Only non-deleted children are included in the emitted lists.
   Stream<List<Child>> watchChildren();
 }
