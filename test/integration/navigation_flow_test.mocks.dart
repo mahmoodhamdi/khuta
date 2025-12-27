@@ -26,6 +26,7 @@ import 'package:shared_preferences/src/shared_preferences_legacy.dart' as _i7;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeFirebaseApp_0 extends _i1.SmartFake implements _i2.FirebaseApp {
   _FakeFirebaseApp_0(Object parent, Invocation parentInvocation)
@@ -50,6 +51,12 @@ class _FakeConfirmationResult_3 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
+class _FakePasswordValidationStatus_4 extends _i1.SmartFake
+    implements _i3.PasswordValidationStatus {
+  _FakePasswordValidationStatus_4(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [FirebaseAuth].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -67,8 +74,8 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
           as _i2.FirebaseApp);
 
   @override
-  set app(_i2.FirebaseApp? _app) => super.noSuchMethod(
-    Invocation.setter(#app, _app),
+  set app(_i2.FirebaseApp? value) => super.noSuchMethod(
+    Invocation.setter(#app, value),
     returnValueForMissingStub: null,
   );
 
@@ -167,14 +174,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
             ),
           )
           as _i5.Future<_i4.UserCredential>);
-
-  @override
-  _i5.Future<List<String>> fetchSignInMethodsForEmail(String? email) =>
-      (super.noSuchMethod(
-            Invocation.method(#fetchSignInMethodsForEmail, [email]),
-            returnValue: _i5.Future<List<String>>.value(<String>[]),
-          )
-          as _i5.Future<List<String>>);
 
   @override
   _i5.Future<_i4.UserCredential> getRedirectResult() =>
@@ -433,15 +432,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
           as _i5.Future<void>);
 
   @override
-  _i5.Future<void> signOut() =>
-      (super.noSuchMethod(
-            Invocation.method(#signOut, []),
-            returnValue: _i5.Future<void>.value(),
-            returnValueForMissingStub: _i5.Future<void>.value(),
-          )
-          as _i5.Future<void>);
-
-  @override
   _i5.Future<String> verifyPasswordResetCode(String? code) =>
       (super.noSuchMethod(
             Invocation.method(#verifyPasswordResetCode, [code]),
@@ -499,6 +489,15 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
           as _i5.Future<void>);
 
   @override
+  _i5.Future<void> signOut() =>
+      (super.noSuchMethod(
+            Invocation.method(#signOut, []),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
   _i5.Future<void> initializeRecaptchaConfig() =>
       (super.noSuchMethod(
             Invocation.method(#initializeRecaptchaConfig, []),
@@ -506,6 +505,22 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
             returnValueForMissingStub: _i5.Future<void>.value(),
           )
           as _i5.Future<void>);
+
+  @override
+  _i5.Future<_i3.PasswordValidationStatus> validatePassword(
+    _i4.FirebaseAuth? auth,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#validatePassword, [auth, password]),
+            returnValue: _i5.Future<_i3.PasswordValidationStatus>.value(
+              _FakePasswordValidationStatus_4(
+                this,
+                Invocation.method(#validatePassword, [auth, password]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.PasswordValidationStatus>);
 }
 
 /// A class which mocks [SharedPreferences].

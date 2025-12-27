@@ -4,7 +4,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.10.0
 dependencies:
   flutter:
     sdk: flutter  # Core
@@ -29,7 +29,7 @@ dependencies:
   # Utils
   uuid:
   intl: 
-  flutter_markdown:  
+  flutter_markdown_plus:  
   flutter_tts:
   permission_handler: 
   connectivity_plus: 
@@ -42,7 +42,7 @@ dependencies:
   firebase_app_check: 
   share_plus:
   path_provider:
-  pdf: ^3.11.3
+  pdf:  
 dev_dependencies:
   flutter_test:
     sdk: flutter

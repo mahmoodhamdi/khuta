@@ -34,13 +34,30 @@ class HomeScreenTheme {
     offset: const Offset(0, 4),
   );
 
-  static Color getScoreColor(double score, bool isDark) {
-    if (score <= 80) {
+  /// Returns color based on T-Score interpretation
+  /// Lower T-scores are better (less ADHD symptoms)
+  /// Higher T-scores indicate more concern
+  static Color getScoreColor(double tScore, bool isDark) {
+    if (tScore < 45) {
+      // Below average - good, fewer symptoms
       return accentGreen(isDark);
-    }
-    if (score <= 60) {
+    } else if (tScore <= 55) {
+      // Average range - neutral
+      return accentBlue(isDark);
+    } else if (tScore <= 65) {
+      // Above average - some concern
       return accentOrange(isDark);
+    } else {
+      // Significantly elevated - needs attention
+      return accentRed(isDark);
     }
-    return accentRed(isDark);
+  }
+
+  /// Returns a severity level string for the score
+  static String getScoreSeverity(double tScore) {
+    if (tScore < 45) return 'low';
+    if (tScore <= 55) return 'average';
+    if (tScore <= 65) return 'elevated';
+    return 'high';
   }
 }

@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khuta/core/di/service_locator.dart';
+import 'package:khuta/core/repositories/child_repository.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/screens/child/add_child_screen.dart';
@@ -20,8 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late final ChildRepository _childRepository;
   List<Child> children = [];
   bool isLoading = true;
   String? error;
@@ -29,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _childRepository = ServiceLocator().childRepository;
     _fetchChildren();
   }
 
@@ -41,22 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
         error = null;
       });
 
-      final user = _auth.currentUser;
-      if (user == null) return;
-
-      final querySnapshot = await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('children')
-          .orderBy('createdAt', descending: false)
-          .get();
+      final fetchedChildren = await _childRepository.getChildren();
 
       if (!mounted) return;
 
       setState(() {
-        children = querySnapshot.docs
-            .map((doc) => Child.fromFirestore(doc))
-            .toList();
+        children = fetchedChildren;
         isLoading = false;
       });
     } catch (e) {
@@ -73,14 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!mounted) return;
 
     try {
-      final user = _auth.currentUser;
-      if (user == null) return;
-
-      await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('children')
-          .add(child.toFirestore());
+      await _childRepository.addChild(child);
 
       if (mounted) {
         _fetchChildren(); // Refresh the list
@@ -439,11 +422,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         child: Icon(
-                                          lastTest.score >= 80
-                                              ? Icons.trending_down
-                                              : lastTest.score >= 60
-                                              ? Icons.trending_up
-                                              : Icons.emoji_events,
+                                          lastTest.score < 45
+                                              ? Icons.emoji_events // Low score - good
+                                              : lastTest.score <= 55
+                                              ? Icons.horizontal_rule // Average
+                                              : Icons.trending_up, // Elevated/High - concern
                                           size: 12,
                                           color: HomeScreenTheme.getScoreColor(
                                             lastTest.score,

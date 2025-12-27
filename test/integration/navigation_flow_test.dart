@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:khuta/core/di/service_locator.dart';
+import 'package:khuta/core/repositories/child_repository.dart';
 import 'package:khuta/cubit/auth/auth_cubit.dart';
 import 'package:khuta/cubit/onboarding/onboarding_cubit.dart';
 import 'package:khuta/cubit/theme/theme_cubit.dart';
+import 'package:khuta/models/child.dart';
 import 'package:khuta/screens/about/about_screen.dart';
 import 'package:khuta/screens/home/home_screen.dart';
 import 'package:khuta/screens/main_screen.dart';
@@ -14,6 +17,27 @@ import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/test_helpers.dart';
+
+/// Mock implementation of ChildRepository for testing
+class MockChildRepository implements ChildRepository {
+  @override
+  Future<List<Child>> getChildren() async => [];
+
+  @override
+  Future<Child?> getChild(String childId) async => null;
+
+  @override
+  Future<String> addChild(Child child) async => 'mock-id';
+
+  @override
+  Future<void> updateChild(Child child) async {}
+
+  @override
+  Future<void> deleteChild(String childId) async {}
+
+  @override
+  Stream<List<Child>> watchChildren() => Stream.value([]);
+}
 
 @GenerateMocks([FirebaseAuth, SharedPreferences])
 import 'navigation_flow_test.mocks.dart';
@@ -28,12 +52,20 @@ void main() async {
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockSharedPreferences = MockSharedPreferences();
-    
+
     // Setup SharedPreferences mock methods
     when(mockSharedPreferences.getBool(any)).thenReturn(false);
     when(mockSharedPreferences.setBool(any, any)).thenAnswer((_) async => true);
     when(mockSharedPreferences.getString(any)).thenReturn(null);
     when(mockSharedPreferences.setString(any, any)).thenAnswer((_) async => true);
+
+    // Register mock repository with ServiceLocator
+    ServiceLocator().registerChildRepository(MockChildRepository());
+  });
+
+  tearDown(() {
+    // Reset ServiceLocator after each test
+    ServiceLocator().reset();
   });
 
   group('Main Navigation Flow Integration Tests', () {

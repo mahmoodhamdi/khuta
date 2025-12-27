@@ -18,13 +18,17 @@ import 'screens/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await EasyLocalization.ensureInitialized();
-    WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
-  );
+
+  // Initialize Firebase once with proper options
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Activate App Check after Firebase is initialized
+  await FirebaseAppCheck.instance.activate(
+    providerAndroid: const AndroidDebugProvider(),
+  );
+
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

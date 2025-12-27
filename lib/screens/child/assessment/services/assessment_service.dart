@@ -1,24 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:khuta/core/di/service_locator.dart';
+import 'package:khuta/core/repositories/child_repository.dart';
+import 'package:khuta/core/repositories/test_result_repository.dart';
 import 'package:khuta/core/services/sdq_scoring_service.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/models/test_result.dart';
 
 class AssessmentService {
-  final FirebaseFirestore _firestore;
-  final FirebaseAuth _auth;
+  final ChildRepository _childRepository;
+  final TestResultRepository _testResultRepository;
   final Child child;
   final String assessmentType;
 
   AssessmentService({
     required this.assessmentType,
     required this.child,
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  }) : _firestore = firestore ?? FirebaseFirestore.instance,
-       _auth = auth ?? FirebaseAuth.instance;
+    ChildRepository? childRepository,
+    TestResultRepository? testResultRepository,
+  }) : _childRepository = childRepository ?? ServiceLocator().childRepository,
+       _testResultRepository = testResultRepository ?? ServiceLocator().testResultRepository;
 
   Future<void> saveTestResult(
     int score,
@@ -26,9 +27,6 @@ class AssessmentService {
     List<String> recommendations,
   ) async {
     try {
-      final user = _auth.currentUser;
-      if (user == null) return;
-
       final testResult = TestResult(
         testType: assessmentType.tr(),
         score: score.toDouble(),
@@ -37,18 +35,12 @@ class AssessmentService {
         recommendations: recommendations,
       );
 
-      // Add result to child's list
-      child.testResults.add(testResult);
+      // Save to subcollection via repository
+      await _testResultRepository.saveTestResult(child.id, testResult);
 
-      // Update in Firebase
-      await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('children')
-          .doc(child.id)
-          .update({
-            'testResults': child.testResults.map((e) => e.toMap()).toList(),
-          });
+      // Also update embedded results for UI compatibility
+      child.testResults.add(testResult);
+      await _childRepository.updateChild(child);
     } catch (e) {
       debugPrint('Error saving test result: $e');
       rethrow;

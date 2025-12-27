@@ -233,7 +233,7 @@ class ResultsScreen extends StatelessWidget {
         arabicFont = pw.Font.ttf(fontData);
       } catch (e) {
         // Fallback to default font if Arabic font not available
-        print('Arabic font not found, using default font');
+        debugPrint('Arabic font not found, using default font');
       }
 
       // Add page to PDF
@@ -583,33 +583,84 @@ class ResultsScreen extends StatelessWidget {
         ),
       );
 
-      // Save PDF to temporary directory
-      final output = await getTemporaryDirectory();
-      final file = File(
-        '${output.path}/assessment_results_${child.name}_${DateTime.now().millisecondsSinceEpoch}.pdf',
-      );
+      // Use app-specific private directory instead of temp for security
+      final output = await getApplicationDocumentsDirectory();
+      final pdfDir = Directory('${output.path}/reports');
+
+      // Create reports directory if it doesn't exist
+      if (!await pdfDir.exists()) {
+        await pdfDir.create(recursive: true);
+      }
+
+      // Clean up old reports (older than 24 hours)
+      await _cleanupOldReports(pdfDir);
+
+      // Sanitize child name for filename to prevent path traversal
+      final sanitizedName = _sanitizeFileName(child.name);
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = 'assessment_${sanitizedName}_$timestamp.pdf';
+
+      final file = File('${pdfDir.path}/$fileName');
       await file.writeAsBytes(await pdf.save());
 
       // Close loading dialog
-      Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
 
       // Share the PDF
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        text: '${'assessment_results_for'.tr()} ${child.name}',
-        subject: 'assessment_results'.tr(),
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          text: '${'assessment_results_for'.tr()} ${child.name}',
+          subject: 'assessment_results'.tr(),
+        ),
       );
     } catch (e) {
       // Close loading dialog if still open
-      Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
 
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('error_generating_pdf'.tr()),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('error_generating_pdf'.tr()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      debugPrint('Error generating PDF: $e');
+    }
+  }
+
+  /// Sanitizes a filename by removing special characters
+  /// Prevents path traversal attacks and invalid filename characters
+  String _sanitizeFileName(String name) {
+    return name
+        .replaceAll(RegExp(r'[^\w\s-]'), '_')
+        .replaceAll(RegExp(r'\s+'), '_')
+        .toLowerCase();
+  }
+
+  /// Cleans up old PDF reports older than 24 hours
+  Future<void> _cleanupOldReports(Directory pdfDir) async {
+    try {
+      if (await pdfDir.exists()) {
+        final files = pdfDir.listSync();
+        final now = DateTime.now();
+
+        for (var file in files) {
+          if (file is File && file.path.endsWith('.pdf')) {
+            final stat = await file.stat();
+            final age = now.difference(stat.modified);
+
+            // Delete files older than 24 hours
+            if (age.inHours > 24) {
+              await file.delete();
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error cleaning up old reports: $e');
     }
   }
 

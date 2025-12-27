@@ -168,11 +168,11 @@ class SdqScoringService {
     } else if (tScore >= 56) {
       return 'slightly_above_average'.tr();
     } else if (tScore >= 45) {
-      return 'average';
+      return 'average'.tr();
     } else if (tScore >= 40) {
       return 'slightly_below_average'.tr();
     } else if (tScore >= 35) {
-      return 'below_average';
+      return 'below_average'.tr();
     } else if (tScore >= 30) {
       return 'significantly_below_average'.tr();
     } else {

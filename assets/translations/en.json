@@ -362,5 +362,8 @@
   "recommendation_environment": "Create a supportive and nurturing environment that promotes emotional well-being and learning",
   "ai_powered": "AI-Powered Analysis",
   "contact_whatsapp": "Contact via WhatsApp",
-  "offline_removed": "Internet connection required for AI features"
+  "offline_removed": "Internet connection required for AI features",
+  "please_answer_all_questions": "Please answer all questions before submitting",
+  "error_saving_results": "Error saving results. Please try again",
+  "error_invalid_age": "This assessment is not valid for this age range"
 }

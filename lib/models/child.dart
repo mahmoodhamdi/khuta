@@ -8,6 +8,8 @@ class Child {
   final int age;
   final List<TestResult> testResults;
   final DateTime createdAt;
+  final bool isDeleted;
+  final DateTime? updatedAt;
 
   Child({
     required this.id,
@@ -16,6 +18,8 @@ class Child {
     required this.age,
     required this.testResults,
     required this.createdAt,
+    this.isDeleted = false,
+    this.updatedAt,
   });
 
   factory Child.fromFirestore(DocumentSnapshot doc) {
@@ -31,6 +35,8 @@ class Child {
               .toList() ??
           [],
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      isDeleted: data['isDeleted'] ?? false,
+      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -41,6 +47,23 @@ class Child {
       'age': age,
       'testResults': testResults.map((e) => e.toMap()).toList(),
       'createdAt': Timestamp.fromDate(createdAt),
+      'isDeleted': isDeleted,
+      if (updatedAt != null) 'updatedAt': Timestamp.fromDate(updatedAt!),
     };
+  }
+
+  /// Creates a copy of this Child with isDeleted set to true
+  /// Used for soft delete operations
+  Child copyWithDeleted() {
+    return Child(
+      id: id,
+      name: name,
+      gender: gender,
+      age: age,
+      testResults: testResults,
+      createdAt: createdAt,
+      isDeleted: true,
+      updatedAt: DateTime.now(),
+    );
   }
 }

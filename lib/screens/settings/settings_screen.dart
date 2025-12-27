@@ -187,7 +187,13 @@ class SettingsScreen extends StatelessWidget {
                       value: state is ThemeDark,
                       onChanged: (_) =>
                           context.read<ThemeCubit>().toggleTheme(),
-                      activeColor: HomeScreenTheme.accentBlue(isDark),
+                      activeTrackColor: HomeScreenTheme.accentBlue(isDark).withValues(alpha: 0.5),
+                      thumbColor: WidgetStateProperty.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return HomeScreenTheme.accentBlue(isDark);
+                        }
+                        return null;
+                      }),
                     );
                   },
                 ),

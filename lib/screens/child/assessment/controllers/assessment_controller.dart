@@ -56,6 +56,19 @@ class AssessmentController {
   Future<void> _showResults() async {
     if (questions.isEmpty) return;
 
+    // Validate all questions are answered
+    final unansweredCount = answers.where((a) => a < 0).length;
+    if (unansweredCount > 0) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('please_answer_all_questions'.tr()),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
     try {
       if (!context.mounted) return;
 
@@ -66,9 +79,10 @@ class AssessmentController {
         builder: (context) => const LoadingOverlay(),
       );
 
-      final score = answers.asMap().entries.fold<int>(
+      // Filter out unanswered questions (-1) before summing
+      final score = answers.where((answer) => answer >= 0).fold<int>(
         0,
-        (sum, entry) => sum + entry.value,
+        (sum, answer) => sum + answer,
       );
       final interpretation = _service.getScoreInterpretation(score);
       final recommendations = await AiRecommendationsService.getRecommendations(

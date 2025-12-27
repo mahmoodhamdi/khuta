@@ -88,8 +88,12 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       answers = List.filled(questions.length, -1);
     }
 
-    return WillPopScope(
-      onWillPop: _controller.showExitConfirmation,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _controller.showExitConfirmation();
+      },
       child: Scaffold(
         backgroundColor: HomeScreenTheme.backgroundColor(isDark),
         appBar: _buildAppBar(isRTL),
