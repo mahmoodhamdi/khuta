@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
 import 'cubit/auth/auth_cubit.dart';
 import 'cubit/auth/auth_state.dart';
@@ -32,8 +33,14 @@ void main() async {
   );
 
   // Activate App Check after Firebase is initialized
+  // Uses debug providers in debug mode, production providers in release mode
   await FirebaseAppCheck.instance.activate(
-    providerAndroid: const AndroidDebugProvider(),
+    providerAndroid: AppConfig.isDebug
+        ? const AndroidDebugProvider()
+        : const AndroidPlayIntegrityProvider(),
+    providerApple: AppConfig.isDebug
+        ? const AppleDebugProvider()
+        : const AppleDeviceCheckProvider(),
   );
 
   // Set preferred orientations
