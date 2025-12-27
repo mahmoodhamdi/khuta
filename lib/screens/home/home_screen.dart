@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:khuta/core/di/service_locator.dart';
-import 'package:khuta/core/repositories/child_repository.dart';
 import 'package:khuta/core/theme/home_screen_theme.dart';
+import 'package:khuta/cubit/child/child_cubit.dart';
 import 'package:khuta/models/child.dart';
 import 'package:khuta/screens/child/add_child_screen.dart';
 import 'package:khuta/screens/child/child_details_screen.dart';
@@ -12,83 +11,20 @@ import '../../cubit/auth/auth_cubit.dart';
 import '../../cubit/auth/auth_state.dart';
 import '../auth/login_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  late final ChildRepository _childRepository;
-  List<Child> children = [];
-  bool isLoading = true;
-  String? error;
-
-  @override
-  void initState() {
-    super.initState();
-    _childRepository = ServiceLocator().childRepository;
-    _fetchChildren();
-  }
-
-  Future<void> _fetchChildren() async {
-    if (!mounted) return;
-
-    try {
-      setState(() {
-        isLoading = true;
-        error = null;
-      });
-
-      final fetchedChildren = await _childRepository.getChildren();
-
-      if (!mounted) return;
-
-      setState(() {
-        children = fetchedChildren;
-        isLoading = false;
-      });
-    } catch (e) {
-      if (!mounted) return;
-
-      setState(() {
-        error = e.toString();
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _addChild(Child child) async {
-    if (!mounted) return;
-
-    try {
-      await _childRepository.addChild(child);
-
-      if (mounted) {
-        _fetchChildren(); // Refresh the list
-      }
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('error_adding_child'.tr()),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  void _showAddChildScreen() {
-    if (!mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddChildScreen(onAddChild: _addChild),
-      ),
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ChildCubit()..loadChildren(),
+      child: const _HomeView(),
     );
   }
+}
+
+class _HomeView extends StatelessWidget {
+  const _HomeView();
 
   @override
   Widget build(BuildContext context) {
@@ -113,20 +49,53 @@ class _HomeScreenState extends State<HomeScreen> {
           automaticallyImplyLeading: false,
         ),
         body: SafeArea(
-          child: isLoading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: HomeScreenTheme.accentBlue(isDark),
+          child: BlocConsumer<ChildCubit, ChildState>(
+            listener: (context, state) {
+              if (state.status == ChildStatus.error &&
+                  state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.errorMessage!),
+                    backgroundColor: Colors.red,
                   ),
-                )
-              : error != null
-              ? _buildErrorWidget(isDark)
-              : children.isEmpty
-              ? _buildEmptyState(isDark)
-              : _buildChildrenList(),
+                );
+                context.read<ChildCubit>().clearError();
+              }
+            },
+            builder: (context, state) {
+              switch (state.status) {
+                case ChildStatus.initial:
+                case ChildStatus.loading:
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: HomeScreenTheme.accentBlue(isDark),
+                    ),
+                  );
+                case ChildStatus.error:
+                  if (state.children.isEmpty) {
+                    return _ErrorWidget(
+                      error: state.errorMessage ?? 'error_loading_children'.tr(),
+                      onRetry: () => context.read<ChildCubit>().loadChildren(),
+                      isDark: isDark,
+                    );
+                  }
+                  return _ChildrenList(children: state.children);
+                case ChildStatus.loaded:
+                case ChildStatus.adding:
+                case ChildStatus.deleting:
+                  if (state.isEmpty) {
+                    return _EmptyState(
+                      onAddChild: () => _showAddChildScreen(context),
+                      isDark: isDark,
+                    );
+                  }
+                  return _ChildrenList(children: state.children);
+              }
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _showAddChildScreen,
+          onPressed: () => _showAddChildScreen(context),
           backgroundColor: HomeScreenTheme.accentBlue(isDark),
           child: const Icon(Icons.add, color: Colors.white),
         ),
@@ -134,7 +103,33 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildErrorWidget(bool isDark) {
+  void _showAddChildScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AddChildScreen(
+          onAddChild: (child) {
+            context.read<ChildCubit>().addChild(child);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _ErrorWidget extends StatelessWidget {
+  final String error;
+  final VoidCallback onRetry;
+  final bool isDark;
+
+  const _ErrorWidget({
+    required this.error,
+    required this.onRetry,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,14 +145,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            error!,
-            style: TextStyle(color: HomeScreenTheme.secondaryText(isDark)),
-            textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              error,
+              style: TextStyle(color: HomeScreenTheme.secondaryText(isDark)),
+              textAlign: TextAlign.center,
+            ),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: _fetchChildren,
+            onPressed: onRetry,
             style: ElevatedButton.styleFrom(
               backgroundColor: HomeScreenTheme.accentBlue(isDark),
               foregroundColor: Colors.white,
@@ -171,8 +169,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _buildEmptyState(bool isDark) {
+class _EmptyState extends StatelessWidget {
+  final VoidCallback onAddChild;
+  final bool isDark;
+
+  const _EmptyState({
+    required this.onAddChild,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -213,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
-            onPressed: _showAddChildScreen,
+            onPressed: onAddChild,
             icon: const Icon(Icons.add),
             label: Text('add_first_child'.tr()),
             style: ElevatedButton.styleFrom(
@@ -229,23 +238,34 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _buildChildrenList() {
+class _ChildrenList extends StatelessWidget {
+  final List<Child> children;
+
+  const _ChildrenList({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: children.length,
       itemBuilder: (context, index) {
-        final child = children[index];
-        return _buildChildCard(child);
+        return _ChildCard(child: children[index]);
       },
     );
   }
+}
 
-  Widget _buildChildCard(Child child) {
+class _ChildCard extends StatelessWidget {
+  final Child child;
+
+  const _ChildCard({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final lastTest = child.testResults.isNotEmpty
-        ? child.testResults.last
-        : null;
+    final lastTest = child.testResults.isNotEmpty ? child.testResults.last : null;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -256,7 +276,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: InkWell(
         onTap: () {
-          if (!mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -276,11 +295,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color:
-                          (child.gender == 'male'
-                                  ? HomeScreenTheme.accentBlue(isDark)
-                                  : HomeScreenTheme.accentPink(isDark))
-                              .withValues(alpha: 0.1),
+                      color: (child.gender == 'male'
+                              ? HomeScreenTheme.accentBlue(isDark)
+                              : HomeScreenTheme.accentPink(isDark))
+                          .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Icon(
@@ -331,159 +349,157 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               if (child.testResults.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                // Test results section
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: (isDark ? Colors.black12 : Colors.grey[50])!,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.1)
-                          : Colors.grey.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'test_history'.tr(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: HomeScreenTheme.primaryText(isDark),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                        children: [
-                          if (lastTest != null) ...[
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time,
-
-                                  size: 24,
-                                  color: HomeScreenTheme.secondaryText(isDark),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'last_test'.tr(),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: HomeScreenTheme.secondaryText(
-                                      isDark,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Text(
-                              context.locale.languageCode == 'ar'
-                                  ? DateFormat.yMMMd('ar').format(lastTest.date)
-                                  : DateFormat.yMMMd(
-                                      'en',
-                                    ).format(lastTest.date),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: HomeScreenTheme.secondaryText(isDark),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-
-                      if (lastTest != null) ...[
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          color: HomeScreenTheme.getScoreColor(
-                                            lastTest.score,
-                                            isDark,
-                                          ).withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(
-                                            4,
-                                          ),
-                                        ),
-                                        child: Icon(
-                                          lastTest.score < 45
-                                              ? Icons.emoji_events // Low score - good
-                                              : lastTest.score <= 55
-                                              ? Icons.horizontal_rule // Average
-                                              : Icons.trending_up, // Elevated/High - concern
-                                          size: 12,
-                                          color: HomeScreenTheme.getScoreColor(
-                                            lastTest.score,
-                                            isDark,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'latest_score'.tr(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: HomeScreenTheme.secondaryText(
-                                            isDark,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: HomeScreenTheme.getScoreColor(
-                                  lastTest.score,
-                                  isDark,
-                                ).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                lastTest.score.toStringAsFixed(1),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: HomeScreenTheme.getScoreColor(
-                                    lastTest.score,
-                                    isDark,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                _TestResultsSection(lastTest: lastTest!, isDark: isDark),
               ],
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _TestResultsSection extends StatelessWidget {
+  final dynamic lastTest;
+  final bool isDark;
+
+  const _TestResultsSection({
+    required this.lastTest,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: (isDark ? Colors.black12 : Colors.grey[50])!,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.grey.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'test_history'.tr(),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: HomeScreenTheme.primaryText(isDark),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.access_time,
+                    size: 24,
+                    color: HomeScreenTheme.secondaryText(isDark),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'last_test'.tr(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: HomeScreenTheme.secondaryText(isDark),
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                context.locale.languageCode == 'ar'
+                    ? DateFormat.yMMMd('ar').format(lastTest.date)
+                    : DateFormat.yMMMd('en').format(lastTest.date),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: HomeScreenTheme.secondaryText(isDark),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: HomeScreenTheme.getScoreColor(
+                              lastTest.score,
+                              isDark,
+                            ).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            lastTest.score < 45
+                                ? Icons.emoji_events // Low score - good
+                                : lastTest.score <= 55
+                                    ? Icons.horizontal_rule // Average
+                                    : Icons.trending_up, // Elevated/High - concern
+                            size: 12,
+                            color: HomeScreenTheme.getScoreColor(
+                              lastTest.score,
+                              isDark,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'latest_score'.tr(),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: HomeScreenTheme.secondaryText(isDark),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: HomeScreenTheme.getScoreColor(
+                    lastTest.score,
+                    isDark,
+                  ).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  lastTest.score.toStringAsFixed(1),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: HomeScreenTheme.getScoreColor(
+                      lastTest.score,
+                      isDark,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
